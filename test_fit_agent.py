@@ -1,0 +1,72 @@
+from app.agents.fit_agent import assess_fit
+from app.schemas.opportunity import OpportunitySpec
+from app.schemas.profile import UserProfile
+
+
+user_profile = UserProfile(
+    education="Computer Science student",
+    goals=[
+        "Become an AI engineer",
+        "Build practical AI projects",
+    ],
+    skills=[
+        "Python",
+        "Basic machine learning",
+    ],
+    interests=[
+        "Artificial intelligence",
+        "AI application development",
+    ],
+    daily_available_minutes=60,
+    learning_preferences=[
+        "Hands-on projects",
+        "Step-by-step learning",
+    ],
+)
+
+
+opportunity = OpportunitySpec(
+    opportunity_title="AI Engineering Intern",
+    organization="Example Technologies",
+    opportunity_type="internship",
+    required_skills=[
+        {
+            "skill_name": "Python",
+            "importance": "High",
+            "is_mandatory": True,
+            "description": "Python programming is mandatory.",
+        },
+        {
+            "skill_name": "Machine Learning",
+            "importance": "High",
+            "is_mandatory": True,
+            "description": "Knowledge of machine learning is required.",
+        },
+        {
+            "skill_name": "Model Deployment",
+            "importance": "Medium",
+            "is_mandatory": False,
+            "description": "Experience deploying AI models is desirable.",
+        },
+    ],
+    preferred_skills=[
+        "Git",
+        "Communication",
+    ],
+    experience_level="Beginner",
+    summary=(
+        "An internship for beginners interested in AI engineering "
+        "and application development."
+    ),
+)
+
+
+try:
+    result = assess_fit(user_profile, opportunity)
+
+    print("\nFit Agent is working!")
+    print(result.model_dump_json(indent=2))
+
+except Exception as error:
+    print("\nSomething went wrong:")
+    print(type(error).__name__, "-", error)
