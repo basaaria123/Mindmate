@@ -1,7 +1,8 @@
+
 from app.schemas.profile import UserProfile
 
 
-def main():
+def test_user_profile_schema():
     profile = UserProfile(
         education="Second-year engineering student",
         goals=["Learn AI development"],
@@ -11,10 +12,9 @@ def main():
         learning_preferences=["Step-by-step explanations"],
     )
 
-    print("MindMate Profile Schema Test")
-    print("----------------------------")
-    print(profile.model_dump_json(indent=2))
-
-
-if __name__ == "__main__":
-    main()
+    assert profile.education == "Second-year engineering student"
+    assert profile.goals == ["Learn AI development"]
+    assert profile.skills == ["Basic Python"]
+    assert profile.interests == ["Artificial Intelligence"]
+    assert profile.daily_available_minutes == 60
+    assert profile.learning_preferences == ["Step-by-step explanations"]

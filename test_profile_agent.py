@@ -1,7 +1,8 @@
+
 from app.agents.profile_agent import extract_user_profile
 
 
-def main():
+def test_extract_user_profile():
     user_message = (
         "I am a second-year engineering student. "
         "My goal is to learn AI development. "
@@ -10,15 +11,16 @@ def main():
         "I prefer step-by-step explanations."
     )
 
-    print("Testing MindMate Profile Extraction Agent...")
-    print("\nUser message:")
-    print(user_message)
-
     profile = extract_user_profile(user_message)
 
-    print("\n--- Extracted Profile ---")
-    print(profile.model_dump_json(indent=2))
-
-
-if __name__ == "__main__":
-    main()
+    assert profile.education
+    assert any(
+    "learn ai development" in goal.lower()
+    for goal in profile.goals
+)
+    assert any("Python" in skill for skill in profile.skills)
+    assert profile.daily_available_minutes == 60
+    assert any(
+        "step-by-step" in preference.lower()
+        for preference in profile.learning_preferences
+    )

@@ -48,7 +48,7 @@ Return a JSON object with exactly these fields:
             },
         ],
         response_format={"type": "json_object"},
-        max_tokens=500,
+        max_tokens=1000,
     )
 
     response_text = response.choices[0].message.content
