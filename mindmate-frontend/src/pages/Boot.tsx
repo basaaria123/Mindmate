@@ -1,124 +1,49 @@
-import {
-  ArrowRight,
-  BookOpen,
-  Brain,
-  CirclePlay,
-  Target,
-  TrendingUp,
-} from 'lucide-react'
+import { ArrowRight, BookOpen, Bot, ChartNoAxesColumn, Circle, ClipboardPlus, UsersRound, Zap } from 'lucide-react'
 import { Link } from 'react-router'
 
-const quickLinks = [
-  {
-    label: 'Practice',
-    description: 'Try a practice question',
-    path: '/sim',
-    icon: CirclePlay,
-  },
-  {
-    label: 'Review memory',
-    description: 'See what MINDMATE has learned',
-    path: '/memory',
-    icon: Brain,
-  },
-  {
-    label: 'View skill gaps',
-    description: 'Explore areas to strengthen',
-    path: '/gap-map',
-    icon: Target,
-  },
+const tasks = [
+  { label: 'Study – Cardiovascular System', time: '10:00 AM' },
+  { label: 'Practice – Anatomy MCQs', time: '4:00 PM' },
 ]
 
 function Boot() {
-  return (
-    <div className="mx-auto max-w-6xl">
-      <div className="mb-8">
-        <p className="text-sm font-medium text-violet-300">WEDNESDAY · YOUR WORKSPACE</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-          Welcome to MINDMATE
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
-          Your learning workspace is ready. Start with a practice session, review
-          your learning memory, or explore your skill map.
-        </p>
+  return <div className="home-dashboard mx-auto max-w-[1200px] space-y-[17px]">
+    <section className="relative min-h-[266px] overflow-hidden rounded-[22px] border border-violet-200 bg-[linear-gradient(112deg,#eeebff_0%,#e9e9ff_57%,#ccecf7_100%)] px-6 py-7 sm:px-[27px] sm:py-[52px]">
+      <div className="pointer-events-none absolute -right-4 top-3 size-72 rounded-full bg-[#9b8cff]/30 blur-3xl"/><span className="absolute right-[26%] top-6 text-2xl text-white">✦</span><span className="absolute right-1 top-[68%] text-xs text-amber-200">•</span>
+      <div className="relative z-10">
+        <h1 className="text-[28px] font-bold leading-tight tracking-[-.025em] text-[#201d56] sm:text-[32px]">Good Morning, Salma!</h1>
+        <p className="mt-4 text-base text-[#5e6799] sm:text-[18px]">Small steps today, big progress tomorrow.</p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link to="/pipeline" className="inline-flex h-[46px] items-center gap-2.5 rounded-2xl border border-violet-200 bg-[#e9e3ff] px-4 text-sm font-semibold text-[#211e58] hover:bg-[#dfd6ff]"><ClipboardPlus size={18} className="text-[#7154ff]"/>Continue your plan</Link>
+          <Link to="/sim" className="inline-flex h-[46px] items-center gap-2.5 rounded-2xl border border-violet-200 bg-white px-4 text-sm font-semibold text-[#211e58] hover:bg-violet-50"><ClipboardPlus size={18} className="text-[#7154ff]"/>Create a new task</Link>
+          <Link to="/console" className="inline-flex h-[46px] items-center gap-2.5 rounded-2xl border border-violet-200 bg-white px-4 text-sm font-semibold text-[#211e58] hover:bg-violet-50"><Bot size={18} className="text-[#7154ff]"/>Ask AI</Link>
+        </div>
       </div>
+    </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-400">Learning plan</p>
-            <BookOpen size={18} className="text-violet-300" />
-          </div>
-          <p className="mt-4 text-2xl font-semibold text-white">Not started</p>
-          <p className="mt-1 text-xs text-slate-500">Your plan will appear here</p>
-        </div>
+    <section className="grid gap-4 xl:grid-cols-[1fr_1.12fr_.62fr]">
+      <article className="min-h-[240px] rounded-[22px] border border-violet-200 bg-white p-5 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
+        <div className="flex items-start justify-between"><h2 className="text-[19px] font-bold text-[#211e58]">Your Progress</h2><ChartNoAxesColumn size={27} className="text-emerald-400"/></div>
+        <div className="mt-5 flex items-center justify-center gap-4 sm:justify-start sm:gap-5"><div className="grid size-[130px] shrink-0 place-items-center rounded-full" style={{background:'conic-gradient(from -5deg,#8f6aff 0 68%,#eee8ff 68% 100%)'}}><div className="grid size-[108px] place-items-center rounded-full bg-white text-[29px] font-bold text-[#211e58]">68%</div></div><div><h3 className="text-[16px] font-bold text-[#211e58]">Weekly Goal</h3><p className="mt-2 text-[13px] text-[#858dbb]">4 of 6 tasks completed</p></div></div>
+      </article>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-400">Skills tracked</p>
-            <Target size={18} className="text-violet-300" />
-          </div>
-          <p className="mt-4 text-2xl font-semibold text-white">0</p>
-          <p className="mt-1 text-xs text-slate-500">Skills in your profile</p>
-        </div>
+      <article className="min-h-[240px] rounded-[22px] border border-violet-200 bg-white p-5 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
+        <div className="flex items-end justify-between"><div><h2 className="text-[19px] font-bold text-[#211e58]">Today’s Tasks</h2><p className="mt-1 text-sm text-[#858dbb]">2 due today</p></div><Link to="/sim" className="mb-1 inline-flex items-center gap-1 text-sm font-semibold text-[#805cff]">View all <ArrowRight size={15}/></Link></div>
+        <div className="mt-4">{tasks.map((task)=><Link key={task.label} to="/sim" className="flex min-h-[65px] items-center gap-2.5 border-b border-[#f0edfb] last:border-0"><Circle size={22} strokeWidth={1.8} className="shrink-0 text-[#a28bff]"/><span className="flex-1 text-[13px] font-medium text-[#211e58]">{task.label}</span><span className="whitespace-nowrap text-xs text-[#858dbb]">{task.time}</span></Link>)}</div>
+      </article>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-400">Practice sessions</p>
-            <CirclePlay size={18} className="text-emerald-300" />
-          </div>
-          <p className="mt-4 text-2xl font-semibold text-white">0</p>
-          <p className="mt-1 text-xs text-slate-500">Sessions completed</p>
-        </div>
+      <article className="min-h-[240px] rounded-[22px] border border-violet-200 bg-white p-4 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
+        <h2 className="mb-3 text-[19px] font-bold text-[#211e58]">Quick Actions</h2>
+        <Link to="/sim" className="flex h-[52px] items-center gap-2.5 rounded-xl px-1 hover:bg-violet-50"><span className="grid size-9 place-items-center rounded-xl bg-[#f0eaff] text-[#7e5aff]"><ClipboardPlus size={18}/></span><span className="text-[13px] font-semibold">Create a new task</span></Link>
+        <Link to="/scanner" className="flex h-[52px] items-center gap-2.5 rounded-xl px-1 hover:bg-cyan-50"><span className="grid size-9 place-items-center rounded-xl bg-[#d9f8fa] text-[#19bcd0]"><BookOpen size={18}/></span><span className="text-[13px] font-semibold">Explore resources</span></Link>
+        <Link to="/console" className="flex h-[52px] items-center gap-2.5 rounded-xl px-1 hover:bg-orange-50"><span className="grid size-9 place-items-center rounded-xl bg-[#fff0df] text-[#f09938]"><UsersRound size={18}/></span><span className="text-[13px] font-semibold">Get support</span></Link>
+      </article>
+    </section>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-400">Recent progress</p>
-            <TrendingUp size={18} className="text-amber-300" />
-          </div>
-          <p className="mt-4 text-2xl font-semibold text-white">—</p>
-          <p className="mt-1 text-xs text-slate-500">Complete a session to begin</p>
-        </div>
-      </section>
-
-      <section className="mt-8">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-white">Quick actions</h2>
-          <p className="mt-1 text-sm text-slate-400">
-            Choose where you want to start.
-          </p>
-        </div>
-
-        <div className="grid gap-4 lg:grid-cols-3">
-          {quickLinks.map((item) => {
-            const Icon = item.icon
-
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className="group flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/50 p-5 transition hover:border-violet-300/40 hover:bg-slate-900"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="rounded-xl bg-slate-800 p-3 text-violet-300">
-                    <Icon size={20} />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">{item.label}</p>
-                    <p className="mt-1 text-sm text-slate-400">{item.description}</p>
-                  </div>
-                </div>
-                <ArrowRight
-                  size={18}
-                  className="text-slate-500 transition group-hover:translate-x-1 group-hover:text-violet-300"
-                />
-              </Link>
-            )
-          })}
-        </div>
-      </section>
-    </div>
-  )
+    <section className="flex min-h-[112px] flex-wrap items-center gap-4 rounded-[22px] border border-violet-100 bg-[linear-gradient(105deg,#e7e0ff_0%,#f1edff_100%)] px-5 py-5 sm:px-7">
+      <Zap size={46} fill="#ffbf24" stroke="#ffbf24" className="shrink-0"/><div className="min-w-[220px] flex-1"><h2 className="text-[19px] font-bold text-[#211e58]">Let’s build your future together</h2><p className="mt-2 text-sm text-[#626b9a]">Get personalized guidance, practice and insights — all in one place.</p></div><Link to="/gap-map" className="ml-auto inline-flex h-[47px] items-center rounded-2xl bg-gradient-to-r from-[#956cff] to-[#653bf0] px-5 text-sm font-semibold text-white shadow-[0_7px_15px_rgba(112,70,240,.28)] hover:brightness-105">Explore Now</Link>
+    </section>
+  </div>
 }
 
 export default Boot

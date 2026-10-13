@@ -1,48 +1,56 @@
 import { useEffect, useState } from 'react'
 import {
-  Brain,
+  BookOpenCheck,
   CheckCircle2,
-  Clock3,
+  CircleUserRound,
+  FileText,
+  Goal,
   Lightbulb,
   Save,
-  Target,
+  SlidersHorizontal,
+  Workflow,
 } from 'lucide-react'
-import {
-  getDemoState,
-  saveWeaknessToMemoryApi,
-} from '../services/api'
+import { getDemoState, saveWeaknessToMemoryApi } from '../services/api'
 import type { DemoState } from '../services/demoState'
 
-const sampleMemories = [
+type MemoryTab = 'Saved Info' | 'Preferences' | 'Insights'
+
+const tabs: MemoryTab[] = ['Saved Info', 'Preferences', 'Insights']
+
+const keyInformation = [
   {
-    title: 'React component composition',
-    category: 'Frontend',
-    detail: 'You are comfortable splitting interfaces into reusable components.',
-    strength: 78,
-    icon: CheckCircle2,
-    color: 'text-emerald-300',
+    title: 'Learning Goals',
+    detail: <>Become a skilled<br />Anesthesia Professional</>,
+    Icon: Goal,
+    iconBg: 'bg-[#d9f9e9]',
+    iconColor: 'bg-[#10bd8c] text-white',
   },
   {
-    title: 'Explaining asynchronous code',
-    category: 'JavaScript',
-    detail: 'Practice explaining promises and async/await in your own words.',
-    strength: 46,
-    icon: Lightbulb,
-    color: 'text-amber-300',
+    title: 'Interests',
+    detail: 'Medicine, AI & Tech',
+    Icon: Workflow,
+    iconBg: 'bg-[#d9f7f3]',
+    iconColor: 'bg-[#14b8a6] text-white',
   },
   {
-    title: 'Accessible form controls',
-    category: 'Accessibility',
-    detail: 'Review labels, keyboard focus, and helpful validation messages.',
-    strength: 35,
-    icon: Target,
-    color: 'text-violet-300',
+    title: 'Preferred Study Style',
+    detail: 'Visual + Practice',
+    Icon: BookOpenCheck,
+    iconBg: 'bg-[#fff0d8]',
+    iconColor: 'bg-[#f59e0b] text-white',
+  },
+  {
+    title: 'Focus Subjects',
+    detail: <>Anatomy, Physiology,<br />Pathology</>,
+    Icon: CircleUserRound,
+    iconBg: 'bg-[#ffebe7]',
+    iconColor: 'bg-[#ff7864] text-white',
   },
 ]
 
 function Memory() {
+  const [activeTab, setActiveTab] = useState<MemoryTab>('Saved Info')
   const [demoState, setDemoState] = useState<DemoState | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -54,10 +62,7 @@ function Memory() {
         if (isCurrent) setDemoState(state)
       })
       .catch(() => {
-        if (isCurrent) setErrorMessage('Could not load Memory data.')
-      })
-      .finally(() => {
-        if (isCurrent) setIsLoading(false)
+        if (isCurrent) setErrorMessage('Could not load saved learning information.')
       })
 
     return () => {
@@ -66,14 +71,14 @@ function Memory() {
   }, [])
 
   const latestPractice = demoState?.latestPractice ?? null
-  const weaknessNote = latestPractice
+  const practiceNote = latestPractice
     ? `Practice focus: ${latestPractice.weakness}`
     : null
-  const isSaved =
-    weaknessNote !== null &&
-    (demoState?.memoryNotes.includes(weaknessNote) ?? false)
+  const hasSavedPracticeNote = Boolean(
+    practiceNote && demoState?.memoryNotes.includes(practiceNote),
+  )
 
-  async function handleSaveWeakness() {
+  async function savePracticeInsight() {
     setIsSaving(true)
     setErrorMessage(null)
 
@@ -82,9 +87,7 @@ function Memory() {
       setDemoState(updatedState)
     } catch (error) {
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'Could not save the practice area.',
+        error instanceof Error ? error.message : 'Could not save this insight.',
       )
     } finally {
       setIsSaving(false)
@@ -92,166 +95,163 @@ function Memory() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl">
-      <div className="mb-8">
-        <p className="text-sm font-medium uppercase tracking-[0.18em] text-cyan-300">
-          Learning record
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-          Memory
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
-          Review learning notes and save practice areas for later. This demo
-          stores data in your browser through the mock service.
-        </p>
-      </div>
+    <div className="relative isolate mx-auto w-full max-w-[1120px]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-[96px] -top-[278px] -z-10 size-[260px] rounded-full bg-[#dff8f0]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-[190px] -right-24 -z-10 size-[300px] rounded-full bg-[#e6ddff]"
+      />
 
-      {isLoading && (
-        <p className="mb-5 text-sm text-slate-400" role="status">
-          Loading Memory…
-        </p>
-      )}
-
-      {errorMessage && (
-        <p
-          className="mb-5 rounded-lg border border-rose-400/20 bg-rose-400/5 p-3 text-sm text-rose-300"
-          role="alert"
-        >
-          {errorMessage}
-        </p>
-      )}
-
-      {latestPractice && (
-        <section
-          className="mb-6 rounded-2xl border border-amber-300/20 bg-amber-300/5 p-5 sm:p-6"
-          aria-live="polite"
-        >
-          <div className="flex items-start gap-3">
-            <div className="rounded-xl bg-amber-300/10 p-3 text-amber-300">
-              <Lightbulb size={20} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-300">
-                New practice insight
-              </p>
-              <h2 className="mt-2 text-lg font-semibold text-white">
-                {latestPractice.weakness}
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-300">
-                {latestPractice.feedback}
-              </p>
-
-              <button
-                type="button"
-                onClick={handleSaveWeakness}
-                disabled={isSaved || isSaving || isLoading}
-                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-amber-300 px-4 py-2.5 text-sm font-semibold text-slate-950 hover:bg-amber-200 disabled:cursor-default disabled:opacity-70"
-              >
-                {isSaved ? <CheckCircle2 size={16} /> : <Save size={16} />}
-                {isSaving
-                  ? 'Saving…'
-                  : isSaved
-                    ? 'Saved to Memory'
-                    : 'Save weakness to Memory'}
-              </button>
-            </div>
-          </div>
-        </section>
-      )}
-
-      <section className="mb-6 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="flex items-center gap-3 text-cyan-300">
-            <Brain size={19} />
-            <p className="text-sm text-slate-400">Memory records</p>
-          </div>
-          <p className="mt-4 text-2xl font-semibold text-white">
-            {sampleMemories.length + (demoState?.memoryNotes.length ?? 0)}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">
-            Includes sample and saved notes
-          </p>
+      <section className="relative min-h-[530px] overflow-hidden rounded-[20px] border border-[#e3dcff] bg-white/80 p-5 shadow-[0_12px_30px_rgba(84,63,175,0.07)]">
+        <div aria-hidden="true" className="pointer-events-none absolute right-[60px] top-[18px] h-[75px] w-[54px] rotate-[9deg] rounded-[11px] border-[3px] border-white bg-[#f7f4ff] pt-[10px] shadow-[0_5px_12px_rgba(98,74,180,0.16)]">
+          <span className="ml-[7px] block h-[5px] w-[34px] rounded-full bg-[#a584ff]" />
+          <span className="ml-[6px] mt-[6px] block h-[5px] w-[33px] rounded-full bg-[#a584ff]" />
+          <span className="ml-[5px] mt-[6px] block h-[5px] w-[29px] rounded-full bg-[#a584ff]" />
+          <span className="ml-[4px] mt-[6px] block h-[5px] w-[16px] rounded-full bg-[#a584ff]" />
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="flex items-center gap-3 text-emerald-300">
-            <CheckCircle2 size={19} />
-            <p className="text-sm text-slate-400">Strong area</p>
-          </div>
-          <p className="mt-4 text-xl font-semibold text-white">React</p>
-          <p className="mt-1 text-xs text-slate-500">Component composition</p>
-        </div>
-
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <div className="flex items-center gap-3 text-amber-300">
-            <Clock3 size={19} />
-            <p className="text-sm text-slate-400">Saved practice notes</p>
-          </div>
-          <p className="mt-4 text-2xl font-semibold text-white">
-            {demoState?.memoryNotes.length ?? 0}
-          </p>
-          <p className="mt-1 text-xs text-slate-500">
-            From your practice sessions
-          </p>
-        </div>
-      </section>
-
-      <section className="rounded-2xl border border-slate-800 bg-slate-900/50">
-        <div className="border-b border-slate-800 px-5 py-4">
-          <h2 className="font-semibold text-white">Learning notes</h2>
-          <p className="mt-1 text-sm text-slate-400">
-            Example records and any practice notes you save.
-          </p>
-        </div>
-
-        <div className="divide-y divide-slate-800">
-          {(demoState?.memoryNotes ?? []).map((note) => (
-            <article key={note} className="flex items-start gap-4 px-5 py-5">
-              <CheckCircle2 size={20} className="mt-0.5 text-emerald-300" />
-              <div>
-                <p className="font-medium text-white">{note}</p>
-                <p className="mt-1 text-sm text-slate-400">
-                  Saved from a MINDMATE practice session.
-                </p>
-              </div>
-            </article>
+        <div role="tablist" aria-label="Memory sections" className="relative z-10 flex gap-[9px]">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === tab}
+              onClick={() => setActiveTab(tab)}
+              className={`h-[35px] min-w-[133px] rounded-full px-5 text-[12px] font-semibold transition ${activeTab === tab ? 'bg-[#ded6ff] text-[#6332c7]' : 'bg-[#eef0ff] text-[#7079a6] hover:bg-[#e6e5ff]'}`}
+            >
+              {tab}
+            </button>
           ))}
+        </div>
 
-          {sampleMemories.map((memory) => {
-            const Icon = memory.icon
+        {errorMessage && (
+          <p role="alert" className="mt-3 text-xs text-rose-600">{errorMessage}</p>
+        )}
 
-            return (
-              <article key={memory.title} className="px-5 py-5">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div className="flex items-start gap-4">
-                    <Icon size={20} className={`mt-0.5 ${memory.color}`} />
-                    <div>
-                      <p className="font-medium text-white">{memory.title}</p>
-                      <p className="mt-1 text-xs font-medium text-cyan-300">
-                        {memory.category}
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-slate-400">
-                        {memory.detail}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-sm font-medium text-slate-300">
-                    {memory.strength}% strength
+        {activeTab === 'Saved Info' && (
+          <div role="tabpanel" className="relative z-10 mt-[21px]">
+            <h2 className="mb-[12px] text-[18px] font-bold leading-6 text-[#242052]">
+              Your Key Information
+            </h2>
+            <div className="grid gap-[13px] sm:grid-cols-2">
+              {keyInformation.map(({ title, detail, Icon, iconBg, iconColor }) => (
+                <article
+                  key={title}
+                  className="flex min-h-[125px] items-center gap-4 rounded-[16px] border border-[#e4ddff] bg-white/55 px-[18px] py-4"
+                >
+                  <span className={`grid size-[55px] shrink-0 place-items-center rounded-[17px] ${iconBg}`}>
+                    <span className={`grid size-[37px] place-items-center rounded-[11px] ${iconColor}`}>
+                      <Icon size={20} strokeWidth={2} />
+                    </span>
                   </span>
-                </div>
+                  <span className="min-w-0">
+                    <strong className="block text-[13px] font-bold leading-5 text-[#27244f]">
+                      {title}
+                    </strong>
+                    <span className="mt-[4px] block text-[13px] leading-[18px] text-[#727ba8]">
+                      {detail}
+                    </span>
+                  </span>
+                </article>
+              ))}
+            </div>
 
-                <div className="ml-9 mt-4 h-2 overflow-hidden rounded-full bg-slate-800">
-                  <div
-                    className="h-full rounded-full bg-cyan-300"
-                    style={{ width: `${memory.strength}%` }}
-                  />
+            <h2 className="mb-[9px] mt-[21px] text-[18px] font-bold leading-6 text-[#242052]">
+              Recent Notes
+            </h2>
+            <div className="space-y-2">
+              <article className="flex min-h-[59px] items-center gap-3 rounded-[13px] border border-[#e4ddff] bg-[#faf9ff] px-4 py-3">
+                <span className="grid size-[29px] shrink-0 place-items-center rounded-[9px] bg-[#aa88ff] text-white">
+                  <FileText size={16} />
+                </span>
+                <p className="min-w-0 flex-1 truncate text-[13px] text-[#2b2856]">
+                  You prefer short summaries and simple explanations...
+                </p>
+                <time className="shrink-0 text-[11px] text-[#727ba8]">Apr 22</time>
+              </article>
+              {demoState?.memoryNotes.map((note) => (
+                <article key={note} className="flex min-h-[59px] items-center gap-3 rounded-[13px] border border-[#e4ddff] bg-[#faf9ff] px-4 py-3">
+                  <span className="grid size-[29px] shrink-0 place-items-center rounded-[9px] bg-[#aa88ff] text-white">
+                    <FileText size={16} />
+                  </span>
+                  <p className="min-w-0 flex-1 truncate text-[13px] text-[#2b2856]">{note}</p>
+                  <time className="shrink-0 text-[11px] text-[#727ba8]">Saved</time>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'Preferences' && (
+          <div role="tabpanel" className="relative z-10 mt-[21px]">
+            <h2 className="mb-[12px] text-[18px] font-bold leading-6 text-[#242052]">Your Preferences</h2>
+            <div className="grid gap-[13px] sm:grid-cols-2">
+              <PreferenceCard title="Study style" value="Visual + Practice" Icon={SlidersHorizontal} />
+              <PreferenceCard title="Learning goals" value="Build confidence and practical skills" Icon={Goal} />
+              <PreferenceCard title="Interests" value="Medicine, AI & Tech" Icon={Workflow} />
+              <PreferenceCard title="Focus subjects" value="Anatomy, Physiology, Pathology" Icon={BookOpenCheck} />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'Insights' && (
+          <div role="tabpanel" className="relative z-10 mt-[21px]">
+            <h2 className="mb-[12px] text-[18px] font-bold leading-6 text-[#242052]">Learning Insights</h2>
+            {latestPractice ? (
+              <article className="rounded-[16px] border border-[#e4ddff] bg-white/55 p-5">
+                <div className="flex items-start gap-4">
+                  <span className="grid size-[55px] shrink-0 place-items-center rounded-[17px] bg-[#eee8ff] text-[#8758ef]">
+                    <Lightbulb size={24} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-bold text-[#27244f]">{latestPractice.weakness}</h3>
+                    <p className="mt-2 text-sm leading-6 text-[#727ba8]">{latestPractice.feedback}</p>
+                    <button
+                      type="button"
+                      onClick={savePracticeInsight}
+                      disabled={hasSavedPracticeNote || isSaving}
+                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#8254f6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#7040e8] disabled:cursor-default disabled:opacity-60"
+                    >
+                      {hasSavedPracticeNote ? <CheckCircle2 size={16} /> : <Save size={16} />}
+                      {isSaving ? 'Saving...' : hasSavedPracticeNote ? 'Saved to Memory' : 'Save this insight'}
+                    </button>
+                  </div>
                 </div>
               </article>
-            )
-          })}
-        </div>
+            ) : (
+              <div className="flex min-h-[150px] items-center gap-4 rounded-[16px] border border-[#e4ddff] bg-white/55 p-5">
+                <span className="grid size-[55px] place-items-center rounded-[17px] bg-[#eee8ff] text-[#8758ef]"><Lightbulb size={24} /></span>
+                <p className="text-sm text-[#727ba8]">Complete a practice session to see a personalized learning insight here.</p>
+              </div>
+            )}
+          </div>
+        )}
       </section>
     </div>
+  )
+}
+
+function PreferenceCard({
+  title,
+  value,
+  Icon,
+}: {
+  title: string
+  value: string
+  Icon: typeof Goal
+}) {
+  return (
+    <article className="flex min-h-[125px] items-center gap-4 rounded-[16px] border border-[#e4ddff] bg-white/55 px-[18px] py-4">
+      <span className="grid size-[55px] shrink-0 place-items-center rounded-[17px] bg-[#eee8ff] text-[#8254f6]"><Icon size={23} /></span>
+      <span>
+        <strong className="block text-[13px] font-bold text-[#27244f]">{title}</strong>
+        <span className="mt-1 block text-[13px] text-[#727ba8]">{value}</span>
+      </span>
+    </article>
   )
 }
 

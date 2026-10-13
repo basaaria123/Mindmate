@@ -96,6 +96,25 @@ export function savePracticeResult(result: PracticeResult): void {
   storeDemoState(nextState)
 }
 
+export function addMemoryNote(note: string): void {
+  const currentState = loadDemoState()
+  if (currentState.memoryNotes.includes(note)) return
+
+  storeDemoState({
+    ...currentState,
+    memoryNotes: [note, ...currentState.memoryNotes],
+    trace: [
+      {
+        id: String(Date.now()),
+        title: 'Memory item saved',
+        detail: note,
+        occurredAt: new Date().toISOString(),
+      },
+      ...currentState.trace,
+    ],
+  })
+}
+
 export function saveWeaknessToMemory(): boolean {
   const currentState = loadDemoState()
   const weakness = currentState.latestPractice?.weakness
@@ -110,21 +129,7 @@ export function saveWeaknessToMemory(): boolean {
     return true
   }
 
-  const nextState: DemoState = {
-    ...currentState,
-    memoryNotes: [note, ...currentState.memoryNotes],
-    trace: [
-      {
-        id: String(Date.now()),
-        title: 'Weakness saved to Memory',
-        detail: weakness,
-        occurredAt: new Date().toISOString(),
-      },
-      ...currentState.trace,
-    ],
-  }
-
-  storeDemoState(nextState)
+  addMemoryNote(note)
   return true
 }
 

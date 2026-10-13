@@ -1,0 +1,3 @@
+# Require Nishitha's review for changes to the MindMate frontend.
+/mindmate-frontend/** @nishithalingala-com
+/.github/CODEOWNERS @nishithalingala-com

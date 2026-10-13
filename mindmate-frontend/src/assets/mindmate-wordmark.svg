@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 72" role="img" aria-labelledby="title description">
+  <title id="title">MindMate</title>
+  <desc id="description">Smarter minds. Brighter tomorrows.</desc>
+  <defs>
+    <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#858696" />
+      <stop offset="0.22" stop-color="#fff" />
+      <stop offset="0.43" stop-color="#a3a4b1" />
+      <stop offset="0.62" stop-color="#f5f4ff" />
+      <stop offset="0.82" stop-color="#9293a3" />
+      <stop offset="1" stop-color="#d9d5ef" />
+    </linearGradient>
+    <linearGradient id="lavender" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8254e9" />
+      <stop offset="0.28" stop-color="#d8c5ff" />
+      <stop offset="0.52" stop-color="#a879f5" />
+      <stop offset="0.77" stop-color="#8857e4" />
+      <stop offset="1" stop-color="#c2a8ff" />
+    </linearGradient>
+    <filter id="soft-shadow" x="-8%" y="-18%" width="116%" height="145%">
+      <feGaussianBlur stdDeviation="1.3" />
+    </filter>
+  </defs>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="800" letter-spacing="-2.5">
+    <text x="3" y="55" fill="#5a526f" opacity="0.34" filter="url(#soft-shadow)">MindMate</text>
+    <text x="1" y="52" fill="url(#silver)" stroke="#716e86" stroke-opacity="0.18" stroke-width="0.8">Mind</text>
+    <text x="128" y="52" fill="url(#lavender)" stroke="#7450bb" stroke-opacity="0.22" stroke-width="0.8">Mate</text>
+  </g>
+  <text x="4" y="66" fill="#9692ae" font-family="Arial, Helvetica, sans-serif" font-size="8.5" font-weight="700" letter-spacing="1.5">SMARTER MINDS. BRIGHTER TOMORROWS.</text>
+</svg>
