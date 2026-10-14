@@ -182,3 +182,96 @@ export async function getTraceEvents(): Promise<DemoEvent[]> {
 export async function getDemoState(): Promise<DemoState> {
   return getMemory()
 }
+
+
+
+const AI_API_BASE_URL = 'http://127.0.0.1:8000'
+
+
+export type AIProfile = {
+  education: string | null
+  goals: string[]
+  skills: string[]
+  interests: string[]
+  daily_available_minutes: number | null
+  learning_preferences: string[]
+}
+
+export type AIRequiredSkill = {
+  skill_name: string
+  importance: string
+  is_mandatory: boolean
+  description: string
+}
+
+export type AIOpportunity = {
+  opportunity_title: string
+  organization: string | null
+  opportunity_type: string | null
+  required_skills: AIRequiredSkill[]
+  preferred_skills: string[]
+  experience_level: string | null
+  summary: string
+}
+
+export type AIFitSkill = {
+  skill_name: string
+  user_level: string
+  required_level: string
+  match_status: string
+  explanation: string
+}
+
+export type AIFitAssessment = {
+  opportunity_title: string
+  overall_fit: string
+  matching_skills: AIFitSkill[]
+  partial_matches: AIFitSkill[]
+  missing_skills: AIFitSkill[]
+  strengths: string[]
+  improvement_areas: string[]
+  summary: string
+}
+
+
+
+async function callMindMateAI<T>(
+  path: string,
+  body: unknown,
+): Promise<T> {
+  const response = await fetch(`${AI_API_BASE_URL}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) {
+    throw new Error(`AI request failed (${response.status}). Please try again.`)
+  }
+
+  return response.json() as Promise<T>
+}
+
+export function extractProfile(userMessage: string): Promise<AIProfile> {
+  return callMindMateAI<AIProfile>('/profile', {
+    user_message: userMessage,
+  })
+}
+
+export function extractOpportunity(
+  opportunityText: string,
+): Promise<AIOpportunity> {
+  return callMindMateAI<AIOpportunity>('/opportunity', {
+    opportunity_text: opportunityText,
+  })
+}
+
+export function assessFit(
+  userProfile: AIProfile,
+  opportunity: AIOpportunity,
+): Promise<AIFitAssessment> {
+  return callMindMateAI<AIFitAssessment>('/fit', {
+    user_profile: userProfile,
+    opportunity,
+  })
+}
