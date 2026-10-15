@@ -50,15 +50,10 @@ export function GlassThemeToggle() {
       className="mm-glass-toggle"
       data-sleep={sleepMode}
     >
-      <span className="mm-glass-toggle__thumb" aria-hidden="true">
+      <span className="mm-glass-toggle__bubble" aria-hidden="true">
         {sleepMode ? <Moon size={16} fill="currentColor" /> : <Sun size={17} />}
       </span>
-      <span className={`mm-glass-toggle__option ${!sleepMode ? 'is-active' : ''}`}>
-        <Sun size={14} /> Day
-      </span>
-      <span className={`mm-glass-toggle__option ${sleepMode ? 'is-active' : ''}`}>
-        <Moon size={13} /> Sleep
-      </span>
+      <span className="mm-glass-toggle__label">{sleepMode ? 'Sleep' : 'Day'}</span>
     </button>
   )
 }

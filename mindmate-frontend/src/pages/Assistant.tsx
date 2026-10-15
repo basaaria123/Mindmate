@@ -79,7 +79,7 @@ function Assistant() {
         </aside>}
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="flex h-[62px] shrink-0 items-center justify-between border-b border-violet-100 bg-white/80 px-4 sm:px-6">
+          <header className="relative z-20 flex h-[62px] shrink-0 items-center justify-between border-b border-violet-100 bg-white/95 px-4 shadow-sm sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
               {!sidebarOpen && <button onClick={() => setSidebarOpen(true)} aria-label="Show chat history" className="grid size-9 place-items-center rounded-lg text-violet-600 hover:bg-violet-50"><PanelIcon /></button>}
               <img src={mindmateIntroEmblem} alt="" className="size-8 rounded-full object-cover" />

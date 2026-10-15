@@ -228,7 +228,7 @@ function AppLayout() {
 
         <div className="flex min-w-0 flex-1 flex-col">
           <header
-            className={`flex h-[82px] shrink-0 items-center justify-between gap-4 border-b border-violet-100 bg-gradient-to-r from-[#fbfaff] to-[#f0edff] ${
+            className={`relative z-20 flex h-[82px] shrink-0 items-center justify-between gap-4 border-b border-violet-100 bg-gradient-to-r from-[#fbfaff] to-[#f0edff] ${
               location.pathname === '/memory' ? 'px-[31px]' : 'px-[27px]'
             }`}
           >
@@ -323,13 +323,13 @@ function AppLayout() {
               <button
                 type="button"
                 aria-label="Notifications"
-                className="relative p-2 text-[#777fba] hover:text-violet-700"
+                className="relative grid size-[38px] place-items-center rounded-full border border-violet-100 bg-white/85 p-2 text-[#6256ed] shadow-sm transition hover:bg-violet-50 hover:text-violet-800"
               >
                 <Bell size={21} />
-                <span className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-rose-400" />
+                <span className="absolute right-1.5 top-1.5 size-2 rounded-full border border-white bg-rose-500" />
               </button>
 
-              <div className="grid size-[38px] place-items-center rounded-full bg-gradient-to-br from-[#a288ff] to-[#7658f6] text-sm font-medium text-white">
+              <div aria-label="Signed in profile" className="grid size-[38px] place-items-center rounded-full border-2 border-white bg-gradient-to-br from-[#a288ff] to-[#7658f6] text-sm font-semibold text-white shadow-md">
                 S
               </div>
 
