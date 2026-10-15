@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 from app.agents.profile_agent import extract_user_profile
 from app.agents.opportunity_agent import extract_opportunity
 from app.agents.fit_agent import assess_fit
+from app.agents.suggestions_agent import generate_suggestions
 
 
 class ProfileRequest(BaseModel):
@@ -25,6 +26,9 @@ class FitRequest(BaseModel):
     user_profile: dict
     opportunity: dict
 
+class SuggestionsRequest(BaseModel):
+    user_profile: dict
+
 app = FastAPI(
     title="MindMate API",
     description="AI-powered personal growth and career guidance",
@@ -41,7 +45,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.get("/")
 def home():
@@ -81,3 +84,12 @@ def create_fit_assessment(request: FitRequest):
     assessment = assess_fit(user_profile, opportunity)
 
     return assessment.model_dump()
+
+@app.post("/suggestions")
+def create_suggestions(request: SuggestionsRequest):
+    from app.schemas.profile import UserProfile
+
+    user_profile = UserProfile.model_validate(request.user_profile)
+    suggestions = generate_suggestions(user_profile)
+
+    return suggestions.model_dump()

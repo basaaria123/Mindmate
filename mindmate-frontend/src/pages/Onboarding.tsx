@@ -9,7 +9,11 @@ import {
   UsersRound,
 } from 'lucide-react'
 import { useNavigate } from 'react-router'
-import { getProfile, updateProfile } from '../services/api'
+import {
+  extractProfile,
+  getProfile,
+  updateProfile,
+} from '../services/api'
 import splashMotion from '../assets/mindmate-splash.mp4'
 import mindmateWordmark from '../assets/mindmate-wordmark.svg'
 import mindmateIntroEmblem from '../assets/mindmate-intro-emblem.png'
@@ -32,10 +36,10 @@ function Onboarding() {
   const [goals, setGoals] = useState<string[]>(['Learn faster', 'Build skills', 'Stay organized'])
   const [goalsExpanded, setGoalsExpanded] = useState(true)
   const [personalize, setPersonalize] = useState(true)
+  const [profileDescription, setProfileDescription] = useState('')
   const [savePreferences, setSavePreferences] = useState(true)
   const [isSavingProfile, setIsSavingProfile] = useState(false)
   const [profileError, setProfileError] = useState<string | null>(null)
-
   useEffect(() => {
     const fallback = window.setTimeout(() => setShowSplash(false), 5000)
     return () => window.clearTimeout(fallback)
@@ -89,6 +93,14 @@ function Onboarding() {
     setProfileError(null)
     setIsSavingProfile(true)
     try {
+      let aiProfile = null
+      if (profileDescription.trim()) {
+        aiProfile = await extractProfile(profileDescription.trim())
+        window.localStorage.setItem(
+          'mindmate-ai-profile',
+          JSON.stringify(aiProfile),
+        )
+      }
       if (savePreferences) {
         window.localStorage.setItem(
           'mindmate-profile-preferences',
@@ -303,6 +315,31 @@ function Onboarding() {
               )}
             </div>
           </section>
+          <ProfileCard
+            icon={<Target />}
+            title="Tell us about yourself"
+            description="Share your education, skills, interests, and career goals."
+            delay="300ms"
+          >
+            <textarea
+            className="mm-profile-description"
+            style={{
+              color: '#262251',
+              backgroundColor: '#ffffff',
+              width: '100%',
+              minHeight: '150px',
+              boxSizing: 'border-box',
+              resize: 'vertical',
+            }}
+            value={profileDescription}
+            onChange={(event) => setProfileDescription(event.target.value)}
+            placeholder="I'm studying computer science, know Python, and want to become an AI engineer..."
+            rows={6}
+            maxLength={2000}aria-label="Describe your background and goals"
+            />
+
+          </ProfileCard>
+
 
           {goalsExpanded && (
             <div className="mm-preferences">
