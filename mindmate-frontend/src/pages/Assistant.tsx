@@ -4,6 +4,7 @@ import { ArrowUpRight, Brain, BookOpen, CalendarDays, Camera, ChartNoAxesColumn,
 import mindmateIntroEmblem from '../assets/mindmate-intro-emblem.png'
 import activityEmblemReference from '../assets/activity-emblem-reference.png'
 import mindmateWordmark from '../assets/mindmate-wordmark.svg'
+import { GlassThemeToggle } from '../ThemeContext'
 
 const quickActions = [
   { label: 'Generate Study Plan', detail: 'Personalized for your goals', icon: CalendarDays, prompt: 'Create a study plan for me.' },
@@ -84,7 +85,7 @@ function Assistant() {
               <img src={mindmateIntroEmblem} alt="" className="size-8 rounded-full object-cover" />
               <div><h1 className="text-sm font-bold">MindMate AI</h1><p className="flex items-center gap-1 text-[11px] text-[#7c80a1]"><span className="size-1 rounded-full bg-emerald-400"/>Always here to help</p></div>
             </div>
-            <div className="flex items-center gap-2"><button onClick={() => setExpanded((value) => !value)} aria-label={expanded ? 'Exit expanded view' : 'Expand assistant'} className="grid size-8 place-items-center rounded-lg text-[#7c80a1] hover:bg-violet-50"><Maximize size={15}/></button><button onClick={startNewChat} aria-label="Start a new chat" className="grid size-8 place-items-center rounded-lg text-[#7c80a1] hover:bg-violet-50"><Minus size={16}/></button></div>
+            <div className="flex items-center gap-2"><button onClick={() => setExpanded((value) => !value)} aria-label={expanded ? 'Exit expanded view' : 'Expand assistant'} className="grid size-8 place-items-center rounded-lg text-[#7c80a1] hover:bg-violet-50"><Maximize size={15}/></button><button onClick={startNewChat} aria-label="Start a new chat" className="grid size-8 place-items-center rounded-lg text-[#7c80a1] hover:bg-violet-50"><Minus size={16}/></button><GlassThemeToggle /></div>
           </header>
 
           <div className="flex min-h-0 flex-1 gap-3 overflow-y-auto p-3 sm:gap-4 sm:p-4 lg:p-5">

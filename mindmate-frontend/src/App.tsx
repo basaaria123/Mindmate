@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import {
   Activity,
   Bell,
@@ -36,6 +36,7 @@ import Trace from './pages/Trace'
 import SettingsPage from './pages/Settings'
 import Onboarding from './pages/Onboarding'
 import Assistant from './pages/Assistant'
+import { GlassThemeToggle, ThemeProvider } from './ThemeContext'
 import mindmateWordmark from './assets/mindmate-wordmark.svg'
 import mindmateIntroEmblem from './assets/mindmate-intro-emblem.png'
 
@@ -57,6 +58,10 @@ function AppLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const currentScreen =
     screens.find((screen) => screen.path === location.pathname) ?? screens[0]
+  const activeScreenIndex = Math.max(
+    screens.findIndex((screen) => screen.path === currentScreen.path),
+    0,
+  )
 
   if (location.pathname === '/assistant') {
     return <Assistant />
@@ -130,8 +135,16 @@ function AppLayout() {
             )}
           </div>
 
-          <nav className="mt-4 space-y-1" aria-label="Main navigation">
-            {screens.map(({ path, label, icon: Icon }) => (
+          <div
+            className="mm-screen-nav mt-4"
+            data-collapsed={sidebarCollapsed && !mobileNavOpen}
+            style={{ '--mm-active-screen': activeScreenIndex } as CSSProperties}
+          >
+            <span className="mm-screen-nav__bubble" aria-hidden="true">
+              <span className="mm-screen-nav__shine" />
+            </span>
+            <nav className="space-y-1" aria-label="Main navigation">
+              {screens.map(({ path, label, icon: Icon }) => (
               <NavLink
                 key={path}
                 title={
@@ -140,13 +153,13 @@ function AppLayout() {
                 to={path}
                 onClick={() => setMobileNavOpen(false)}
                 className={({ isActive }) =>
-                  `flex h-[42px] items-center rounded-lg text-[13px] transition ${
+                  `relative z-[1] flex h-[42px] items-center rounded-xl text-[13px] transition-colors duration-300 ${
                     sidebarCollapsed && !mobileNavOpen
                       ? 'mx-auto w-[44px] justify-center px-0'
                       : 'gap-2.5 px-2'
                   } ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#8256f7] to-[#6256ed] text-white shadow-sm'
+                      ? 'text-white'
                       : 'text-[#5f638d] hover:bg-violet-50 hover:text-violet-700'
                   }`
                 }
@@ -154,8 +167,9 @@ function AppLayout() {
                 <Icon size={18} />
                 {(!sidebarCollapsed || mobileNavOpen) && <span>{label}</span>}
               </NavLink>
-            ))}
-          </nav>
+              ))}
+            </nav>
+          </div>
 
           <div className="mt-auto">
             {sidebarCollapsed && !mobileNavOpen && (
@@ -318,6 +332,8 @@ function AppLayout() {
               <div className="grid size-[38px] place-items-center rounded-full bg-gradient-to-br from-[#a288ff] to-[#7658f6] text-sm font-medium text-white">
                 S
               </div>
+
+              <GlassThemeToggle />
             </div>
           </header>
 
@@ -363,23 +379,16 @@ function AppLayout() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
 function AppRoutes() {
   const location = useLocation()
-  const [reloadedPath] = useState(() => {
-    if (typeof performance === 'undefined') return null
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
-    return navigation?.type === 'reload' ? window.location.pathname : null
-  })
-
-  if (reloadedPath && reloadedPath !== '/welcome' && location.pathname === reloadedPath) {
-    return <Navigate to="/welcome" replace />
-  }
 
   if (location.pathname === '/welcome') {
     return <Onboarding />
