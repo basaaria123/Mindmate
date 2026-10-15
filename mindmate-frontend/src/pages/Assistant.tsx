@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router'
-import { ArrowUpRight, Brain, BookOpen, CalendarDays, ChartNoAxesColumn, FileText, Lightbulb, Maximize, Minus, Paperclip, Plus, Send, Sparkles, SquarePen, Target } from 'lucide-react'
+import { ArrowUpRight, Brain, BookOpen, CalendarDays, Camera, ChartNoAxesColumn, FileText, Image, Lightbulb, Maximize, Minus, Paperclip, Plug, Plus, Send, Sparkles, SquarePen, Target, X } from 'lucide-react'
 import mindmateIntroEmblem from '../assets/mindmate-intro-emblem.png'
 import activityEmblemReference from '../assets/activity-emblem-reference.png'
 import mindmateWordmark from '../assets/mindmate-wordmark.svg'
@@ -27,14 +27,34 @@ function Assistant() {
   const [sentMessages, setSentMessages] = useState<string[]>([])
   const [activeChat, setActiveChat] = useState('')
   const [expanded, setExpanded] = useState(false)
+  const [attachmentMenuOpen, setAttachmentMenuOpen] = useState(false)
+  const [pluginsOpen, setPluginsOpen] = useState(false)
+  const [thinkHarder, setThinkHarder] = useState(false)
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([])
+  const cameraInput = useRef<HTMLInputElement>(null)
+  const photoInput = useRef<HTMLInputElement>(null)
+  const fileInput = useRef<HTMLInputElement>(null)
 
-  const startNewChat = () => { setActiveChat(''); setSentMessages([]); setMessage('') }
+  const startNewChat = () => { setActiveChat(''); setSentMessages([]); setMessage(''); setAttachedFiles([]); setThinkHarder(false); setPluginsOpen(false); setAttachmentMenuOpen(false) }
+  const handleFilesSelected = (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(event.target.files ?? [])
+    setAttachedFiles((current) => [...current, ...selectedFiles])
+    setAttachmentMenuOpen(false)
+    event.target.value = ''
+  }
   const submitMessage = () => {
     const trimmed = message.trim()
-    if (!trimmed) return
-    setSentMessages((items) => [...items, trimmed])
-    setActiveChat(trimmed.length > 30 ? `${trimmed.slice(0, 30)}…` : trimmed)
+    if (!trimmed && attachedFiles.length === 0) return
+    const fileSummary = attachedFiles.map((file) => `📎 ${file.name}`).join('\n')
+    const sentContent = [trimmed, fileSummary, thinkHarder ? '✦ Think harder enabled' : '']
+      .filter(Boolean)
+      .join('\n')
+    setSentMessages((items) => [...items, sentContent])
+    setActiveChat(trimmed ? (trimmed.length > 30 ? `${trimmed.slice(0, 30)}…` : trimmed) : attachedFiles[0]?.name ?? 'New chat')
     setMessage('')
+    setAttachedFiles([])
+    setAttachmentMenuOpen(false)
+    setPluginsOpen(false)
   }
 
   return (
@@ -85,7 +105,38 @@ function Assistant() {
               {sentMessages.map((item, index) => <div key={`${item}-${index}`} className="mt-2 flex justify-end"><div className="max-w-[80%] rounded-2xl rounded-br-md bg-violet-600 px-4 py-2.5 text-[13px] text-white">{item}</div></div>)}
 
               <div className="mt-auto pt-4"><div className="flex items-center justify-center gap-2 pb-3 text-[10px] text-[#9396b2]"><span className="h-px w-8 bg-violet-100"/>You can also try one of the suggestions above<span className="h-px w-8 bg-violet-100"/></div>
-                <form onSubmit={(event) => { event.preventDefault(); submitMessage() }} className="flex h-[46px] items-center gap-2 rounded-full border border-violet-200 bg-white px-3 shadow-[0_2px_9px_rgba(120,91,194,.05)]"><button type="button" aria-label="Attach a file" className="text-violet-500"><Paperclip size={16}/></button><input value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Type your message here..." aria-label="Type your message" className="min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-[#9a9cba]"/><button type="submit" aria-label="Send message" className="grid size-[30px] place-items-center rounded-full bg-gradient-to-br from-[#9851ff] to-[#6551ee] text-white hover:brightness-105"><Send size={14}/></button></form>
+                <div className="relative">
+                  <input ref={cameraInput} type="file" accept="image/*" capture="environment" className="sr-only" onChange={handleFilesSelected}/>
+                  <input ref={photoInput} type="file" accept="image/*" multiple className="sr-only" onChange={handleFilesSelected}/>
+                  <input ref={fileInput} type="file" multiple className="sr-only" onChange={handleFilesSelected}/>
+
+                  {attachmentMenuOpen && (
+                    <div role="menu" aria-label="Message tools" className="absolute bottom-[54px] left-0 z-30 w-[190px] rounded-2xl border border-violet-100 bg-white p-2 shadow-[0_10px_30px_rgba(70,54,130,.18)]">
+                      <button type="button" role="menuitem" onClick={() => cameraInput.current?.click()} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-[#343163] hover:bg-violet-50"><Camera size={18} className="text-violet-600"/>Camera</button>
+                      <button type="button" role="menuitem" onClick={() => photoInput.current?.click()} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-[#343163] hover:bg-violet-50"><Image size={18} className="text-violet-600"/>Photos</button>
+                      <button type="button" role="menuitem" onClick={() => fileInput.current?.click()} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-[#343163] hover:bg-violet-50"><FileText size={18} className="text-violet-600"/>Files</button>
+                      <button type="button" role="menuitem" aria-expanded={pluginsOpen} onClick={() => { setPluginsOpen((open) => !open); setAttachmentMenuOpen(false) }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-[#343163] hover:bg-violet-50"><Plug size={18} className="text-violet-600"/>Plugins</button>
+                      <div className="my-1 border-t border-violet-100"/>
+                      <button type="button" role="menuitemcheckbox" aria-checked={thinkHarder} onClick={() => { setThinkHarder((enabled) => !enabled); setAttachmentMenuOpen(false) }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-[#343163] hover:bg-violet-50"><Sparkles size={18} className="text-violet-600"/>Think harder{thinkHarder && <span className="ml-auto text-xs font-semibold text-violet-600">On</span>}</button>
+                    </div>
+                  )}
+
+                  {pluginsOpen && (
+                    <div role="status" className="absolute bottom-[54px] left-0 z-30 w-[250px] rounded-2xl border border-violet-100 bg-white p-4 shadow-[0_10px_30px_rgba(70,54,130,.18)]">
+                      <div className="flex items-center justify-between gap-3"><strong className="flex items-center gap-2 text-sm text-[#343163]"><Plug size={16} className="text-violet-600"/>Plugins</strong><button type="button" aria-label="Close plugins panel" onClick={() => setPluginsOpen(false)} className="grid size-7 place-items-center rounded-full text-[#8589a8] hover:bg-violet-50"><X size={15}/></button></div>
+                      <p className="mt-2 text-xs leading-5 text-[#777c9f]">No plugins are connected yet. You can still use the built-in quick actions above.</p>
+                    </div>
+                  )}
+
+                  {attachedFiles.length > 0 && <div className="mb-2 flex flex-wrap gap-2" aria-label="Files attached to message">{attachedFiles.map((file, index) => <span key={`${file.name}-${file.lastModified}-${index}`} className="inline-flex max-w-[220px] items-center gap-1.5 rounded-full border border-violet-200 bg-[#f6f1ff] py-1 pl-3 pr-1.5 text-xs text-violet-800"><FileText size={13} className="shrink-0"/><span className="truncate">{file.name}</span><button type="button" aria-label={`Remove ${file.name}`} onClick={() => setAttachedFiles((current) => current.filter((_, fileIndex) => fileIndex !== index))} className="grid size-5 shrink-0 place-items-center rounded-full hover:bg-violet-100"><X size={12}/></button></span>)}</div>}
+                  {thinkHarder && <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-3 py-1 text-[11px] font-medium text-violet-700"><Sparkles size={12}/>Think harder is on</div>}
+
+                  <form onSubmit={(event) => { event.preventDefault(); submitMessage() }} className="flex h-[46px] items-center gap-2 rounded-full border border-violet-200 bg-white px-3 shadow-[0_2px_9px_rgba(120,91,194,.05)]">
+                    <button type="button" aria-label="Open message tools" aria-haspopup="menu" aria-expanded={attachmentMenuOpen} onClick={() => { setAttachmentMenuOpen((open) => !open); setPluginsOpen(false) }} className="grid size-8 shrink-0 place-items-center rounded-full text-violet-500 transition hover:bg-violet-50"><Paperclip size={17}/></button>
+                    <input value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Type your message here..." aria-label="Type your message" className="min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-[#9a9cba]"/>
+                    <button type="submit" aria-label="Send message" disabled={!message.trim() && attachedFiles.length === 0} className="grid size-[30px] shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#9851ff] to-[#6551ee] text-white hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"><Send size={14}/></button>
+                  </form>
+                </div>
                 <div className="mt-2 flex justify-between text-[10px] text-[#8d91ad]"><span>♧ &nbsp;Feel free to ask!</span><span>✦ &nbsp;Powered by MindMate AI</span></div>
               </div>
             </main>
