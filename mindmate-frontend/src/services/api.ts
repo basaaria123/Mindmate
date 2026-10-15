@@ -235,22 +235,53 @@ export type AIFitAssessment = {
 
 
 
+
 async function callMindMateAI<T>(
   path: string,
   body: unknown,
 ): Promise<T> {
-  const response = await fetch(`${AI_API_BASE_URL}${path}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
+  let response: Response
 
-  if (!response.ok) {
-    throw new Error(`AI request failed (${response.status}). Please try again.`)
+  try {
+    response = await fetch(`${AI_API_BASE_URL}${path}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+  } catch {
+    throw new Error(
+      'Could not reach the MindMate AI server. Check that the backend is running and try again.',
+    )
   }
 
-  return response.json() as Promise<T>
+  const responseBody: unknown = await response
+    .json()
+    .catch(() => null)
+
+  if (!response.ok) {
+    const detail =
+      responseBody &&
+      typeof responseBody === 'object' &&
+      'detail' in responseBody &&
+      typeof responseBody.detail === 'string'
+        ? responseBody.detail
+        : `AI request failed (${response.status}). Please try again.`
+
+    throw new Error(detail)
+  }
+
+  if (responseBody === null) {
+    throw new Error(
+      'The MindMate AI server returned an empty or invalid response. Please try again.',
+    )
+  }
+
+  return responseBody as T
 }
+
 
 export function extractProfile(userMessage: string): Promise<AIProfile> {
   return callMindMateAI<AIProfile>('/profile', {
@@ -274,4 +305,26 @@ export function assessFit(
     user_profile: userProfile,
     opportunity,
   })
+}
+
+
+export type AIOpportunitySuggestion = {
+  title: string
+  organization: string | null
+  opportunity_type: string
+  category: 'Jobs' | 'Projects' | 'Resources' | 'Other'
+  explanation: string
+}
+
+export type AISuggestionsResponse = {
+  suggestions: AIOpportunitySuggestion[]
+}
+
+export function getPersonalizedSuggestions(
+  userProfile: AIProfile,
+): Promise<AISuggestionsResponse> {
+  return callMindMateAI<AISuggestionsResponse>(
+    '/suggestions',
+    { user_profile: userProfile },
+  )
 }
