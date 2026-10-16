@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import mindmateEmblem from '../assets/mindmate-intro-emblem.png'
+import { useMindMateTheme } from '../ThemeContext'
 
 type StoredProfile = { name?: string; email?: string }
 
@@ -26,22 +27,13 @@ function readableName(email: string) {
 
 function SettingsPage() {
   const navigate = useNavigate()
+  const { sleepMode, toggleSleepMode } = useMindMateTheme()
   const profile = useMemo(getStoredProfile, [])
   const email = profile.email || 'Sign in to add your email'
   const name = profile.name || (profile.email ? readableName(profile.email) : 'MindMate learner')
   const initials = name.split(/\s+/).filter(Boolean).slice(0, 2)
     .map((part) => part[0]?.toUpperCase()).join('') || 'M'
-  const [darkMode, setDarkMode] = useState(
-    window.localStorage.getItem('mindmate-dark-mode') === 'true',
-  )
   const [language, setLanguage] = useState('English')
-
-  function toggleDarkMode() {
-    setDarkMode((enabled) => {
-      window.localStorage.setItem('mindmate-dark-mode', String(!enabled))
-      return !enabled
-    })
-  }
 
   function logOut() {
     window.localStorage.removeItem('mindmate-user-profile')
@@ -49,7 +41,7 @@ function SettingsPage() {
   }
 
   return (
-    <div className="space-y-5 pb-2">
+    <div className="mm-settings-page space-y-5 pb-2">
       <header className="flex items-center gap-3 px-1 pt-1">
         <span className="grid size-12 place-items-center rounded-2xl bg-violet-100 text-violet-600"><SlidersHorizontal size={25} /></span>
         <div>
@@ -57,7 +49,7 @@ function SettingsPage() {
           <p className="mt-1 text-sm text-[#7379a8]">Manage your account, preferences and application settings.</p>
         </div>
       </header>
-      <section className="relative min-h-[226px] overflow-hidden rounded-[22px] border border-violet-200/80 bg-gradient-to-r from-white via-[#f5f1ff] to-[#e5dcff] p-5 shadow-[0_12px_35px_rgba(93,73,173,.08)] sm:p-6">
+      <section className="mm-settings-hero relative min-h-[226px] overflow-hidden rounded-[22px] border border-violet-200/80 bg-gradient-to-r from-white via-[#f5f1ff] to-[#e5dcff] p-5 shadow-[0_12px_35px_rgba(93,73,173,.08)] sm:p-6">
         <div className="pointer-events-none absolute -right-8 -top-24 size-72 rounded-full bg-violet-300/25 blur-3xl" />
         <div className="pointer-events-none absolute right-[12%] top-4 size-2 rounded-full bg-white shadow-[0_0_18px_8px_rgba(255,255,255,.95)]" />
         <div className="pointer-events-none absolute right-[22%] top-16 size-1.5 rounded-full bg-white shadow-[0_0_14px_6px_rgba(255,255,255,.9)]" />
@@ -98,8 +90,8 @@ function SettingsPage() {
           <div className="flex min-h-[68px] items-center gap-4 border-b border-violet-100 px-4 py-3">
             <Moon className="shrink-0 text-[#24215f]" size={22} />
             <div className="min-w-0 flex-1"><p className="text-sm font-semibold text-[#29265f]">Dark Mode</p><p className="mt-0.5 text-xs text-[#8086b2]">Switch between light and dark themes.</p></div>
-            <button type="button" role="switch" aria-checked={darkMode} aria-label="Dark Mode" onClick={toggleDarkMode} className={`relative h-7 w-12 rounded-full transition ${darkMode ? 'bg-violet-700' : 'bg-violet-300'}`}>
-              <span className={`absolute top-1 size-5 rounded-full bg-white shadow transition-all ${darkMode ? 'left-[26px]' : 'left-1'}`} />
+            <button type="button" role="switch" aria-checked={sleepMode} aria-label="Dark Mode" onClick={toggleSleepMode} className={`relative h-7 w-12 rounded-full transition ${sleepMode ? 'bg-violet-700' : 'bg-violet-300'}`}>
+              <span className={`absolute top-1 size-5 rounded-full bg-white shadow transition-all ${sleepMode ? 'left-[26px]' : 'left-1'}`} />
             </button>
           </div>
           <div className="flex min-h-[68px] items-center gap-4 border-b border-violet-100 px-4 py-3">
@@ -141,12 +133,12 @@ function SettingsPage() {
 
 function SettingsPanel({ icon, title, subtitle, children }: { icon: ReactNode; title: string; subtitle: string; children: ReactNode }) {
   return (
-    <section className="rounded-[20px] border border-violet-200/80 bg-white/90 p-4 shadow-[0_8px_24px_rgba(95,76,170,.06)] sm:p-5">
+    <section className="mm-settings-panel rounded-[20px] border border-violet-200/80 bg-white/90 p-4 shadow-[0_8px_24px_rgba(95,76,170,.06)] sm:p-5">
       <div className="mb-3 flex items-center gap-3">
         <span className="grid size-10 shrink-0 place-items-center rounded-full bg-violet-50 text-violet-700">{icon}</span>
         <div className="min-w-0"><h2 className="text-sm font-bold text-[#28255e] sm:text-base">{title}</h2><p className="mt-0.5 text-xs text-[#8086b2]">{subtitle}</p></div>
       </div>
-      <div className="overflow-hidden rounded-xl border border-violet-100 bg-white/70">{children}</div>
+      <div className="mm-settings-rows overflow-hidden rounded-xl border border-violet-100 bg-white/70">{children}</div>
     </section>
   )
 }
