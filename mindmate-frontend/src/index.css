@@ -247,222 +247,531 @@ body {
   100% { scale: 1; }
 }
 
-/* Sleep mode recolors the existing light surfaces while leaving photos and gradients intact. */
-.mindmate-theme[data-theme='sleep'] [class~='bg-white'],
-.mindmate-theme[data-theme='sleep'] [class*='bg-white/'],
-.mindmate-theme[data-theme='sleep'] [class*='bg-[#f'],
-.mindmate-theme[data-theme='sleep'] [class*='bg-[#e'],
-.mindmate-theme[data-theme='sleep'] [class*='bg-[#d'],
-.mindmate-theme[data-theme='sleep'] [class*='bg-violet-50'],
-.mindmate-theme[data-theme='sleep'] [class*='bg-violet-100'] {
-  background-color: rgb(39 29 64 / 90%) !important;
+/* The Figma sleep theme uses deep navy surfaces with restrained lavender accents. */
+.mindmate-theme[data-theme='sleep'] {
+  --color-bg: #0b1020;
+  --color-sidebar: #0d1427;
+  --color-surface: #111a2c;
+  --color-surface-soft: #202b3d;
+  --color-primary: #9670ff;
+  --color-primary-hover: #a78bfa;
+  --color-primary-soft: rgb(150 112 255 / 16%);
+  --color-text: #f4f2ff;
+  --color-text-muted: #a9a7cb;
+  --color-border: #29324c;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
-.mindmate-theme[data-theme='sleep'] .app-shell,
-.mindmate-theme[data-theme='sleep'] .app-shell > div,
-.mindmate-theme[data-theme='sleep'] main,
+.mindmate-theme[data-theme='sleep'] .app-shell {
+  background-color: #090e1d !important;
+  color: #f4f2ff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] > div[class*='min-h-screen'] {
+  background-color: #090e1d !important;
+  color: #f4f2ff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .app-shell > div {
+  border-color: #252d45 !important;
+  background-color: #0c1223 !important;
+}
+
 .mindmate-theme[data-theme='sleep'] aside {
-  border-color: rgb(205 186 255 / 14%) !important;
+  border-color: #242c44 !important;
+  background-color: #0e1428 !important;
 }
 
-.mindmate-theme[data-theme='sleep'] header {
-  border-color: rgb(205 186 255 / 14%) !important;
-  background: rgb(31 23 52 / 92%) !important;
-  color: #f1ebff;
+.mindmate-theme[data-theme='sleep'] main {
+  background-color: #0d1426 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-workspace-header,
+.mindmate-theme[data-theme='sleep'] .mm-assistant-header {
+  border-color: #252d45 !important;
+  background: #11182b !important;
+  color: #f5f2ff;
   backdrop-filter: blur(14px);
 }
 
-.mindmate-theme[data-theme='sleep'] [class*='bg-[#f'],
-.mindmate-theme[data-theme='sleep'] [class*='bg-[#e'],
-.mindmate-theme[data-theme='sleep'] [class*='bg-[#d'] {
-  color: #e9e1ff;
+.mindmate-theme[data-theme='sleep'] .mm-workspace-header label {
+  border-color: #303852 !important;
+  background-color: #151d31 !important;
+  color: #aaa8ca !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
 }
 
-.mindmate-theme [class~='bg-white'],
-.mindmate-theme [class*='bg-white/'],
-.mindmate-theme [class*='bg-[#f'],
-.mindmate-theme [class*='bg-[#e'],
-.mindmate-theme [class*='bg-[#d'],
-.mindmate-theme [class*='bg-violet-50'],
-.mindmate-theme [class*='bg-violet-100'] {
-  transition: background-color 420ms ease, color 420ms ease, border-color 420ms ease;
+.mindmate-theme[data-theme='sleep'] .mm-workspace-header input {
+  border-color: transparent !important;
+  background-color: transparent !important;
+  color: #f4f2ff !important;
 }
 
-.mindmate-theme[data-theme='sleep'] [class*='text-[#'] {
-  color: #e8e0fb !important;
+.mindmate-theme[data-theme='sleep'] .mm-workspace-header input::placeholder {
+  color: #a8a7cc !important;
 }
 
-.mindmate-theme [class*='text-[#'] {
-  transition: color 420ms ease;
+.mindmate-theme[data-theme='sleep'] .home-dashboard > section:first-child {
+  border-color: #303750 !important;
+  background: linear-gradient(110deg, #273348 0%, #202b3d 61%, #171a32 100%) !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .home-dashboard article {
+  border-color: #29334d !important;
+  background-color: #111a2d !important;
+  color: #f3f0ff;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-home-hero > div[class*='bg-[#9b8cff]'] {
+  background-color: rgb(153 95 255 / 48%) !important;
+  box-shadow: 0 0 72px 30px rgb(129 81 243 / 30%);
+}
+
+.mindmate-theme[data-theme='sleep'] .home-dashboard article a:hover {
+  background-color: rgb(150 112 255 / 12%) !important;
+}
+
+.mindmate-theme[data-theme='sleep'] > div[class*='min-h-screen'] > section {
+  border-color: #252d45 !important;
+  background-color: #10182b !important;
+}
+
+/* Cards use the slate blue-gray fill visible across pages 19–28. */
+.mindmate-theme[data-theme='sleep'] main [class*='rounded-['][class*='border'] {
+  border-color: #29334d !important;
+  background-color: #202b3d !important;
+  color: #f2efff;
+}
+
+.mindmate-theme[data-theme='sleep'] main section[class*='rounded-[20px]'][class*='border'] {
+  border-color: #29334d !important;
+  background-color: #111a2d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .app-shell aside a[href='/assistant'] {
+  border: 1px solid #343052 !important;
+  background: linear-gradient(110deg, #211c3d, #17192f) !important;
+  color: #eeeaff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .app-shell aside a[href='/assistant'] [class*='text-'] {
+  color: #aaa0d8 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main [class*='bg-[#ded6ff]'] {
+  background-color: #7048cc !important;
+  color: #fff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main [class*='bg-[#eef0ff]'] {
+  background-color: #171d31 !important;
+  color: #aaa8ca !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-trace-clock-position {
+  right: -115px;
+  top: 128px;
+  transform: scale(1.18);
+  transform-origin: top right;
+}
+
+.mindmate-theme[data-theme='sleep'] main .home-dashboard .mm-home-hero[class*='rounded-'][class*='border'] {
+  border-color: #303750 !important;
+  background: linear-gradient(110deg, #273348 0%, #202b3d 61%, #171a32 100%) !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main .home-dashboard article.mm-home-card[class*='rounded-'][class*='border'] {
+  border-color: #29334d !important;
+  background-color: #111a2d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-home-progress-ring {
+  background: conic-gradient(from -5deg, #8f6aff 0 68%, #171a37 68% 100%) !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main .home-dashboard .mm-home-progress-center {
+  background-color: #111a2d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main .home-dashboard .mm-home-promise[class*='rounded-'][class*='border'] {
+  border-color: #2b3150 !important;
+  background: linear-gradient(105deg, #191936 0%, #111a2d 100%) !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-home-card [class*='bg-[#f0eaff]'] {
+  background-color: #292044 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-home-card [class*='bg-[#d9f8fa]'] {
+  background-color: #123640 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-home-card [class*='bg-[#fff0df]'] {
+  background-color: #3a2a1d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main [class~='bg-white'],
+.mindmate-theme[data-theme='sleep'] main [class*='bg-white/'] {
+  background-color: #202b3d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main [class*='bg-violet-50'],
+.mindmate-theme[data-theme='sleep'] main [class*='bg-violet-100'] {
+  background-color: #252047 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main .mm-task-list[class*='rounded-'][class*='border'],
+.mindmate-theme[data-theme='sleep'] main .mm-task-side-card[class*='rounded-'][class*='border'] {
+  border-color: #29334d !important;
+  background-color: #111a2d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-task-list > div {
+  border-color: #2a334b !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-task-type[data-task-type='study'] {
+  background-color: #292044 !important;
+  color: #cbb9ff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-task-type[data-task-type='practice'] {
+  background-color: #123b37 !important;
+  color: #82e5be !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-task-type[data-task-type='revision'] {
+  background-color: #173049 !important;
+  color: #a7d1ff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-task-side-card [class*='bg-[#fff0ac]'],
+.mindmate-theme[data-theme='sleep'] .mm-task-side-card [class*='bg-[#eee8ff]'] {
+  background-color: #292044 !important;
+}
+
+/* The corner orbs and history clock switch from light mint/lilac to the dim violet treatment. */
+.mindmate-theme[data-theme='sleep'] [class*='bg-[#dff8f0]'] {
+  background-color: #241a4a !important;
+  box-shadow: 0 0 74px 18px rgb(125 79 223 / 14%);
+}
+
+.mindmate-theme[data-theme='sleep'] [class*='bg-[#e6ddff]'] {
+  background-color: #1d193b !important;
+  box-shadow: 0 0 80px 20px rgb(121 77 219 / 13%);
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-history-clock {
+  background-color: #1c1838 !important;
+  box-shadow: 0 0 0 14px rgb(109 73 198 / 10%), 0 18px 42px rgb(0 0 0 / 28%);
+}
+
+.mindmate-theme[data-theme='sleep'] main .mm-history-clock__mid[class*='rounded-'][class*='border'] {
+  border-color: #34265e !important;
+  background-color: #17152e !important;
+  box-shadow: inset 0 0 0 3px #453479 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main .mm-history-clock__face[class*='rounded-'][class*='border'] {
+  border-color: #9273f3 !important;
+  background-color: #101427 !important;
+  box-shadow: 0 0 0 6px rgb(132 100 233 / 15%), 0 0 30px rgb(130 89 239 / 20%) !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-history-clock__face > span {
+  background-color: #a080ff !important;
+  box-shadow: 0 0 12px rgb(152 116 255 / 42%);
+}
+
+.mindmate-theme[data-theme='sleep'] main [class*='border-violet-100'],
+.mindmate-theme[data-theme='sleep'] main [class*='border-violet-200'],
+.mindmate-theme[data-theme='sleep'] main [class*='border-[#e'],
+.mindmate-theme[data-theme='sleep'] main [class*='border-[#f'] {
+  border-color: #303852 !important;
+}
+
+/* Convert light-theme ink to the white/lavender hierarchy while retaining colored icons. */
+.mindmate-theme[data-theme='sleep'] [class~='text-[#211d54]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#211e58]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#201d56]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#201e55]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#242052]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#24215f]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#262251]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#26245d]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#27244f]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#28254f]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#28255e]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#29245f]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#29265f]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#2b2856]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#33365d]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#343163]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#393665]'] {
+  color: #f1efff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] [class~='text-[#5f638d]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#5e6799]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#626b9a]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#626b9c]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#646b9d]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#656b97]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#686d99]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#686d9a]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#69709e]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#7079a6]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#727ba8]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#73779e]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#737ba6]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#74789b]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#77759a]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#777c9f]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#7a80a7]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#7b81ad]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#7c80a1]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#8086b2]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#8187b5]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#8188b5]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#848ab2]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#8588aa]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#8588ae]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#8589a8]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#8585a5]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#858dbb]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#8790bc]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#898cac]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#898eb8]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#898fb8]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#9396b2]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#9a9cba]'],
+.mindmate-theme[data-theme='sleep'] [class~='text-[#a8aecb]'] {
+  color: #a8a7cc !important;
 }
 
 .mindmate-theme[data-theme='sleep'] [class~='text-slate-500'],
 .mindmate-theme[data-theme='sleep'] [class~='text-slate-600'],
-.mindmate-theme[data-theme='sleep'] [class~='text-slate-700'],
-.mindmate-theme[data-theme='sleep'] [class~='text-violet-700'],
-.mindmate-theme[data-theme='sleep'] [class~='text-violet-800'] {
-  color: #c8b9ed !important;
+.mindmate-theme[data-theme='sleep'] [class~='text-slate-700'] {
+  color: #aaa8ca !important;
 }
 
-.mindmate-theme[data-theme='sleep'] [class*='border-violet-100'],
-.mindmate-theme[data-theme='sleep'] [class*='border-violet-200'] {
-  border-color: rgb(205 186 255 / 18%) !important;
+.mindmate-theme[data-theme='sleep'] [class*='bg-[#faf9ff]'],
+.mindmate-theme[data-theme='sleep'] [class*='bg-[#f7fbff]'],
+.mindmate-theme[data-theme='sleep'] [class*='bg-[#f1f8ff]'],
+.mindmate-theme[data-theme='sleep'] [class*='bg-[#e9e3ff]'],
+.mindmate-theme[data-theme='sleep'] [class*='bg-[#f6f1ff]'],
+.mindmate-theme[data-theme='sleep'] [class*='bg-[#eee7ff]'] {
+  background-color: #182238 !important;
 }
 
 .mindmate-theme[data-theme='sleep'] input,
 .mindmate-theme[data-theme='sleep'] textarea,
 .mindmate-theme[data-theme='sleep'] select {
-  border-color: rgb(205 186 255 / 22%);
-  background-color: rgb(26 19 44 / 62%);
-  color: #f2ecff;
+  border-color: #353b58;
+  background-color: #151d31;
+  color: #f2efff;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .mm-screen-nav__bubble,
-  .mm-glass-toggle__bubble {
-    transition: none;
-    animation: none;
-  }
+.mindmate-theme[data-theme='sleep'] input::placeholder,
+.mindmate-theme[data-theme='sleep'] textarea::placeholder {
+  color: #a9a6c7;
 }
 
-/* Dark sidebar and top bar */
-[class~="bg-[#0c111c]"],
-[class~="bg-[#0c111c]/95"] {
-  background-color: rgb(11 16 32 / 90%) !important;
-  backdrop-filter: blur(14px);
+.mindmate-theme[data-theme='sleep'] .mm-screen-nav__bubble {
+  background: linear-gradient(115deg, #8c5bf4, #635ce9) !important;
+  box-shadow: 0 8px 24px rgb(99 80 227 / 35%), inset 0 1px 0 rgb(255 255 255 / 28%);
 }
 
-/* Dark cards, panels, and input areas */
-[class~="bg-slate-950/70"],
-[class~="bg-slate-950/40"] {
-  background-color: #0b1020 !important;
+/* Skill Gaps: use the same deep surfaces as the other sleep-mode panels. */
+.mindmate-theme[data-theme='sleep'] main .mm-gap-panel[class*='rounded-'][class*='border'],
+.mindmate-theme[data-theme='sleep'] main .mm-gap-level[class*='rounded-'][class*='border'],
+.mindmate-theme[data-theme='sleep'] main .mm-gap-list[class*='rounded-'][class*='border'] {
+  border-color: #29334d !important;
+  background: #111a2d !important;
+  color: #f2efff;
 }
 
-[class~="bg-slate-900"],
-[class~="bg-slate-900/70"],
-[class~="bg-slate-900/60"],
-[class~="bg-slate-900/50"] {
-  background-color: var(--color-surface) !important;
+.mindmate-theme[data-theme='sleep'] .mm-gap-level circle:first-child {
+  stroke: #27314b;
 }
 
-[class~="bg-slate-800"],
-[class~="bg-slate-800/70"] {
-  background-color: var(--color-surface-soft) !important;
+.mindmate-theme[data-theme='sleep'] .mm-gap-level circle:nth-child(2) {
+  stroke: #9a76ff;
 }
 
-/* Replace blue and cyan accents with lavender */
-[class~="bg-[#A78BFA]"],
-[class~="bg-cyan-300"],
-[class~="hover:bg-cyan-200"]:hover {
-  background-color: var(--color-primary) !important;
+.mindmate-theme[data-theme='sleep'] .mm-gap-list [role='progressbar'] {
+  background-color: #272744 !important;
 }
 
-[class~="bg-cyan-300/10"],
-[class~="bg-cyan-300/5"],
-[class~="bg-violet-400/10"],
-[class~="bg-violet-400/20"],
-[class~="bg-violet-300/5"],
-[class~="bg-violet-300/10"] {
-  background-color: var(--color-primary-soft) !important;
+.mindmate-theme[data-theme='sleep'] .mm-gap-list [role='progressbar'] > div {
+  background-color: #9a76ff !important;
 }
 
-[class~="text-cyan-300"],
-[class~="text-cyan-200"],
-[class~="text-violet-300"],
-[class~="text-violet-200"],
-[class~="hover:text-violet-300"]:hover,
-[class~="hover:text-cyan-200"]:hover {
-  color: var(--color-primary) !important;
+.mindmate-theme[data-theme='sleep'] .mm-gap-action {
+  border-color: #342c55 !important;
+  background: linear-gradient(105deg, #211c3d, #15192e) !important;
 }
 
-[class~="border-cyan-300/20"],
-[class~="border-cyan-300/30"],
-[class~="border-violet-300/20"],
-[class~="hover:border-violet-300/40"]:hover {
-  border-color: rgb(167 139 250 / 28%) !important;
+/* Settings: the profile banner and preference rows also need dark surfaces. */
+.mindmate-theme[data-theme='sleep'] .mm-settings-hero {
+  border-color: #383052 !important;
+  background: radial-gradient(circle at 85% 50%, #33245a 0, #1c1b37 34%, #111a2d 76%) !important;
 }
 
-/* Keep progress and success accents teal/mint */
-[class~="text-emerald-300"],
-[class~="text-emerald-200"] {
-  color: var(--color-success) !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-hero > div[class*='bg-white'] {
+  background-color: rgb(156 128 242 / 9%) !important;
 }
 
-[class~="bg-emerald-400"],
-[class~="bg-emerald-400/10"] {
-  background-color: var(--color-success-bg) !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-hero > div[class*='bg-gradient-to-l'] {
+  opacity: .15;
 }
 
-[class~="border-emerald-400/20"] {
-  border-color: rgb(94 234 212 / 25%) !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-hero > div[class*='rounded-2xl'][class*='bg-white'] {
+  border-color: #393451 !important;
+  background: #171b30 !important;
 }
 
-/* Text colors for dark surfaces */
-[class~="text-white"],
-[class~="text-slate-100"] {
-  color: #f8f6ff !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-hero > div[class*='rounded-2xl'][class*='border-white'] {
+  border-color: #393451 !important;
 }
 
-[class~="text-slate-200"] {
-  color: #e8e2f5 !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-hero > div[class*='rounded-full'][class*='bg-white'] {
+  background-color: #241b43 !important;
+  box-shadow: 0 0 55px 22px rgb(128 91 220 / 20%) !important;
 }
 
-[class~="text-slate-300"] {
-  color: #c8c1d8 !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-hero span[class*='bg-violet-100'] {
+  background-color: #292044 !important;
+  color: #d0c1ff !important;
 }
 
-[class~="text-slate-400"] {
-  color: #aaa3bd !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-hero button[class*='bg-gradient-to-r'] {
+  color: #fff !important;
 }
 
-[class~="text-slate-500"],
-[class~="text-slate-600"] {
-  color: #88819b !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-panel,
+.mindmate-theme[data-theme='sleep'] .mm-settings-rows {
+  border-color: #29334d !important;
+  background-color: #111a2d !important;
 }
 
-[class~="text-slate-950"] {
-  color: #171126 !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-rows > button,
+.mindmate-theme[data-theme='sleep'] .mm-settings-page > button {
+  border-color: #2a334b !important;
+  background-color: #171e32 !important;
 }
 
-/* Borders and dividers */
-[class~="border-slate-800"],
-[class~="border-slate-700"],
-[class~="divide-slate-800"] > :not([hidden]) ~ :not([hidden]) {
-  border-color: var(--color-border) !important;
+.mindmate-theme[data-theme='sleep'] .mm-settings-rows [class*='bg-emerald-50'] {
+  background-color: #123b37 !important;
+  color: #82e5be !important;
 }
 
-/* Form fields */
-textarea,
-input,
-select {
-  color: var(--color-text);
+.mindmate-theme[data-theme='sleep'] .mm-settings-page > button[class*='border-rose'] {
+  border-color: #483047 !important;
+  background: linear-gradient(100deg, #281b31, #171a2d) !important;
 }
 
-textarea::placeholder,
-input::placeholder {
-  color: var(--color-text-muted);
-  opacity: 0.75;
+/* Assistant: correct low-contrast purple text and remaining light chat surfaces. */
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell > section {
+  border-color: #29334d !important;
+  background: #0d1426 !important;
 }
 
-[class~="focus:border-cyan-300"]:focus {
-  border-color: var(--color-primary) !important;
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside,
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell main {
+  color: #f2efff;
 }
 
-[class~="focus:ring-cyan-300/20"]:focus {
-  --tw-ring-color: rgb(167 139 250 / 22%) !important;
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside button,
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell main button[class*='bg-[#f6f1ff]'] {
+  color: #e4ddff !important;
 }
 
-/* Keyboard focus */
-a:focus-visible,
-button:focus-visible,
-textarea:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 3px;
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside button[class*='bg-[#e7dcff]'] {
+  border: 1px solid #40345f !important;
+  background: #211c3d !important;
+  color: #eeeaff !important;
 }
 
-/* Respect reduced-motion preferences */
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside div[class*='bg-[#e8ddff]'] {
+  border: 1px solid #383052 !important;
+  background: #19182f !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside div[class*='bg-[#e8ddff]'] strong {
+  color: #d0c1ff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell main [class*='bg-white/'] {
+  border-color: #29334d !important;
+  background-color: #111a2d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > section[class*='bg-white/'] {
+  border: 1px solid #29334d !important;
+  background: #111a2d !important;
+  background-color: #111a2d !important;
+  color: #f2efff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > section[class*='bg-white/'] button {
+  color: #eeeaff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > section[class*='bg-white/'] button:hover {
+  background-color: #20233d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > section[class*='bg-white/'] [class*='bg-[#f0e9ff]'] {
+  background-color: #292044 !important;
+  color: #cbb9ff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > section[class*='bg-white/'] a {
+  background-color: #292044 !important;
+  color: #d0c1ff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > section[class*='bg-white/'] a:hover {
+  background-color: #352858 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > section[class*='bg-white/'] p,
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > section[class*='bg-white/'] small {
+  color: #aaa8ca !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell main [class*='bg-[#eee7ff]'] {
+  background-color: #20233d !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell main [class*='bg-[#f6f1ff]'] {
+  border-color: #343052 !important;
+  background-color: #171a31 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell main [class*='text-violet-700'],
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell main [class*='text-violet-800'] {
+  color: #d0c1ff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell main form {
+  border-color: #343052 !important;
+  background-color: #151b30 !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell [role='menu'],
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell [role='status'] {
+  border-color: #383052 !important;
+  background-color: #171b30 !important;
+  color: #eeeaff !important;
+}
+
+.mindmate-theme[data-theme='sleep'] .mm-assistant-shell aside > div[class*='radial-gradient'] {
+  background: radial-gradient(circle at 50% 75%, #35275c 0%, #201b3d 50%, transparent 72%) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

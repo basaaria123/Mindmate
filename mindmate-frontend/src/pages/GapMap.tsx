@@ -13,7 +13,7 @@ function SkillLevelRing() {
   const progress = circumference * 0.72
 
   return (
-    <div className="flex h-[308px] flex-col items-center justify-center rounded-[17px] border border-[#e3dcff] bg-[#faf9ff]">
+    <div className="mm-gap-level flex h-[308px] flex-col items-center justify-center rounded-[17px] border border-[#e3dcff] bg-[#faf9ff]">
       <div className="relative grid size-[190px] place-items-center">
         <svg viewBox="0 0 190 190" className="size-full -rotate-90" aria-hidden="true">
           <circle cx="95" cy="95" r={radius} fill="none" stroke="#d8e2f4" strokeWidth="14" />
@@ -37,7 +37,7 @@ function SkillLevelRing() {
 
 function SkillGapList() {
   return (
-    <section className="h-[308px] rounded-[17px] border border-[#e3dcff] bg-white/55 px-5 py-[18px]">
+    <section className="mm-gap-list h-[308px] rounded-[17px] border border-[#e3dcff] bg-white/55 px-5 py-[18px]">
       <h2 className="mb-[17px] text-[18px] font-bold leading-6 text-[#262251]">Top Skill Gaps</h2>
       <div className="space-y-[17px]">
         {skillGaps.map(({ name, value, Icon, iconColor, barColor }) => (
@@ -71,7 +71,7 @@ function GapMap() {
       <div aria-hidden="true" className="pointer-events-none absolute -right-[96px] -top-[278px] -z-10 size-[260px] rounded-full bg-[#dff8f0]" />
       <div aria-hidden="true" className="pointer-events-none absolute -bottom-[190px] -right-24 -z-10 size-[300px] rounded-full bg-[#e6ddff]" />
 
-      <section className="min-h-[530px] rounded-[20px] border border-[#e3dcff] bg-white/80 p-5 shadow-[0_12px_30px_rgba(84,63,175,0.07)]">
+      <section className="mm-gap-panel min-h-[530px] rounded-[20px] border border-[#e3dcff] bg-white/80 p-5 shadow-[0_12px_30px_rgba(84,63,175,0.07)]">
         <div className="grid gap-[19px] lg:grid-cols-[280px_minmax(0,1fr)]">
           <SkillLevelRing />
           <SkillGapList />
@@ -80,7 +80,7 @@ function GapMap() {
         <h2 className="mb-[12px] mt-[18px] text-[18px] font-bold leading-6 text-[#262251]">
           Recommended Actions
         </h2>
-        <section className="flex min-h-[103px] flex-col justify-between gap-4 rounded-[16px] border border-[#eee0ff] bg-[linear-gradient(100deg,#fff0f2_0%,#f6efff_100%)] px-[18px] py-4 sm:flex-row sm:items-center">
+        <section className="mm-gap-action flex min-h-[103px] flex-col justify-between gap-4 rounded-[16px] border border-[#eee0ff] bg-[linear-gradient(100deg,#fff0f2_0%,#f6efff_100%)] px-[18px] py-4 sm:flex-row sm:items-center">
           <div className="flex min-w-0 items-center gap-4">
             <span className="grid size-[47px] shrink-0 place-items-center rounded-[13px] bg-[#ff718a] text-white">
               <HeartPulse size={24} strokeWidth={1.8} />

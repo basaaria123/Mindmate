@@ -63,9 +63,9 @@ function classifyEvent(event: DemoEvent): ActivityItem {
 
 function HistoryClock() {
   return (
-    <div aria-hidden="true" className="relative grid size-[210px] place-items-center rounded-full bg-[#eeeaff] shadow-[0_13px_23px_rgba(100,76,191,.13)]">
-      <div className="grid size-[184px] place-items-center rounded-full border-[8px] border-[#d8d1ff] bg-[#f4f1ff] shadow-[inset_0_0_0_3px_#b6aaff]">
-        <div className="relative grid size-[144px] place-items-center rounded-full border-[4px] border-[#a79aff] bg-[#f8f7ff] shadow-[0_0_0_3px_rgba(153,137,255,.1)]">
+    <div aria-hidden="true" className="mm-history-clock relative grid size-[210px] place-items-center rounded-full bg-[#eeeaff] shadow-[0_13px_23px_rgba(100,76,191,.13)]">
+      <div className="mm-history-clock__mid grid size-[184px] place-items-center rounded-full border-[8px] border-[#d8d1ff] bg-[#f4f1ff] shadow-[inset_0_0_0_3px_#b6aaff]">
+        <div className="mm-history-clock__face relative grid size-[144px] place-items-center rounded-full border-[4px] border-[#a79aff] bg-[#f8f7ff] shadow-[0_0_0_3px_rgba(153,137,255,.1)]">
           <span className="absolute left-1/2 top-1/2 h-[43px] w-[8px] -translate-x-1/2 -translate-y-full rotate-[27deg] origin-bottom rounded-full bg-[#7b6bf4]" />
           <span className="absolute left-1/2 top-1/2 h-[39px] w-[8px] -translate-y-1/2 rotate-[112deg] origin-left rounded-full bg-[#7b6bf4]" />
           <span className="absolute left-1/2 top-1/2 size-[12px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#7b6bf4]" />
@@ -144,7 +144,7 @@ function Trace() {
               </li>
             ))}
           </ol>
-          <div className="pointer-events-none absolute right-0 top-[48px] hidden md:block">
+          <div className="mm-trace-clock-position pointer-events-none absolute right-0 top-[48px] hidden md:block">
             <HistoryClock />
           </div>
         </div>

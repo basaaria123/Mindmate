@@ -87,18 +87,7 @@ function AppLayout() {
           } ${
             sidebarCollapsed && !mobileNavOpen
               ? 'md:w-[68px]'
-              : location.pathname === '/sim'
-                ? 'md:w-[14vw] md:min-w-[166px] md:max-w-[186px]'
-                : location.pathname === '/memory'
-                  ? 'md:w-[14vw] md:min-w-[160px] md:max-w-[186px]'
-                  : location.pathname === '/pipeline' ||
-                      location.pathname === '/gap-map' ||
-                      location.pathname === '/scanner' ||
-                      location.pathname === '/trace'
-                    ? 'md:w-[14.5vw] md:min-w-[166px] md:max-w-[186px]'
-                    : location.pathname === '/console'
-                      ? 'md:w-[14.2vw] md:min-w-[160px] md:max-w-[186px]'
-                      : 'md:w-[186px]'
+              : 'md:w-[208px]'
           } shrink-0 border-r border-violet-100 bg-white px-2.5 pb-3 pt-4 md:sticky md:top-2 md:h-[calc(100vh-16px)] md:flex md:flex-col`}
         >
           <div
@@ -228,7 +217,7 @@ function AppLayout() {
 
         <div className="flex min-w-0 flex-1 flex-col">
           <header
-            className={`relative z-20 flex h-[82px] shrink-0 items-center justify-between gap-4 border-b border-violet-100 bg-gradient-to-r from-[#fbfaff] to-[#f0edff] ${
+            className={`mm-workspace-header relative z-20 flex h-[82px] shrink-0 items-center justify-between gap-4 border-b border-violet-100 bg-gradient-to-r from-[#fbfaff] to-[#f0edff] ${
               location.pathname === '/memory' ? 'px-[31px]' : 'px-[27px]'
             }`}
           >
@@ -296,7 +285,7 @@ function AppLayout() {
                 </p>
               </div>
             ) : (
-              <label className="flex h-[42px] w-full max-w-[510px] items-center gap-2 rounded-full border border-violet-200 bg-white/80 px-4 text-[#8187b5] shadow-[0_1px_3px_rgba(74,55,150,.04)]">
+              <label className="flex h-[44px] w-full max-w-[440px] items-center gap-2 rounded-full border border-violet-200 bg-white/80 px-4 text-[#8187b5] shadow-[0_1px_3px_rgba(74,55,150,.04)]">
                 <Search size={17} />
                 <input
                   className="w-full bg-transparent text-sm outline-none placeholder:text-[#898eb8]"
@@ -340,17 +329,18 @@ function AppLayout() {
           <main
             className={`min-h-0 flex-1 bg-[#f4f2ff] pb-[22px] ${
               location.pathname === '/memory'
-                ? 'px-[31px] pt-[33px]'
+                ? 'px-3 pt-[63px] md:px-[31px]'
                 : location.pathname === '/pipeline' ||
                     location.pathname === '/console' ||
                     location.pathname === '/gap-map' ||
                     location.pathname === '/scanner' ||
-                    location.pathname === '/trace' ||
-                    location.pathname === '/settings'
-                  ? 'px-[27px] pt-[36px]'
+                    location.pathname === '/trace'
+                  ? 'px-3 pt-[63px] md:px-[27px]'
+                  : location.pathname === '/settings'
+                    ? 'px-3 pt-[36px] md:px-[27px]'
                   : location.pathname === '/sim'
-                    ? 'px-[25px] pt-[6px]'
-                    : 'px-[15px] pt-[6px]'
+                    ? 'px-3 pt-[6px] md:px-[27px]'
+                    : 'px-3 pt-[10px] md:px-[20px]'
             }`}
           >
             <div className="sr-only" aria-live="polite">

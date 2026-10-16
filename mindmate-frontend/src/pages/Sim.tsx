@@ -66,12 +66,12 @@ function Sim() {
     </div>
 
     <div className="grid gap-4 lg:grid-cols-[1.85fr_.9fr]">
-      <section className="rounded-[22px] border border-violet-200 bg-white px-5 shadow-[0_8px_24px_rgba(82,62,163,.07)] sm:px-[22px]" aria-label={`${filter} tasks`}>
+      <section className="mm-task-list rounded-[22px] border border-violet-200 bg-white px-5 shadow-[0_8px_24px_rgba(82,62,163,.07)] sm:px-[22px]" aria-label={`${filter} tasks`}>
         {filteredTasks.map((task) => <div key={task.id} className={`flex min-h-[103px] items-center gap-2 border-b border-[#f0edfb] last:border-0 ${task.status === 'completed' ? 'text-slate-400' : ''}`}>
           <button type="button" aria-label={`${task.status === 'pending' ? 'Mark complete' : 'Mark pending'}: ${task.title}`} onClick={() => toggleTask(task.id)} className={`grid size-6 shrink-0 place-items-center rounded-full border-2 ${task.status === 'completed' ? 'border-slate-300 text-slate-400' : 'border-[#ad96ff] text-[#8257fb]'}`}>{task.status === 'completed' && <Check size={14}/>}</button>
           {task.icon !== 'none' && <span className={`hidden size-8 shrink-0 place-items-center rounded-lg text-white sm:grid ${task.icon === 'bolt' ? 'bg-emerald-500' : task.icon === 'refresh' ? 'bg-emerald-500' : task.icon === 'diamond' ? 'bg-amber-500' : 'bg-violet-500'}`}>{task.icon === 'bolt' ? <Zap size={18} fill="none"/> : task.icon === 'refresh' ? <RefreshCw size={18}/> : task.icon === 'diamond' ? <Diamond size={18}/> : <CircleHelp size={18}/>}</span>}
           <button type="button" onClick={() => { setActiveTask(task); setResult(null); setAnswer('') }} className="min-w-0 flex-1 py-3 text-left"><span className="block text-[13px] font-semibold leading-5 text-[#201e55]">{task.title}</span><span className="mt-1 block text-[10px] text-[#8790bc]">Simple</span></button>
-          <span className={`hidden shrink-0 rounded-xl px-4 py-1.5 text-[11px] sm:inline-flex ${task.type === 'Practice' ? 'bg-[#dcfae9] text-[#16a35b]' : task.type === 'Revision' ? 'bg-[#edf5ff] text-[#3281ee]' : 'bg-[#f0e9ff] text-[#8053f7]'}`}>{task.type}</span>
+          <span data-task-type={task.type.toLowerCase()} className={`mm-task-type hidden shrink-0 rounded-xl px-4 py-1.5 text-[11px] sm:inline-flex ${task.type === 'Practice' ? 'bg-[#dcfae9] text-[#16a35b]' : task.type === 'Revision' ? 'bg-[#edf5ff] text-[#3281ee]' : 'bg-[#f0e9ff] text-[#8053f7]'}`}>{task.type}</span>
           <span className={`hidden min-w-[132px] shrink-0 text-right text-[10px] sm:block ${task.due.includes('Due Today') && task.status === 'pending' ? 'text-red-500' : 'text-[#69709e]'}`}>{task.due}</span>
           <button type="button" aria-label={`Open ${task.title}`} onClick={() => { setActiveTask(task); setResult(null); setAnswer('') }} className="grid size-7 shrink-0 place-items-center text-[#8a91bd] hover:text-violet-600"><ChevronRight size={19}/></button>
         </div>)}
@@ -79,12 +79,12 @@ function Sim() {
       </section>
 
       <aside className="grid gap-4 lg:grid-cols-1 sm:grid-cols-2">
-        <section className="min-h-[242px] rounded-[22px] border border-violet-200 bg-white p-5 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
+        <section className="mm-task-side-card min-h-[242px] rounded-[22px] border border-violet-200 bg-white p-5 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
           <h2 className="text-[18px] font-bold text-[#211e58]">Your Study Streak</h2>
           <div className="mt-4 flex items-center gap-4"><span className="grid size-[54px] place-items-center rounded-[18px] bg-[#fff0ac] text-[30px]">🔥</span><div><p className="text-[30px] font-bold leading-8 text-[#211e58]">5 Days</p><p className="mt-1 text-[13px] text-[#7a80a7]">Keep going!</p></div></div>
           <div className="mt-5 flex h-[66px] items-end justify-center gap-6">{[20,35,53,73].map((height,index)=><div key={height} style={{height}} className={`w-9 rounded-t-md ${index<2?'bg-[#ded6ff]':'bg-[#8c4df3]'}`}/>)}</div>
         </section>
-        <section className="flex min-h-[260px] flex-col rounded-[22px] border border-violet-200 bg-white p-5 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
+        <section className="mm-task-side-card flex min-h-[260px] flex-col rounded-[22px] border border-violet-200 bg-white p-5 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
           <h2 className="text-[18px] font-bold text-[#211e58]">Today’s Focus</h2><div className="mt-6 flex items-start gap-4"><span className="grid size-[53px] shrink-0 place-items-center rounded-[17px] bg-[#eee8ff] text-violet-600"><Target size={29} strokeWidth={1.7}/></span><p className="text-sm leading-5 text-[#33365d]">Complete at least 2 tasks today.</p></div><div className="mt-auto flex items-center gap-5 pt-8"><div className="h-[10px] flex-1 overflow-hidden rounded-full bg-[#e4e4e8]"><div className="h-full w-1/2 rounded-full bg-gradient-to-r from-[#8f3ef3] to-[#6562f1]"/></div><span className="text-sm text-[#656b97]">1 / 2</span></div>
         </section>
       </aside>

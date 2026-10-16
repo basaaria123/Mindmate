@@ -59,7 +59,7 @@ function Assistant() {
   }
 
   return (
-    <div className="min-h-screen bg-[#eeeaff] p-1.5 text-[#211e58] sm:p-2.5">
+    <div className="mm-assistant-shell min-h-screen bg-[#eeeaff] p-1.5 text-[#211e58] sm:p-2.5">
       <section className={`mx-auto flex min-h-[calc(100vh-16px)] max-w-[1600px] overflow-hidden rounded-[20px] border border-violet-200 bg-[#fbfaff] shadow-[0_12px_40px_rgba(88,63,173,.10)] ${expanded ? 'min-h-[calc(100vh-16px)]' : ''}`}>
         {sidebarOpen && <aside className="flex w-[205px] shrink-0 flex-col border-r border-violet-100 bg-[#f2eeff] sm:w-[220px]">
           <div className="flex h-[62px] items-center gap-2 border-b border-violet-100 px-3">
@@ -79,7 +79,7 @@ function Assistant() {
         </aside>}
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="relative z-20 flex h-[62px] shrink-0 items-center justify-between border-b border-violet-100 bg-white/95 px-4 shadow-sm sm:px-6">
+          <header className="mm-assistant-header relative z-20 flex h-[62px] shrink-0 items-center justify-between border-b border-violet-100 bg-white/95 px-4 shadow-sm sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
               {!sidebarOpen && <button onClick={() => setSidebarOpen(true)} aria-label="Show chat history" className="grid size-9 place-items-center rounded-lg text-violet-600 hover:bg-violet-50"><PanelIcon /></button>}
               <img src={mindmateIntroEmblem} alt="" className="size-8 rounded-full object-cover" />
