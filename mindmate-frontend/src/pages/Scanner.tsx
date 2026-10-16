@@ -257,7 +257,7 @@ useEffect(() => {
           </p>
 
           <textarea
-          className="mt-4 w-full rounded-xl border border-[#d9d2ff] bg-white p-3 text-sm !text-[#262251] placeholder:text-[#8585a5] outline-none focus:border-[#8057ff] focus:ring-2 focus:ring-[#8057ff]/20"
+          className="mt-4 w-full rounded-xl border border-[#d9d2ff] bg-white p-3 text-sm text-[#262251] placeholder:text-[#8585a5] outline-none focus:border-[#8057ff] focus:ring-2 focus:ring-[#8057ff]/20"
             value={opportunityText}
             onChange={(event) => setOpportunityText(event.target.value)}
             placeholder="Paste the full opportunity description here..."

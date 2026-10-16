@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from 'react'
+import { useState, type FormEvent, type ReactNode } from 'react'
 import {
   Atom, Bell, BookOpen, Box, ChevronDown, ChevronRight, Database, GitBranch,
   Globe2, Headset, Info, KeyRound, LogOut, MessageSquare, Moon, Network,
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router'
 import mindmateEmblem from '../assets/mindmate-intro-emblem.png'
 import { useMindMateTheme } from '../ThemeContext'
 
-type StoredProfile = { name?: string; email?: string }
+type StoredProfile = { name?: string; firstName?: string; lastName?: string; email?: string }
 
 function getStoredProfile(): StoredProfile {
   try {
@@ -28,12 +28,49 @@ function readableName(email: string) {
 function SettingsPage() {
   const navigate = useNavigate()
   const { sleepMode, toggleSleepMode } = useMindMateTheme()
-  const profile = useMemo(getStoredProfile, [])
+  const [profile, setProfile] = useState<StoredProfile>(getStoredProfile)
+  const [isEditingProfile, setIsEditingProfile] = useState(false)
+  const [profileError, setProfileError] = useState('')
+  const [profileDraft, setProfileDraft] = useState({ firstName: '', lastName: '', email: '' })
   const email = profile.email || 'Sign in to add your email'
   const name = profile.name || (profile.email ? readableName(profile.email) : 'MindMate learner')
   const initials = name.split(/\s+/).filter(Boolean).slice(0, 2)
     .map((part) => part[0]?.toUpperCase()).join('') || 'M'
   const [language, setLanguage] = useState('English')
+
+  function openProfileEditor() {
+    const nameParts = (profile.name ?? '').trim().split(/\s+/).filter(Boolean)
+    const fallbackName = profile.email ? readableName(profile.email).split(' ') : []
+    setProfileDraft({
+      firstName: profile.firstName || nameParts[0] || fallbackName[0] || '',
+      lastName: profile.lastName || nameParts.slice(1).join(' ') || fallbackName.slice(1).join(' '),
+      email: profile.email || '',
+    })
+    setProfileError('')
+    setIsEditingProfile(true)
+  }
+
+  function saveProfile(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const firstName = profileDraft.firstName.trim()
+    const lastName = profileDraft.lastName.trim()
+    const nextProfile: StoredProfile = {
+      ...profile,
+      firstName,
+      lastName,
+      name: `${firstName} ${lastName}`.trim(),
+      email: profileDraft.email.trim(),
+    }
+
+    try {
+      window.localStorage.setItem('mindmate-user-profile', JSON.stringify(nextProfile))
+      setProfile(nextProfile)
+      setIsEditingProfile(false)
+      window.dispatchEvent(new Event('mindmate:profile-updated'))
+    } catch {
+      setProfileError('Your changes could not be saved on this device. Please try again.')
+    }
+  }
 
   function logOut() {
     window.localStorage.removeItem('mindmate-user-profile')
@@ -64,7 +101,7 @@ function SettingsPage() {
                 <p className="truncate text-sm text-[#7b81ad]">{email}</p>
                 <span className="mt-1 inline-flex rounded-full bg-violet-100 px-2.5 py-0.5 text-[11px] font-semibold text-violet-700">MindMate account</span>
               </div>
-              <button type="button" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[#8953f5] to-[#6259ed] px-3 py-2 text-xs font-semibold text-white shadow-sm hover:brightness-105">
+              <button type="button" onClick={openProfileEditor} className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[#8953f5] to-[#6259ed] px-3 py-2 text-xs font-semibold text-white shadow-sm hover:brightness-105">
                 <Pencil size={14} /> <span className="hidden sm:inline">Edit Profile</span>
               </button>
             </div>
@@ -77,6 +114,33 @@ function SettingsPage() {
           </div>
         </div>
       </section>
+
+      {isEditingProfile && (
+        <div className="fixed inset-0 z-[120] grid place-items-center overflow-y-auto bg-slate-950/60 p-4 backdrop-blur-sm" onMouseDown={(event) => { if (event.target === event.currentTarget) setIsEditingProfile(false) }}>
+          <section role="dialog" aria-modal="true" aria-labelledby="edit-profile-title" className={`w-full max-w-md rounded-2xl border p-6 shadow-2xl ${sleepMode ? 'border-[#393451] bg-[#171b30] text-white' : 'border-violet-100 bg-white text-[#211e58]'}`}>
+            <h2 id="edit-profile-title" className="text-xl font-bold">Edit Profile</h2>
+            <p className={`mt-1 text-sm ${sleepMode ? 'text-[#aaa6cb]' : 'text-[#7379a8]'}`}>Update your account name and email address.</p>
+            <form onSubmit={saveProfile} className="mt-5 space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block text-sm font-medium">First name
+                  <input autoFocus required value={profileDraft.firstName} onChange={(event) => setProfileDraft((draft) => ({ ...draft, firstName: event.target.value }))} className="mt-1.5 w-full rounded-xl border border-violet-200 bg-white px-3 py-2.5 text-sm text-[#211e58] outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20" />
+                </label>
+                <label className="block text-sm font-medium">Last name
+                  <input required value={profileDraft.lastName} onChange={(event) => setProfileDraft((draft) => ({ ...draft, lastName: event.target.value }))} className="mt-1.5 w-full rounded-xl border border-violet-200 bg-white px-3 py-2.5 text-sm text-[#211e58] outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20" />
+                </label>
+              </div>
+              <label className="block text-sm font-medium">Email address
+                <input type="email" autoComplete="email" required value={profileDraft.email} onChange={(event) => setProfileDraft((draft) => ({ ...draft, email: event.target.value }))} className="mt-1.5 w-full rounded-xl border border-violet-200 bg-white px-3 py-2.5 text-sm text-[#211e58] outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20" />
+              </label>
+              {profileError && <p role="alert" className="text-sm text-rose-500">{profileError}</p>}
+              <div className="flex justify-end gap-3 pt-1">
+                <button type="button" onClick={() => setIsEditingProfile(false)} className={`rounded-xl border px-4 py-2 text-sm font-semibold ${sleepMode ? 'border-[#393451] text-[#e7e3ff] hover:bg-white/5' : 'border-violet-200 text-[#6256a5] hover:bg-violet-50'}`}>Cancel</button>
+                <button type="submit" className="rounded-xl bg-gradient-to-r from-[#8953f5] to-[#6259ed] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:brightness-105">Save changes</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      )}
 
       <div className="grid gap-4 xl:grid-cols-2">
         <SettingsPanel icon={<ShieldCheck />} title="Credentials & Connections" subtitle="Manage your API keys and connected services.">

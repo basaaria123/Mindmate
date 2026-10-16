@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import {
   Activity,
   Bell,
@@ -67,7 +67,16 @@ function AppLayout() {
   const location = useLocation()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [profileInitial] = useState(getProfileInitial)
+  const [profileInitial, setProfileInitial] = useState(getProfileInitial)
+  useEffect(() => {
+    const syncProfileInitial = () => setProfileInitial(getProfileInitial())
+    window.addEventListener('mindmate:profile-updated', syncProfileInitial)
+    window.addEventListener('storage', syncProfileInitial)
+    return () => {
+      window.removeEventListener('mindmate:profile-updated', syncProfileInitial)
+      window.removeEventListener('storage', syncProfileInitial)
+    }
+  }, [])
   const currentScreen =
     screens.find((screen) => screen.path === location.pathname) ?? screens[0]
   const activeScreenIndex = Math.max(
