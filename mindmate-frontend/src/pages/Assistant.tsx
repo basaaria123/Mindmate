@@ -5,6 +5,7 @@ import mindmateIntroEmblem from '../assets/mindmate-intro-emblem.png'
 import activityEmblemReference from '../assets/activity-emblem-reference.png'
 import mindmateWordmark from '../assets/mindmate-wordmark.svg'
 import { GlassThemeToggle } from '../ThemeContext'
+import { getFirstNameFromEmail } from '../services/userProfile'
 
 const quickActions = [
   { label: 'Generate Study Plan', detail: 'Personalized for your goals', icon: CalendarDays, prompt: 'Create a study plan for me.' },
@@ -23,6 +24,7 @@ const recentChats = [
 
 function Assistant() {
   const navigate = useNavigate()
+  const firstName = getFirstNameFromEmail()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [message, setMessage] = useState('')
   const [sentMessages, setSentMessages] = useState<string[]>([])
@@ -92,7 +94,7 @@ function Assistant() {
             <main className="flex min-w-0 flex-1 flex-col rounded-2xl bg-white/70 p-3 sm:p-5">
               <section className="flex min-h-[155px] items-center gap-4 rounded-2xl px-2 py-2 sm:gap-6 sm:px-3">
                 <div className="relative hidden size-[122px] shrink-0 overflow-hidden rounded-full border border-violet-200 bg-[#e9e0ff] shadow-[0_3px_14px_rgba(139,103,247,.24)] sm:block"><img src={activityEmblemReference} alt="MindMate AI emblem" className="absolute left-[-26px] top-[-19px] max-w-none w-[174px]" /></div>
-                <div className="min-w-0"><h2 className="text-xl font-bold sm:text-[27px]">Hi Salma! <span className="text-violet-500">✦</span></h2><p className="mt-1 text-[14px] text-[#686d99]">I’m MindMate, your AI assistant.</p><p className="mt-2 text-[12px] leading-5 text-[#777c9f] sm:text-[13px]">Let’s make learning easier, plan smarter, reach goals, or just say hello!</p></div>
+                <div className="min-w-0"><h2 className="text-xl font-bold sm:text-[27px]">Hi {firstName}! <span className="text-violet-500">✦</span></h2><p className="mt-1 text-[14px] text-[#686d99]">I’m MindMate, your AI assistant.</p><p className="mt-2 text-[12px] leading-5 text-[#777c9f] sm:text-[13px]">Let’s make learning easier, plan smarter, reach goals, or just say hello!</p></div>
               </section>
 
               <div className="grid grid-cols-2 gap-2 xl:grid-cols-3">
@@ -102,7 +104,7 @@ function Assistant() {
                 ].map(({ label, icon: Icon }) => <button key={label} onClick={() => setMessage(label)} className="flex min-h-8 items-center justify-center gap-1.5 rounded-full border border-violet-100 bg-[#f6f1ff] px-2 text-[11px] font-medium text-violet-700 hover:bg-[#eee5ff] sm:text-[14px]"><Icon size={12}/>{label}</button>)}
               </div>
 
-              <div className="mt-4 flex min-h-[96px] gap-2.5"><img src={mindmateIntroEmblem} alt="" className="mt-1 size-5 rounded-full object-cover" /><div className="max-w-[510px] rounded-2xl rounded-tl-md bg-[#eee7ff] px-3.5 py-3 text-[12px] leading-[1.7] sm:px-4 sm:text-[13px]"><strong className="text-[#29245f]">Tell me what you’d like to do today, Salma.</strong><p className="mt-1 text-[#74789b]">I can help with your studies, plan your tasks, explain concepts, find resources, and much more. <span className="text-violet-500">✦</span></p></div></div>
+              <div className="mt-4 flex min-h-[96px] gap-2.5"><img src={mindmateIntroEmblem} alt="" className="mt-1 size-5 rounded-full object-cover" /><div className="max-w-[510px] rounded-2xl rounded-tl-md bg-[#eee7ff] px-3.5 py-3 text-[12px] leading-[1.7] sm:px-4 sm:text-[13px]"><strong className="text-[#29245f]">Tell me what you’d like to do today, {firstName}.</strong><p className="mt-1 text-[#74789b]">I can help with your studies, plan your tasks, explain concepts, find resources, and much more. <span className="text-violet-500">✦</span></p></div></div>
               {sentMessages.map((item, index) => <div key={`${item}-${index}`} className="mt-2 flex justify-end"><div className="max-w-[80%] rounded-2xl rounded-br-md bg-violet-600 px-4 py-2.5 text-[13px] text-white">{item}</div></div>)}
 
               <div className="mt-auto pt-4"><div className="flex items-center justify-center gap-2 pb-3 text-[10px] text-[#9396b2]"><span className="h-px w-8 bg-violet-100"/>You can also try one of the suggestions above<span className="h-px w-8 bg-violet-100"/></div>

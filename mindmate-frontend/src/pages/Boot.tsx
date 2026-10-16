@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, BookOpen, Bot, ChartNoAxesColumn, CheckSquare, Circle, ClipboardPlus, UsersRound, X, Zap } from 'lucide-react'
 import { Link } from 'react-router'
+import { getFirstNameFromEmail } from '../services/userProfile'
 
 const tasks = [
   { label: 'Study – Cardiovascular System', time: '10:00 AM' },
@@ -108,12 +109,13 @@ function DashboardTourCard({ step, onClose, onNext, className = '', inert = fals
 }
 
 function Boot() {
+  const firstName = getFirstNameFromEmail()
   return <div className="home-dashboard mx-auto max-w-[1200px] space-y-[21px]">
     <DashboardTour />
     <section className="mm-home-hero relative min-h-[310px] overflow-hidden rounded-[22px] border border-violet-200 bg-[linear-gradient(112deg,#eeebff_0%,#e9e9ff_57%,#ccecf7_100%)] px-6 py-7 sm:px-[27px] sm:pb-[52px] sm:pt-[60px]">
       <div className="pointer-events-none absolute -right-4 top-3 size-72 rounded-full bg-[#9b8cff]/30 blur-3xl"/><span className="absolute right-[26%] top-6 text-2xl text-white">✦</span><span className="absolute right-1 top-[68%] text-xs text-amber-200">•</span>
       <div className="relative z-10">
-        <h1 className="text-[28px] font-bold leading-tight tracking-[-.025em] text-[#201d56] sm:text-[32px]">Good Morning, Salma!</h1>
+        <h1 className="text-[28px] font-bold leading-tight tracking-[-.025em] text-[#201d56] sm:text-[32px]">Good Morning, {firstName}!</h1>
         <p className="mt-4 text-base text-[#5e6799] sm:text-[18px]">Small steps today, big progress tomorrow.</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link to="/pipeline" className="inline-flex h-[46px] items-center gap-2.5 rounded-2xl border border-violet-200 bg-[#e9e3ff] px-4 text-sm font-semibold text-[#211e58] hover:bg-[#dfd6ff]"><ClipboardPlus size={18} className="text-[#7154ff]"/>Continue your plan</Link>
