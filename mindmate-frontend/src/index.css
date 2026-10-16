@@ -793,6 +793,11 @@ body {
   pointer-events: none;
 }
 
+.mm-dashboard-tour__stack {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
 .mm-dashboard-tour__back--one {
   transform: translateY(7px) scale(.99);
   opacity: .9;
@@ -803,8 +808,58 @@ body {
   opacity: .78;
 }
 
+.mm-dashboard-tour__back--one { z-index: 1; }
+.mm-dashboard-tour__back--two { z-index: 3; transform: translate(4px, 18px) scale(.985); }
+.mm-dashboard-tour__back--one { transform: translate(2px, 9px) scale(.992); }
+.mm-dashboard-tour__back--three { z-index: 2; transform: translate(6px, 27px) scale(.978); }
+.mm-dashboard-tour__back--four { z-index: 1; transform: translate(8px, 36px) scale(.97); }
+
+.mm-dashboard-tour__rear-card {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+.mm-dashboard-tour__rear-card > .mm-dashboard-tour__card {
+  border-color: #e7d8ff !important;
+  background: #fcf9ff !important;
+  box-shadow: 0 12px 25px rgb(79 53 139 / 15%);
+}
+
+.mm-dashboard-tour__stack > .mm-dashboard-tour__card:not(.is-incoming) {
+  z-index: 5;
+}
+
 .mm-dashboard-tour__card {
-  animation: mm-dashboard-card-wipe 420ms cubic-bezier(.2,.75,.25,1) both;
+  animation: mm-dashboard-card-entrance 260ms ease-out both;
+  transform-origin: center;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.mm-dashboard-tour__stack.is-transitioning .mm-dashboard-tour__card.is-outgoing {
+  z-index: -1 !important;
+  animation: mm-dashboard-card-out 450ms cubic-bezier(.45,0,.85,.35) both;
+}
+
+.mm-dashboard-tour__stack.is-transitioning .mm-dashboard-tour__back--two {
+  z-index: 3;
+}
+
+.mm-dashboard-tour__stack.is-transitioning .mm-dashboard-tour__back--one {
+  z-index: 4;
+}
+
+.mm-dashboard-tour__stack.is-transitioning .mm-dashboard-tour__back--three { z-index: 2; }
+.mm-dashboard-tour__stack.is-transitioning .mm-dashboard-tour__back--four { z-index: 1; }
+
+.mm-dashboard-tour__stack.is-transitioning .mm-dashboard-tour__card.is-incoming {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  animation: mm-dashboard-card-in 450ms cubic-bezier(.15,.75,.25,1) both;
 }
 
 .mindmate-theme[data-theme='sleep'] main .mm-dashboard-tour__card[class*='rounded-'][class*='border'] {
@@ -901,9 +956,49 @@ body {
   text-shadow: 0 3px 7px rgb(83 40 151 / 23%);
 }
 
-@keyframes mm-dashboard-card-wipe {
-  from { opacity: .35; transform: translateX(26px) rotate(1.5deg); clip-path: inset(0 0 0 100%); }
-  to { opacity: 1; transform: translateX(0) rotate(0); clip-path: inset(0 0 0 0); }
+@keyframes mm-dashboard-card-entrance {
+  from { opacity: .7; transform: translateY(8px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes mm-dashboard-card-out {
+  0% { opacity: 1; transform: translate3d(0,0,0) rotateX(0) scale(1); }
+  45% { opacity: 1; transform: translate3d(20px,44px,-40px) rotateZ(2deg) scale(.99); }
+  100% { opacity: 1; transform: translate3d(34px,78px,-80px) rotateZ(4deg) scale(.98); }
+}
+
+@keyframes mm-dashboard-card-in {
+  0% { opacity: .82; transform: translate3d(2px,9px,-40px) rotateZ(1deg) scale(.99); }
+  55% { opacity: 1; transform: translate3d(0,-3px,18px) rotateZ(-.5deg) scale(1.005); }
+  100% { opacity: 1; transform: translate3d(0,0,0) rotateX(0) scale(1); }
+}
+
+.mm-dashboard-tour__progress {
+  position: relative;
+  display: grid;
+  width: 112px;
+  height: 112px;
+  place-items: center;
+  border: 7px solid #dbe8ff;
+  border-right-color: #42a4ea;
+  border-bottom-color: #42a4ea;
+  border-radius: 50%;
+  background: #fcfaff;
+  box-shadow: 0 0 0 6px rgb(151 121 231 / 12%), 0 6px 16px rgb(63 133 204 / 18%);
+  color: #56508c;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.mm-dashboard-tour__progress i {
+  position: absolute;
+  right: -14px;
+  bottom: -10px;
+  width: 12px;
+  height: 55px;
+  border-radius: 9px;
+  background: linear-gradient(#bb98f4, #8b4be5);
+  box-shadow: 0 0 12px rgb(142 75 229 / 26%);
 }
 
 @media (max-width: 639px) {
@@ -911,5 +1006,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mm-dashboard-tour__card { animation: none; }
+  .mm-dashboard-tour__card,
+  .mm-dashboard-tour__stack.is-transitioning .mm-dashboard-tour__card.is-outgoing,
+  .mm-dashboard-tour__stack.is-transitioning .mm-dashboard-tour__card.is-incoming { animation: none; }
 }
