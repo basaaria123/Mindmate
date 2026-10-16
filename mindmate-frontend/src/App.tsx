@@ -52,10 +52,22 @@ const screens = [
   { path: '/settings', label: 'Settings', icon: Settings },
 ]
 
+function getProfileInitial() {
+  try {
+    const profile = JSON.parse(
+      window.localStorage.getItem('mindmate-user-profile') ?? '{}',
+    ) as { email?: string }
+    return profile.email?.trim().charAt(0).toUpperCase() || 'S'
+  } catch {
+    return 'S'
+  }
+}
+
 function AppLayout() {
   const location = useLocation()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [profileInitial] = useState(getProfileInitial)
   const currentScreen =
     screens.find((screen) => screen.path === location.pathname) ?? screens[0]
   const activeScreenIndex = Math.max(
@@ -309,18 +321,19 @@ function AppLayout() {
                 </button>
               )}
 
-              <button
-                type="button"
-                aria-label="Notifications"
-                className="relative grid size-[38px] place-items-center rounded-full border border-violet-100 bg-white/85 p-2 text-[#6256ed] shadow-sm transition hover:bg-violet-50 hover:text-violet-800"
+              <NavLink
+                to="/sim"
+                aria-label="Open Tasks & Practice"
+                title="Tasks & Practice"
+                className="relative grid size-[38px] place-items-center rounded-full border border-violet-100 bg-white/85 p-2 text-[#6256ed] shadow-sm transition hover:bg-violet-50 hover:text-violet-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
               >
                 <Bell size={21} />
                 <span className="absolute right-1.5 top-1.5 size-2 rounded-full border border-white bg-rose-500" />
-              </button>
+              </NavLink>
 
-              <div aria-label="Signed in profile" className="grid size-[38px] place-items-center rounded-full border-2 border-white bg-gradient-to-br from-[#a288ff] to-[#7658f6] text-sm font-semibold text-white shadow-md">
-                S
-              </div>
+              <NavLink to="/settings" aria-label="Open Settings" title="Settings" className="grid size-[38px] place-items-center rounded-full border-2 border-white bg-gradient-to-br from-[#a288ff] to-[#7658f6] text-sm font-semibold text-white shadow-md transition hover:scale-105 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2">
+                {profileInitial}
+              </NavLink>
 
               <GlassThemeToggle />
             </div>

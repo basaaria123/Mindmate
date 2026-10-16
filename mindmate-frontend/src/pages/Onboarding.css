@@ -540,15 +540,16 @@
 .mm-profile-intro__art {
   position: relative;
   display: grid;
-  width: min(450px, 76vw);
-  height: min(300px, 46vh);
-  min-height: 210px;
+  width: min(360px, 72vw, 40vh);
+  aspect-ratio: 1;
+  height: auto;
   place-items: center;
   margin: 0 auto 20px;
   border-radius: 50%;
-  background: transparent;
+  overflow: hidden;
+  background: #f5f1ff;
 }
-.mm-profile-intro__art img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: fill; }
+.mm-profile-intro__art img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; border-radius: inherit; object-fit: cover; object-position: center; }
 .mm-profile-intro h1 { position: relative; z-index: 2; margin: 0; color: #1e2057; font-size: clamp(28px, 3vw, 34px); font-weight: 750; line-height: 1.12; letter-spacing: -.025em; }
 .mm-profile-intro p { position: relative; z-index: 2; margin: 16px 0 28px; color: #8991ba; font-size: clamp(15px, 1.7vw, 19px); }
 .mm-profile-intro__button { position: relative; z-index: 2; min-height: 62px; padding: 0 27px; border-radius: 20px; font-size: 19px; }
@@ -556,7 +557,7 @@
 @media (max-width: 600px) {
   .mm-profile-intro-page { border-radius: 10px; }
   .mm-profile-intro { min-height: 100svh; padding-top: 96px; }
-  .mm-profile-intro__art { height: 245px; min-height: 0; margin-bottom: 20px; }
+  .mm-profile-intro__art { width: min(280px, 72vw, 38vh); min-height: 0; margin-bottom: 20px; }
   .mm-profile-intro p { max-width: 340px; line-height: 1.45; }
   .mm-profile-intro__button { min-height: 54px; font-size: 16px; }
 }
