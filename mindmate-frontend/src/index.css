@@ -782,3 +782,134 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+.mm-dashboard-tour__back {
+  position: absolute;
+  inset: 0 7px -10px;
+  border: 1px solid #e7d8ff;
+  border-radius: 24px;
+  background: #eee5ff;
+  box-shadow: 0 11px 24px rgb(75 48 133 / 13%);
+  pointer-events: none;
+}
+
+.mm-dashboard-tour__back--one {
+  transform: translateY(7px) scale(.99);
+  opacity: .9;
+}
+
+.mm-dashboard-tour__back--two {
+  transform: translateY(14px) scale(.975);
+  opacity: .78;
+}
+
+.mm-dashboard-tour__card {
+  animation: mm-dashboard-card-wipe 420ms cubic-bezier(.2,.75,.25,1) both;
+}
+
+.mindmate-theme[data-theme='sleep'] main .mm-dashboard-tour__card[class*='rounded-'][class*='border'] {
+  border-color: #e9dcff !important;
+  background: #fcf9ff !important;
+  color: #29264f !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main .mm-dashboard-tour__card h2[class*='text-'] {
+  color: #29264f !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main .mm-dashboard-tour__card p {
+  color: #777c9f !important;
+}
+
+.mindmate-theme[data-theme='sleep'] main .mm-dashboard-tour__card button[aria-label='Close dashboard walkthrough'] {
+  color: #a982d6 !important;
+}
+
+.mm-dashboard-tour__illustration {
+  position: relative;
+  width: 132px;
+  height: 142px;
+  margin-inline: auto;
+  filter: drop-shadow(0 7px 8px rgb(104 55 177 / 15%));
+}
+
+.mm-dashboard-tour__paper {
+  position: absolute;
+  left: 19px;
+  top: 25px;
+  display: grid;
+  width: 92px;
+  height: 99px;
+  grid-template-columns: 20px 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  align-items: center;
+  gap: 1px 7px;
+  padding: 24px 12px 9px;
+  border: 5px solid #a775e9;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #fff 0%, #f3edff 100%);
+  color: #8852df;
+  box-shadow: inset 0 0 0 2px #d9c1ff;
+}
+
+.mm-dashboard-tour__paper i {
+  height: 4px;
+  border-radius: 999px;
+  background: #b993ee;
+}
+
+.mm-dashboard-tour__clip {
+  position: absolute;
+  z-index: 1;
+  top: 16px;
+  left: 42px;
+  width: 47px;
+  height: 18px;
+  border: 3px solid #56b6e8;
+  border-radius: 7px;
+  background: #7cd3f4;
+}
+
+.mm-dashboard-tour__clip::before {
+  position: absolute;
+  top: -14px;
+  left: 12px;
+  width: 17px;
+  height: 17px;
+  border: 4px solid #65bde8;
+  border-radius: 50%;
+  background: #a4e6fa;
+  content: '';
+}
+
+.mm-dashboard-tour__spark {
+  position: absolute;
+  color: #c89cf4;
+  font-size: 17px;
+}
+
+.mm-dashboard-tour__spark--left { top: 19px; left: 5px; }
+.mm-dashboard-tour__spark--right { top: 20px; right: 5px; }
+
+.mm-dashboard-tour__star {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  color: #7b3de0;
+  font-size: 38px;
+  line-height: 1;
+  text-shadow: 0 3px 7px rgb(83 40 151 / 23%);
+}
+
+@keyframes mm-dashboard-card-wipe {
+  from { opacity: .35; transform: translateX(26px) rotate(1.5deg); clip-path: inset(0 0 0 100%); }
+  to { opacity: 1; transform: translateX(0) rotate(0); clip-path: inset(0 0 0 0); }
+}
+
+@media (max-width: 639px) {
+  .mm-dashboard-tour__illustration { width: 94px; height: 92px; transform: scale(.68); transform-origin: center; margin: -20px auto -22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-dashboard-tour__card { animation: none; }
+}
