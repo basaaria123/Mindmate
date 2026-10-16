@@ -70,8 +70,8 @@ function SettingsPage() {
             </div>
           </div>
           <div className="pointer-events-none absolute right-5 top-2 hidden h-[190px] w-[230px] items-center justify-center sm:flex lg:right-12 lg:w-[270px]">
-            <div className="absolute size-44 rounded-full bg-white/60 shadow-[0_0_65px_32px_rgba(255,255,255,.65)]" />
-            <img src={mindmateEmblem} alt="" className="relative z-10 size-40 rounded-full object-contain drop-shadow-[0_12px_18px_rgba(116,82,211,.35)] lg:size-48" />
+            <div className="absolute size-44 rounded-full bg-white/60 shadow-[0_0_65px_32px_rgba(255,255,255,.65)] lg:size-52" />
+            <img src={mindmateEmblem} alt="" className="relative z-10 size-44 rounded-full object-cover drop-shadow-[0_12px_18px_rgba(116,82,211,.35)] lg:size-52" />
             <Sparkles className="absolute right-5 top-4 text-white drop-shadow-[0_0_8px_rgba(144,100,255,.9)]" size={24} />
             <Sparkles className="absolute bottom-5 left-4 text-white drop-shadow-[0_0_8px_rgba(144,100,255,.9)]" size={17} />
           </div>
