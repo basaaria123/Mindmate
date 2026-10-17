@@ -15,17 +15,17 @@
 }
 @keyframes mm-splash-backdrop-drift { from { transform: scale(1.02); } to { transform: scale(1.07); } }
 @keyframes mm-splash-head-build {
-  0% { opacity: 1; transform: scale(.88); filter: brightness(1.28); }
-  20% { opacity: 1; transform: scale(.94); filter: brightness(1.18); }
-  72% { opacity: 1; transform: scale(1.04); filter: brightness(1); }
-  100% { opacity: 0; transform: scale(1.08); }
+  0% { opacity: 1; transform: scale(1); filter: brightness(1.28); }
+  20% { opacity: 1; transform: scale(1); filter: brightness(1.18); }
+  72% { opacity: 1; transform: scale(1); filter: brightness(1); }
+  100% { opacity: 0; transform: scale(1); }
 }
 @keyframes mm-splash-emblem-arrive {
-  0% { opacity: 0; transform: scale(.82) rotate(-5deg); filter: brightness(1.6) blur(6px); }
-  68% { opacity: 1; transform: scale(1.035) rotate(1deg); filter: brightness(1.12) blur(0); }
-  100% { opacity: 1; transform: scale(1) rotate(0); filter: brightness(1) blur(0); }
+  0% { opacity: 0; transform: rotate(-5deg); filter: brightness(1.6) blur(6px); }
+  68% { opacity: 1; transform: rotate(1deg); filter: brightness(1.12) blur(0); }
+  100% { opacity: 1; transform: rotate(0); filter: brightness(1) blur(0); }
 }
-@keyframes mm-splash-wordmark-arrive { 0% { opacity: 0; transform: translateY(34px) scale(.96); filter: blur(7px); } 75% { opacity: 1; } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+@keyframes mm-splash-wordmark-arrive { 0% { opacity: 0; transform: translateY(34px); filter: blur(7px); } 75% { opacity: 1; } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) {
   .mm-splash__backdrop { animation: none; }
   .mm-splash__head { display: none; }
