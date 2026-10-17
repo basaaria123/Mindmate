@@ -185,7 +185,8 @@ export async function getDemoState(): Promise<DemoState> {
 
 
 
-const AI_API_BASE_URL = 'http://127.0.0.1:8000'
+// Same configurable base URL as the rest of the API; the local default keeps mock mode working.
+const AI_API_BASE_URL = apiBaseUrl || 'http://127.0.0.1:8000'
 
 
 export type AIProfile = {

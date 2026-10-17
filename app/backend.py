@@ -47,8 +47,6 @@ def _extend_cors(app: FastAPI) -> None:
 
 def _startup() -> None:
     init_db()
-    if not get_settings().auto_create_schema:
-        return
     import os
 
     if os.getenv("MINDMATE_AUTO_SEED", "true").strip().lower() in {"1", "true", "yes", "on"}:

@@ -9,3 +9,13 @@ api-schema.json
 data/*.db
 data/*.db-journal
 .env.local
+
+# Tooling and build output
+node_modules/
+dist/
+.vercel
+.env.*
+!.env.example
+*.egg-info/
+.mypy_cache/
+.ruff_cache/

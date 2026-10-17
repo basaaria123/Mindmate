@@ -1,3 +1,26 @@
 # Require Nishitha's review for changes to the MindMate frontend.
 /mindmate-frontend/** @nishithalingala-com
 /.github/CODEOWNERS @nishithalingala-com
+
+# ---- Ownership by component (see docs/BRANCH_WORKFLOW.md) -------------------
+# Fill in the GitHub logins of the backend and AI developers, then uncomment.
+# Backend & memory layer (branch mindmate-backend)
+# /main.py                 @backend-dev-login
+# /app/api/                @backend-dev-login
+# /app/db/                 @backend-dev-login
+# /app/memory/             @backend-dev-login
+# /app/scoring/            @backend-dev-login
+# /app/backend.py          @backend-dev-login
+# /app/config.py           @backend-dev-login
+# /app/permissions.py      @backend-dev-login
+# /app/rate_limit.py       @backend-dev-login
+# /alembic/                @backend-dev-login
+# /tests/                  @backend-dev-login
+# /scripts/                @backend-dev-login
+# AI agents (branch mindmate-ai)
+# /app/agents/             @ai-dev-login
+# /app/schemas/            @ai-dev-login
+# /app/services/llm_client.py   @ai-dev-login
+# /app/services/memory_store.py @ai-dev-login
+# /app/utils/              @ai-dev-login
+# /test_*.py               @ai-dev-login
