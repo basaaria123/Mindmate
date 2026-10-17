@@ -1,27 +1,19 @@
-/* Splash video stays at its exported 1440 × 900 size on larger displays. */
-.mm-splash {
-  position: fixed;
-  z-index: 100;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  background: #05050a;
-}
-
+/* Figma splash: moving violet light field behind the animated brand reveal. */
+.mm-splash { position: fixed; z-index: 100; inset: 0; overflow: hidden; isolation: isolate; background: #03020a; }
 .mm-splash.is-fading { animation: mm-splash-out 450ms ease both; }
-
-.mm-splash__video {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: min(100vw, 1440px);
-  max-height: min(100vh, 900px);
-  aspect-ratio: 8 / 5;
-  object-fit: contain;
-  background: #05050a;
-}
-
+.mm-splash__backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; animation: mm-splash-backdrop-drift 14s ease-in-out infinite alternate; }
+.mm-splash__light-motion { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.mm-splash__streak { stroke-dasharray: 250 2100; animation: mm-splash-light-flow 7s linear infinite; opacity: .48; }
+.mm-splash__streak--bottom { animation-duration: 9s; animation-delay: -3s; }
+.mm-splash__streak--orbit { animation-duration: 6s; animation-delay: -2s; opacity: .3; }
+.mm-splash__sparkles circle { animation: mm-splash-sparkle 2.8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+.mm-splash__sparkles circle:nth-child(2) { animation-delay: -.8s; }
+.mm-splash__sparkles circle:nth-child(3) { animation-delay: -1.7s; }
+.mm-splash__video { position: absolute; z-index: 2; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; mix-blend-mode: screen; background: transparent; }
+@keyframes mm-splash-backdrop-drift { from { transform: scale(1.01) translate3d(-.3%, .1%, 0); } to { transform: scale(1.06) translate3d(.3%, -.2%, 0); } }
+@keyframes mm-splash-light-flow { to { stroke-dashoffset: -2350; opacity: .2; } }
+@keyframes mm-splash-sparkle { from { opacity: .2; transform: scale(.7); } to { opacity: .9; transform: scale(1.4); } }
+@media (prefers-reduced-motion: reduce) { .mm-splash__backdrop, .mm-splash__streak, .mm-splash__sparkles circle { animation: none; } }
 .mm-onboarding {
   position: relative;
   min-height: 100vh;

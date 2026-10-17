@@ -15,6 +15,7 @@ import {
   updateProfile,
 } from '../services/api'
 import splashMotion from '../assets/mindmate-splash.mp4'
+import splashTrails from '../assets/mindmate-splash-trails.png'
 import mindmateWordmark from '../assets/mindmate-wordmark.svg'
 import mindmateIntroEmblem from '../assets/mindmate-intro-emblem.png'
 import './Onboarding.css'
@@ -130,6 +131,23 @@ function Onboarding() {
   if (showSplash) {
     return (
       <main className={`mm-splash${splashFading ? ' is-fading' : ''}`} aria-label="MindMate splash animation">
+        <img className="mm-splash__backdrop" src={splashTrails} alt="" aria-hidden="true" />
+        <svg className="mm-splash__light-motion" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="mm-splash-light" x1="0" y1="0" x2="1" y2="1">
+              <stop stopColor="#6f36ff" stopOpacity="0" /><stop offset=".42" stopColor="#9b54ff" stopOpacity=".82" />
+              <stop offset=".52" stopColor="#f8ebff" /><stop offset=".62" stopColor="#8b42ff" stopOpacity=".75" />
+              <stop offset="1" stopColor="#5720c8" stopOpacity="0" />
+            </linearGradient>
+            <filter id="mm-splash-light-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+          </defs>
+          <g fill="none" stroke="url(#mm-splash-light)" filter="url(#mm-splash-light-glow)">
+            <path className="mm-splash__streak mm-splash__streak--top" d="M-90 500C120 210 225-28 560-70c245-31 438 92 705 38 248-51 485 82 680 274" strokeWidth="3" />
+            <path className="mm-splash__streak mm-splash__streak--bottom" d="M-80 690C110 940 395 1030 740 1040c390 12 690-63 930-235 160-115 250-265 335-430" strokeWidth="4" />
+            <path className="mm-splash__streak mm-splash__streak--orbit" d="M-100 620C130 393 175 142 407 22 627-91 810-64 1015-106" strokeWidth="2" />
+          </g>
+          <g className="mm-splash__sparkles" fill="#f4e9ff"><circle cx="178" cy="182" r="3" /><circle cx="1665" cy="407" r="2.5" /><circle cx="1430" cy="910" r="3" /></g>
+        </svg>
         <video
           className="mm-splash__video"
           src={splashMotion}
