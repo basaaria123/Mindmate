@@ -1,0 +1,94 @@
+{
+  "questions": [
+    {
+      "topic": "Model evaluation",
+      "question": "Your binary classifier reports 95% accuracy on a dataset where 95% of examples are negative. Explain why accuracy is misleading here and which metrics you would use instead, and how you would validate the model fairly.",
+      "expected_concepts": ["class imbalance", "precision", "recall", "f1", "confusion matrix", "roc", "cross-validation", "baseline"],
+      "concept_aliases": {
+        "class imbalance": ["imbalanced", "imbalance", "skewed", "majority class"],
+        "precision": ["precision"],
+        "recall": ["recall", "sensitivity", "true positive rate"],
+        "f1": ["f1", "f-score", "f score"],
+        "confusion matrix": ["confusion matrix", "false positive", "false negative"],
+        "roc": ["roc", "auc", "pr curve", "precision-recall curve"],
+        "cross-validation": ["cross-validation", "cross validation", "k-fold", "validation set", "hold-out", "holdout", "stratified"],
+        "baseline": ["baseline", "majority classifier", "dummy"]
+      }
+    },
+    {
+      "topic": "Model evaluation",
+      "question": "How would you detect and prevent overfitting when training a model, and how would you choose between two candidate models?",
+      "expected_concepts": ["train-test split", "validation set", "cross-validation", "regularization", "learning curve", "early stopping", "metric comparison"],
+      "concept_aliases": {
+        "train-test split": ["train/test", "train-test", "test set", "held-out", "hold-out"],
+        "validation set": ["validation"],
+        "cross-validation": ["cross-validation", "cross validation", "k-fold"],
+        "regularization": ["regulariz", "dropout", "l1", "l2", "weight decay"],
+        "learning curve": ["learning curve", "training loss", "validation loss", "gap between"],
+        "early stopping": ["early stopping"],
+        "metric comparison": ["same metric", "compare", "statistical", "confidence interval", "paired"]
+      }
+    },
+    {
+      "topic": "Python",
+      "question": "Explain the difference between a list and a generator in Python, and when you would use each for processing a large file.",
+      "expected_concepts": ["memory", "lazy evaluation", "iteration", "yield", "one pass"],
+      "concept_aliases": {
+        "memory": ["memory", "ram"],
+        "lazy evaluation": ["lazy", "on demand", "on-demand"],
+        "iteration": ["iterate", "iteration", "loop", "for each"],
+        "yield": ["yield", "generator expression"],
+        "one pass": ["once", "one pass", "single pass", "exhaust"]
+      }
+    },
+    {
+      "topic": "Machine learning fundamentals",
+      "question": "Explain the bias-variance trade-off and give one example of a high-bias and one of a high-variance model.",
+      "expected_concepts": ["bias", "variance", "underfitting", "overfitting", "model complexity", "example"],
+      "concept_aliases": {
+        "bias": ["bias"],
+        "variance": ["variance"],
+        "underfitting": ["underfit"],
+        "overfitting": ["overfit"],
+        "model complexity": ["complexity", "capacity", "flexible", "simple model"],
+        "example": ["linear regression", "decision tree", "deep tree", "neural network", "nearest neighbor", "k-nn", "knn"]
+      }
+    },
+    {
+      "topic": "Data structures",
+      "question": "When would you choose a hash map over a balanced binary search tree, and what are the complexity trade-offs?",
+      "expected_concepts": ["o(1)", "o(log n)", "ordering", "worst case", "memory"],
+      "concept_aliases": {
+        "o(1)": ["o(1)", "constant time", "constant-time", "average case"],
+        "o(log n)": ["o(log n)", "logarithmic", "log n"],
+        "ordering": ["sorted", "order", "range query", "in-order"],
+        "worst case": ["worst case", "worst-case", "collision"],
+        "memory": ["memory", "overhead", "space"]
+      }
+    },
+    {
+      "topic": "SQL",
+      "question": "Explain the difference between an INNER JOIN and a LEFT JOIN, and describe one case where a LEFT JOIN result could surprise an analyst.",
+      "expected_concepts": ["matching rows", "null", "unmatched rows", "aggregation", "duplicates"],
+      "concept_aliases": {
+        "matching rows": ["match", "both tables", "intersection"],
+        "null": ["null"],
+        "unmatched rows": ["unmatched", "all rows from the left", "keeps every", "preserves"],
+        "aggregation": ["count", "sum", "group by", "aggregate"],
+        "duplicates": ["duplicate", "one-to-many", "fan out", "multiplied"]
+      }
+    },
+    {
+      "topic": "Deep learning",
+      "question": "Why do deep networks use non-linear activation functions, and what problem do techniques like batch normalisation and residual connections address?",
+      "expected_concepts": ["non-linearity", "composition of linear", "vanishing gradient", "training stability", "depth"],
+      "concept_aliases": {
+        "non-linearity": ["non-linear", "nonlinear", "relu", "sigmoid", "tanh"],
+        "composition of linear": ["linear transformation", "collapse", "single linear", "stack of linear"],
+        "vanishing gradient": ["vanishing", "exploding", "gradient flow"],
+        "training stability": ["stabil", "faster training", "converge", "internal covariate"],
+        "depth": ["deeper", "depth", "skip connection", "identity"]
+      }
+    }
+  ]
+}

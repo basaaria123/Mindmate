@@ -192,3 +192,9 @@ def list_memories():
             for memory in memories
         ],
     }
+
+
+# Backend & Memory layer (memory, goals, plans, practice, trace, admin APIs).
+from app.backend import register_backend  # noqa: E402
+
+register_backend(app)

@@ -1,0 +1,99 @@
+{
+  "opportunities": [
+    {"title": "AI/ML Engineering Intern", "org": "Nimbus Analytics", "type": "internship", "deadline_in_days": 21, "url": null,
+     "summary": "Build and evaluate ML models for customer analytics with a small research team.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Machine learning fundamentals", "weight": "High", "mandatory": true},
+       {"name": "Model evaluation", "weight": "High", "mandatory": true},
+       {"name": "SQL", "weight": "Medium", "mandatory": false},
+       {"name": "Git", "weight": "Low", "mandatory": false}
+     ]},
+    {"title": "Machine Learning Research Intern", "org": "Vector Lab", "type": "internship", "deadline_in_days": 35, "url": null,
+     "summary": "Reproduce and extend published models; write up evaluation results.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Deep learning", "weight": "High", "mandatory": true},
+       {"name": "Model evaluation", "weight": "Medium", "mandatory": false},
+       {"name": "Technical writing", "weight": "Medium", "mandatory": false}
+     ]},
+    {"title": "Data Science Intern", "org": "Harbor Retail", "type": "internship", "deadline_in_days": 14, "url": null,
+     "summary": "Analyse sales data, build forecasting prototypes and present findings.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "SQL", "weight": "High", "mandatory": true},
+       {"name": "Statistics", "weight": "Medium", "mandatory": false},
+       {"name": "Data visualisation", "weight": "Medium", "mandatory": false}
+     ]},
+    {"title": "Computer Vision Intern", "org": "Orbital Imaging", "type": "internship", "deadline_in_days": 28, "url": null,
+     "summary": "Train and evaluate detection models on satellite imagery.",
+     "requirements": [
+       {"name": "Deep learning", "weight": "High", "mandatory": true},
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Model evaluation", "weight": "Medium", "mandatory": false},
+       {"name": "Linux", "weight": "Low", "mandatory": false}
+     ]},
+    {"title": "NLP Engineering Intern", "org": "Lexica AI", "type": "internship", "deadline_in_days": 42, "url": null,
+     "summary": "Fine-tune language models and build evaluation pipelines.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Deep learning", "weight": "Medium", "mandatory": false},
+       {"name": "Model evaluation", "weight": "High", "mandatory": true},
+       {"name": "Data structures", "weight": "Low", "mandatory": false}
+     ]},
+    {"title": "ML Platform Intern", "org": "Gridline Systems", "type": "internship", "deadline_in_days": 30, "url": null,
+     "summary": "Build tooling that trains, evaluates and deploys models reliably.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Docker", "weight": "Medium", "mandatory": false},
+       {"name": "Git", "weight": "Medium", "mandatory": false},
+       {"name": "Machine learning fundamentals", "weight": "Medium", "mandatory": false}
+     ]},
+    {"title": "Analytics Engineering Intern", "org": "Beacon Health", "type": "internship", "deadline_in_days": 18, "url": null,
+     "summary": "Model healthcare data pipelines and dashboards.",
+     "requirements": [
+       {"name": "SQL", "weight": "High", "mandatory": true},
+       {"name": "Python", "weight": "Medium", "mandatory": false},
+       {"name": "Data visualisation", "weight": "Medium", "mandatory": false}
+     ]},
+    {"title": "Applied AI Intern", "org": "Cobalt Robotics", "type": "internship", "deadline_in_days": 25, "url": null,
+     "summary": "Prototype perception models for warehouse robots.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Deep learning", "weight": "High", "mandatory": true},
+       {"name": "Data structures", "weight": "Medium", "mandatory": false},
+       {"name": "C++", "weight": "Low", "mandatory": false}
+     ]},
+    {"title": "Student AI Hackathon", "org": "Campus AI Guild", "type": "hackathon", "deadline_in_days": 10, "url": null,
+     "summary": "48-hour build with judging on evaluation rigor and demo quality.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Machine learning fundamentals", "weight": "Medium", "mandatory": false},
+       {"name": "Git", "weight": "Medium", "mandatory": false}
+     ]},
+    {"title": "Quantitative Research Intern", "org": "Meridian Capital", "type": "internship", "deadline_in_days": 40, "url": null,
+     "summary": "Statistical modelling of market data with rigorous backtesting.",
+     "requirements": [
+       {"name": "Statistics", "weight": "High", "mandatory": true},
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Model evaluation", "weight": "Medium", "mandatory": false},
+       {"name": "Data structures", "weight": "Medium", "mandatory": false}
+     ]},
+    {"title": "Open-source ML Fellowship", "org": "Open Models Foundation", "type": "fellowship", "deadline_in_days": 50, "url": null,
+     "summary": "Contribute evaluation tooling to an open-source ML library.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "Git", "weight": "High", "mandatory": true},
+       {"name": "Model evaluation", "weight": "Medium", "mandatory": false},
+       {"name": "Technical writing", "weight": "Low", "mandatory": false}
+     ]},
+    {"title": "Backend Engineering Intern", "org": "Parcel Labs", "type": "internship", "deadline_in_days": 33, "url": null,
+     "summary": "Build APIs and data services for a logistics product.",
+     "requirements": [
+       {"name": "Python", "weight": "High", "mandatory": true},
+       {"name": "SQL", "weight": "Medium", "mandatory": false},
+       {"name": "Data structures", "weight": "Medium", "mandatory": false},
+       {"name": "Docker", "weight": "Low", "mandatory": false}
+     ]}
+  ]
+}

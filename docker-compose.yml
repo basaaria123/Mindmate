@@ -1,0 +1,23 @@
+# Local PostgreSQL for the MindMate backend (BE role, Day 1).
+#   docker compose up -d
+#   export DATABASE_URL=postgresql+psycopg://mindmate:mindmate@localhost:5432/mindmate
+#   alembic upgrade head && python scripts/reset_demo.py && uvicorn main:app --reload
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: mindmate
+      POSTGRES_PASSWORD: mindmate
+      POSTGRES_DB: mindmate
+    ports:
+      - "5432:5432"
+    volumes:
+      - mindmate-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mindmate"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  mindmate-postgres:

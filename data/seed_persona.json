@@ -1,0 +1,69 @@
+{
+  "user": {
+    "name": "Meera",
+    "email": "meera@example.edu",
+    "education": "2nd-year B.E. CSE (AI & ML)",
+    "summary": "Second-year computer science student aiming for an AI/ML internship within three months, then GATE preparation.",
+    "target_role": "AI/ML Intern",
+    "goal_text": "Land an AI/ML internship within three months",
+    "daily_minutes": 60,
+    "preferences": {"learning_style": ["hands-on projects", "step-by-step"], "study_window": "evenings"}
+  },
+  "goals": [
+    {"key": "internship", "title": "Land an AI/ML internship", "target_role": "AI/ML Intern", "deadline_in_days": 90, "hours_per_day": 1.0, "priority_rank": 1},
+    {"key": "gate", "title": "Prepare for GATE", "target_role": null, "deadline_in_days": 300, "hours_per_day": 0.5, "priority_rank": 3},
+    {"key": "exams", "title": "Pass college semester exams", "target_role": null, "deadline_in_days": 45, "hours_per_day": 1.0, "priority_rank": 2}
+  ],
+  "constraints": [
+    {"kind": "hours", "value": "About 60 minutes per day on weekdays"},
+    {"kind": "boundary", "value": "College exams come first during exam weeks"},
+    {"kind": "deadline", "value": "Internship applications close within three months"}
+  ],
+  "decisions": [
+    {"statement": "College exams come before GATE preparation", "reason": "Semester results decide eligibility; GATE is next year.", "goal_key": "exams"},
+    {"statement": "Prioritise model-evaluation skills over new frameworks", "reason": "Every target internship lists evaluation; frameworks can be learned on the job.", "goal_key": "internship"}
+  ],
+  "skills": [
+    {"name": "Python", "level": "intermediate", "confidence": 80, "evidence": [
+      {"type": "project", "description": "Spam classifier project in Python with scikit-learn", "url": null},
+      {"type": "repo", "description": "GitHub repository: data-cleaning utilities with tests", "url": "https://github.com/example/meera-data-tools"}
+    ]},
+    {"name": "Machine learning fundamentals", "level": "intermediate", "confidence": 65, "evidence": [
+      {"type": "project", "description": "House-price regression project with feature engineering", "url": null},
+      {"type": "cert", "description": "Certificate: Introduction to Machine Learning (online course)", "url": null}
+    ]},
+    {"name": "SQL", "level": "beginner", "confidence": 45, "evidence": [
+      {"type": "internship", "description": "Summer internship: wrote reporting queries for a campus startup", "url": null}
+    ]},
+    {"name": "Model evaluation", "level": "beginner", "confidence": 35, "evidence": []},
+    {"name": "Git", "level": "intermediate", "confidence": 70, "evidence": [
+      {"type": "repo", "description": "Maintains personal GitHub repositories with branches and pull requests", "url": "https://github.com/example/meera-data-tools"}
+    ]},
+    {"name": "Deep learning", "level": "none", "confidence": 15, "evidence": []}
+  ],
+  "practice_history": [
+    {"topic": "Model evaluation", "question_index": 0,
+     "answer": "I would look at accuracy on a test set and maybe try a different model if it is low.",
+     "score": 42, "rubric_scores": {"correctness": 40, "depth": 35, "clarity": 52},
+     "missing_concepts": ["class imbalance", "precision", "recall", "confusion matrix", "cross-validation"],
+     "feedback": "The answer does not address class imbalance or any metric beyond accuracy."}
+  ],
+  "plan": {
+    "goal_key": "internship",
+    "daily_budget_minutes": 60,
+    "tasks": [
+      {"title": "Review precision, recall and F1 with a worked example", "minutes": 30, "priority": "High", "day_number": 1, "role_impact": 0.9, "why": "Model evaluation is mandatory for the target internship and is currently a gap."},
+      {"title": "Refactor the spam classifier to log a confusion matrix", "minutes": 30, "priority": "Medium", "day_number": 1, "role_impact": 0.7, "why": "Turns an existing project into evidence of evaluation skills."},
+      {"title": "Practice two SQL join questions", "minutes": 30, "priority": "Medium", "day_number": 2, "role_impact": 0.5, "why": "SQL is a medium-weight requirement at beginner level."},
+      {"title": "Write a one-page summary of the house-price project", "minutes": 30, "priority": "Low", "day_number": 2, "role_impact": 0.4, "why": "Strengthens evidence for machine learning fundamentals."},
+      {"title": "Mock interview: model evaluation questions", "minutes": 30, "priority": "High", "day_number": 3, "role_impact": 0.9, "why": "Practice answers feed back into the plan."},
+      {"title": "Read the intern posting and list its requirements", "minutes": 20, "priority": "Medium", "day_number": 3, "role_impact": 0.6, "why": "Keeps preparation anchored to the real posting."},
+      {"title": "Revise semester exam topics: operating systems", "minutes": 40, "priority": "Medium", "day_number": 4, "role_impact": 0.3, "goal_key": "exams", "why": "Exams come before GATE prep [decision]."},
+      {"title": "Implement k-fold cross-validation on the regression project", "minutes": 45, "priority": "High", "day_number": 5, "role_impact": 0.8, "why": "Creates evidence for model evaluation."},
+      {"title": "Learn Git rebase and clean up repository history", "minutes": 30, "priority": "Low", "day_number": 6, "role_impact": 0.3, "why": "Git is a low-weight requirement already partly demonstrated."},
+      {"title": "Draft resume bullet points from existing evidence", "minutes": 30, "priority": "Medium", "day_number": 7, "role_impact": 0.6, "why": "Application drafts cite evidence; the user submits."},
+      {"title": "Intro to neural networks: one tutorial notebook", "minutes": 45, "priority": "Low", "day_number": 9, "role_impact": 0.5, "why": "Deep learning is required by two other target opportunities."},
+      {"title": "Weekly review: what changed, what stalled", "minutes": 20, "priority": "Medium", "day_number": 7, "role_impact": 0.5, "why": "Closes the adapt loop each week."}
+    ]
+  }
+}

@@ -5,3 +5,7 @@ __pycache__/
 .pytest_cache/
 data/memories.json
 api-schema.json
+# Backend & memory layer
+data/*.db
+data/*.db-journal
+.env.local
