@@ -1,19 +1,37 @@
-/* Figma splash: moving violet light field behind the animated brand reveal. */
-.mm-splash { position: fixed; z-index: 100; inset: 0; overflow: hidden; isolation: isolate; background: #03020a; }
+/* Figma splash: face first, then the orbital emblem, purple trails, and wordmark. */
+.mm-splash { position: fixed; z-index: 100; inset: 0; overflow: hidden; isolation: isolate; background: #000; }
 .mm-splash.is-fading { animation: mm-splash-out 450ms ease both; }
-.mm-splash__backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; animation: mm-splash-backdrop-drift 14s ease-in-out infinite alternate; }
-.mm-splash__light-motion { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.mm-splash__streak { stroke-dasharray: 250 2100; animation: mm-splash-light-flow 7s linear infinite; opacity: .48; }
-.mm-splash__streak--bottom { animation-duration: 9s; animation-delay: -3s; }
-.mm-splash__streak--orbit { animation-duration: 6s; animation-delay: -2s; opacity: .3; }
-.mm-splash__sparkles circle { animation: mm-splash-sparkle 2.8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
-.mm-splash__sparkles circle:nth-child(2) { animation-delay: -.8s; }
-.mm-splash__sparkles circle:nth-child(3) { animation-delay: -1.7s; }
-.mm-splash__video { position: absolute; z-index: 2; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; mix-blend-mode: screen; background: transparent; }
-@keyframes mm-splash-backdrop-drift { from { transform: scale(1.01) translate3d(-.3%, .1%, 0); } to { transform: scale(1.06) translate3d(.3%, -.2%, 0); } }
-@keyframes mm-splash-light-flow { to { stroke-dashoffset: -2350; opacity: .2; } }
-@keyframes mm-splash-sparkle { from { opacity: .2; transform: scale(.7); } to { opacity: .9; transform: scale(1.4); } }
-@media (prefers-reduced-motion: reduce) { .mm-splash__backdrop, .mm-splash__streak, .mm-splash__sparkles circle { animation: none; } }
+.mm-splash__backdrop,
+.mm-splash__head,
+.mm-splash__emblem,
+.mm-splash__wordmark { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.mm-splash__backdrop { z-index: 0; animation: mm-splash-trails-arrive 1.25s ease-out .25s both, mm-splash-backdrop-drift 8s ease-in-out 1.5s infinite alternate; }
+.mm-splash__head { z-index: 1; mix-blend-mode: screen; animation: mm-splash-head-build 2.65s cubic-bezier(.2,.72,.2,1) both; }
+.mm-splash__emblem { z-index: 2; animation: mm-splash-emblem-arrive 1.35s cubic-bezier(.16,.8,.2,1) 1.8s both; }
+.mm-splash__wordmark { z-index: 3; animation: mm-splash-wordmark-arrive 1s cubic-bezier(.2,.75,.2,1) 2.55s both; }
+@keyframes mm-splash-trails-arrive {
+  0% { opacity: 0; transform: scale(1.08); filter: brightness(.55); }
+  100% { opacity: 1; transform: scale(1.02); filter: brightness(1); }
+}
+@keyframes mm-splash-backdrop-drift { from { transform: scale(1.02); } to { transform: scale(1.07); } }
+@keyframes mm-splash-head-build {
+  0% { opacity: 1; transform: scale(.88); filter: brightness(1.28); }
+  20% { opacity: 1; transform: scale(.94); filter: brightness(1.18); }
+  72% { opacity: 1; transform: scale(1.04); filter: brightness(1); }
+  100% { opacity: 0; transform: scale(1.08); }
+}
+@keyframes mm-splash-emblem-arrive {
+  0% { opacity: 0; transform: scale(.82) rotate(-5deg); filter: brightness(1.6) blur(6px); }
+  68% { opacity: 1; transform: scale(1.035) rotate(1deg); filter: brightness(1.12) blur(0); }
+  100% { opacity: 1; transform: scale(1) rotate(0); filter: brightness(1) blur(0); }
+}
+@keyframes mm-splash-wordmark-arrive { 0% { opacity: 0; transform: translateY(34px) scale(.96); filter: blur(7px); } 75% { opacity: 1; } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .mm-splash__backdrop { animation: none; }
+  .mm-splash__head { display: none; }
+  .mm-splash__emblem,
+  .mm-splash__wordmark { animation: none; }
+}
 .mm-onboarding {
   position: relative;
   min-height: 100vh;
