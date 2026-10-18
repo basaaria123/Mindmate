@@ -137,6 +137,25 @@ function Onboarding() {
     return (
       <main className={`mm-splash${splashFading ? ' is-fading' : ''}`} aria-label="MindMate splash animation">
         <img className="mm-splash__backdrop" src={splashTrails} alt="" aria-hidden="true" />
+        <svg className="mm-splash__orbits" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="mm-splash-orbit-blue" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#263aff" stopOpacity="0" />
+              <stop offset="38%" stopColor="#5277ff" stopOpacity=".9" />
+              <stop offset="58%" stopColor="#bba2ff" stopOpacity=".72" />
+              <stop offset="100%" stopColor="#6334ff" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="mm-splash-orbit-violet" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4528d9" stopOpacity="0" />
+              <stop offset="48%" stopColor="#8d55ff" stopOpacity=".8" />
+              <stop offset="67%" stopColor="#a7aaff" stopOpacity=".9" />
+              <stop offset="100%" stopColor="#462bff" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <ellipse className="mm-splash__orbit mm-splash__orbit--outer" cx="960" cy="540" rx="900" ry="455" />
+          <ellipse className="mm-splash__orbit mm-splash__orbit--middle" cx="960" cy="540" rx="790" ry="350" transform="rotate(-12 960 540)" />
+          <ellipse className="mm-splash__orbit mm-splash__orbit--inner" cx="960" cy="540" rx="675" ry="270" transform="rotate(15 960 540)" />
+        </svg>
         <img className="mm-splash__emblem" src={splashEmblem} alt="" aria-hidden="true" />
         <img className="mm-splash__wordmark" src={splashWordmark} alt="MindMate — Smarter minds. Brighter tomorrows." />
       </main>

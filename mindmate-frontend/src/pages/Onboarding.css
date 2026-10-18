@@ -5,6 +5,11 @@
 .mm-splash__emblem,
 .mm-splash__wordmark { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .mm-splash__backdrop { z-index: 0; animation: mm-splash-trails-arrive 1.2s ease-out .1s both, mm-splash-backdrop-drift 8s ease-in-out 1.3s infinite alternate; }
+.mm-splash__orbits { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.mm-splash__orbit { fill: none; stroke-width: 2.2; stroke-linecap: round; filter: drop-shadow(0 0 8px rgb(97 103 255 / 72%)); }
+.mm-splash__orbit--outer { stroke: url(#mm-splash-orbit-blue); stroke-dasharray: 620 4300; animation: mm-splash-orbit-flow 22s linear .5s infinite; }
+.mm-splash__orbit--middle { stroke: url(#mm-splash-orbit-violet); stroke-dasharray: 420 3600; animation: mm-splash-orbit-flow 29s linear 1s infinite reverse; }
+.mm-splash__orbit--inner { stroke: url(#mm-splash-orbit-blue); stroke-dasharray: 290 3000; opacity: .8; animation: mm-splash-orbit-flow 37s linear 1.5s infinite; }
 .mm-splash__emblem { z-index: 2; opacity: 0; animation: mm-splash-emblem-arrive 900ms cubic-bezier(.2,.75,.2,1) 1.05s both, mm-splash-emblem-glow 3.6s ease-in-out 2s infinite alternate; }
 .mm-splash__wordmark { z-index: 3; opacity: 0; animation: mm-splash-wordmark-arrive 850ms cubic-bezier(.2,.75,.2,1) 2.05s both; }
 @keyframes mm-splash-trails-arrive {
@@ -12,11 +17,13 @@
   100% { opacity: 1; filter: brightness(1); }
 }
 @keyframes mm-splash-backdrop-drift { from { transform: scale(1.02); } to { transform: scale(1.07); } }
+@keyframes mm-splash-orbit-flow { to { stroke-dashoffset: -4920; } }
 @keyframes mm-splash-emblem-arrive { from { opacity: 0; } to { opacity: 1; } }
 @keyframes mm-splash-emblem-glow { from { filter: drop-shadow(0 0 12px rgb(164 110 255 / 28%)); } to { filter: drop-shadow(0 0 25px rgb(164 110 255 / 52%)); } }
 @keyframes mm-splash-wordmark-arrive { from { opacity: 0; transform: translateY(20px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) {
   .mm-splash__backdrop { animation: none; }
+  .mm-splash__orbit { animation: none; }
   .mm-splash__emblem,
   .mm-splash__wordmark { animation: none; }
   .mm-splash__emblem,
