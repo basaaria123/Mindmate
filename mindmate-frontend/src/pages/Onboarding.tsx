@@ -14,7 +14,6 @@ import {
   getProfile,
   updateProfile,
 } from '../services/api'
-import splashHeadMotion from '../assets/mindmate-splash.mp4'
 import splashTrails from '../assets/mindmate-splash-trails.png'
 import splashEmblem from '../assets/mindmate-splash-emblem.png'
 import splashWordmark from '../assets/mindmate-splash-wordmark.png'
@@ -138,7 +137,6 @@ function Onboarding() {
     return (
       <main className={`mm-splash${splashFading ? ' is-fading' : ''}`} aria-label="MindMate splash animation">
         <img className="mm-splash__backdrop" src={splashTrails} alt="" aria-hidden="true" />
-        <video className="mm-splash__head" src={splashHeadMotion} autoPlay muted playsInline preload="auto" aria-hidden="true" />
         <img className="mm-splash__emblem" src={splashEmblem} alt="" aria-hidden="true" />
         <img className="mm-splash__wordmark" src={splashWordmark} alt="MindMate — Smarter minds. Brighter tomorrows." />
       </main>
