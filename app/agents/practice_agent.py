@@ -1,4 +1,5 @@
 
+from openai.types.chat import ChatCompletionMessageParam
 from pydantic import ValidationError
 
 from app.schemas.practice import PracticeEvaluation
@@ -56,7 +57,7 @@ RULES:
 11. Return valid JSON only, without Markdown.
 """
 
-    messages = [
+    messages: list[ChatCompletionMessageParam] = [
         {
             "role": "system",
             "content": (
@@ -93,7 +94,7 @@ RULES:
 
             return evaluation
 
-        except (ValueError, ValidationError) as error:
+        except ValueError as error:
             if attempt == 1:
                 raise ValueError(
                     "The Practice Agent could not return valid data after one retry."

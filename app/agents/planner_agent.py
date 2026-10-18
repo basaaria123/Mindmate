@@ -1,4 +1,4 @@
-
+from openai.types.chat import ChatCompletionMessageParam
 from pydantic import ValidationError
 
 from app.schemas.gap import GapVectorJSON
@@ -88,7 +88,7 @@ RULES:
 13. Return valid JSON only, without Markdown.
 """
 
-    messages = [
+    messages: list[ChatCompletionMessageParam] = [
         {
             "role": "system",
             "content": (
@@ -154,11 +154,14 @@ RULES:
 
             return plan
 
-        except (ValueError, ValidationError) as error:
+        
+        except ValueError as error:
             if attempt == 1:
                 raise ValueError(
-                    "The Planner Agent could not return valid data after one retry."
+                    f"The Planner Agent failed validation after one retry. "
+                    f"Actual error: {error}"
                 ) from error
+
 
             messages.append(
                 {"role": "assistant", "content": response_text or ""}

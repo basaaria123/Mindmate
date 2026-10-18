@@ -1,3 +1,4 @@
+from openai.types.chat import ChatCompletionMessageParam
 from pydantic import ValidationError
 
 from app.schemas.fit import FitAssessment
@@ -87,7 +88,7 @@ RULES:
 8. Return valid JSON only, without Markdown or extra explanations.
 """
 
-    messages = [
+    messages: list[ChatCompletionMessageParam] = [
         {
             "role": "system",
             "content": (
@@ -121,7 +122,7 @@ RULES:
 
             return FitAssessment.model_validate(assessment_data)
 
-        except (ValueError, ValidationError) as error:
+        except ValueError as error:
             if attempt == 1:
                 raise ValueError(
                     "The Fit Agent could not return valid assessment "

@@ -1,4 +1,5 @@
 
+from openai.types.chat import ChatCompletionMessageParam
 from pydantic import ValidationError
 
 from app.schemas.profile import UserProfile
@@ -93,7 +94,7 @@ RULES:
 14. Return valid JSON only. Do not include Markdown or commentary.
 """
 
-    messages = [
+    messages: list[ChatCompletionMessageParam] = [
         {
             "role": "system",
             "content": (
@@ -128,7 +129,7 @@ RULES:
 
             return SuggestionsResponse.model_validate(suggestions_data)
 
-        except (ValueError, ValidationError) as error:
+        except ValueError as error:
             if attempt == 1:
                 raise ValueError(
                     "The Suggestions Agent failed to return exactly "

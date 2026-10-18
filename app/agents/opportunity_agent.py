@@ -1,3 +1,4 @@
+from openai.types.chat import ChatCompletionMessageParam
 from pydantic import ValidationError
 
 from app.schemas.opportunity import OpportunitySpec
@@ -55,7 +56,7 @@ Opportunity description:
 {opportunity_text}
 """
 
-    messages = [
+    messages: list[ChatCompletionMessageParam] = [
         {
             "role": "system",
             "content": (
@@ -88,7 +89,7 @@ Opportunity description:
 
             return OpportunitySpec.model_validate(opportunity_data)
 
-        except (ValueError, ValidationError) as error:
+        except ValueError as error:
             if attempt == 1:
                 raise ValueError(
                     "The Opportunity Agent failed to return valid "
