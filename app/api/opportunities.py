@@ -18,6 +18,7 @@ from app.services.opportunity_service import (
     serialize_fit,
     serialize_opportunity,
     store_opportunity,
+    target_opportunity,
 )
 
 router = APIRouter(tags=["opportunities"])
@@ -25,8 +26,12 @@ router = APIRouter(tags=["opportunities"])
 
 @router.get("/opportunities")
 def read_opportunities(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)) -> dict:
-    items = [serialize_opportunity(o, latest_fit(db, user, o.id)) for o in list_opportunities(db, user)]
-    return {"total": len(items), "opportunities": items}
+    target = target_opportunity(db, user)
+    items = [
+        {**serialize_opportunity(o, latest_fit(db, user, o.id)), "target": bool(target and o.id == target.id)}
+        for o in list_opportunities(db, user)
+    ]
+    return {"total": len(items), "opportunities": items, "target_id": target.id if target else None}
 
 
 @router.post("/opportunities", status_code=201)

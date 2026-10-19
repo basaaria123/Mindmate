@@ -106,13 +106,7 @@ def pick_question(db: Session, user: models.User, topic: str | None) -> dict:
         if not pool:
             return {"topic": topic, "question": f"Explain the key ideas of {topic} and how you have applied them.", "expected_concepts": [], "concept_aliases": {}}
     else:
-        weaknesses = active_weaknesses(db, user.id)
-        preferred = weaknesses[0].topic if weaknesses else None
-        if preferred is None:
-            latest_fit = db.scalar(
-                select(models.FitAssessment).where(models.FitAssessment.user_id == user.id).order_by(models.FitAssessment.created_at.desc()).limit(1)
-            )
-            preferred = latest_fit.top_gap if latest_fit and latest_fit.top_gap else None
+        preferred = preferred_topic(db, user)
         pool = [q for q in bank if preferred and q["topic"].lower() == preferred.lower()] or bank
 
     # choose the least-used question in the pool
@@ -128,13 +122,13 @@ def pick_question(db: Session, user: models.User, topic: str | None) -> dict:
 def preferred_topic(db: Session, user: models.User) -> str | None:
     """Active weakness first, then the top gap of the latest fit assessment."""
 
+    from app.services.opportunity_service import target_fit
+
     weaknesses = active_weaknesses(db, user.id)
     if weaknesses:
         return weaknesses[0].topic
-    latest_fit = db.scalar(
-        select(models.FitAssessment).where(models.FitAssessment.user_id == user.id).order_by(models.FitAssessment.created_at.desc()).limit(1)
-    )
-    return latest_fit.top_gap if latest_fit and latest_fit.top_gap else None
+    fit = target_fit(db, user)
+    return fit.top_gap if fit and fit.top_gap else None
 
 
 def generated_question(db: Session, user: models.User, topic: str | None) -> dict | None:
@@ -148,10 +142,10 @@ def generated_question(db: Session, user: models.User, topic: str | None) -> dic
         f"{skill.name} ({skill.level}); evidence: " + ("; ".join(ev.description for ev in skill.evidence if ev.deleted_at is None) or "none")
         for skill in active_skills(db, user.id)
     ]
+    from app.services.opportunity_service import target_fit
+
     weaknesses = [{"ref": make_ref(w), "topic": w.topic, "severity": w.severity} for w in active_weaknesses(db, user.id)]
-    latest_fit = db.scalar(
-        select(models.FitAssessment).where(models.FitAssessment.user_id == user.id).order_by(models.FitAssessment.created_at.desc()).limit(1)
-    )
+    latest_fit = target_fit(db, user)
     gaps = [
         {"requirement": r["requirement"], "coverage": r["coverage"], "weight": r["weight"]}
         for r in (latest_fit.per_requirement if latest_fit else [])

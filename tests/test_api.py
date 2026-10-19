@@ -247,3 +247,19 @@ def test_profile_import_ignores_placeholders(seeded_client):
     assert response.status_code == 200
     assert response.json()["profile"]["education"] == before["education"]
     assert response.json()["profile"]["dailyMinutes"] == before["dailyMinutes"]
+
+
+
+def test_seed_scores_opportunities_and_flags_the_target(seeded_client):
+    listing = seeded_client.get("/opportunities").json()
+    assert all(o.get("fit") for o in listing["opportunities"])
+    target = next(o for o in listing["opportunities"] if o["target"])
+    assert target["title"] == "AI/ML Engineering Intern" and listing["target_id"] == target["id"]
+    session = seeded_client.post("/practice/start", json={}).json()
+    assert session["topic"] == "Model evaluation"  # the target role's top gap, not the last fit computed
+
+
+def test_extracted_opportunity_is_scored(seeded_client):
+    body = seeded_client.post("/opportunities/extract", json={"text": "Data Intern\nRequired: SQL and Python"}).json()
+    listed = next(o for o in seeded_client.get("/opportunities").json()["opportunities"] if o["id"] == body["id"])
+    assert listed["fit"]["score"] >= 0

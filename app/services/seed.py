@@ -21,7 +21,7 @@ from app.memory.refs import make_ref
 from app.memory.service import record_note
 from app.services.events import log_event
 from app.services.memory_writes import add_constraint, add_decision, add_evidence, add_goal, add_skill
-from app.services.opportunity_service import curated_opportunities, store_opportunity
+from app.services.opportunity_service import assess_fit, curated_opportunities, store_opportunity
 from app.services.plan_service import create_plan
 from app.services.practice_service import question_bank
 
@@ -125,6 +125,8 @@ def seed(db: Session, *, today: date | None = None) -> dict:
 
     opportunity_data = persona.get("opportunities") or curated_opportunities()
     opportunities = [store_opportunity(db, None, data, source="curated", agent="seed") for data in opportunity_data]
+    for opportunity in opportunities:
+        assess_fit(db, user, opportunity, use_model=False)
 
     bank = question_bank()
     for history in persona.get("practice_history", []):

@@ -361,4 +361,34 @@ def extract_and_store(db: Session, user: models.User, text: str) -> tuple[models
     if not normalise_requirements(data):
         raise ValueError("No skill requirements could be found in the text.")
     opportunity = store_opportunity(db, user, data, source=extractor)
+    assess_fit(db, user, opportunity, use_model=False)
     return opportunity, extractor
+
+
+
+def target_opportunity(db: Session, user: models.User) -> models.Opportunity | None:
+    """The opportunity that best matches the user's target role and top goal.
+
+    Word overlap with the target role and the highest-priority goal title,
+    preferring internships; ties go to the oldest opportunity, so the choice
+    is stable.
+    """
+
+    from app.memory.retrieval import active_goals
+    from app.scoring.fit import _tokens
+
+    goals = active_goals(db, user.id)
+    wanted = _tokens(" ".join(filter(None, [user.target_role, goals[0].target_role if goals else None, goals[0].title if goals else None])))
+    best: tuple[int, int, int] | None = None
+    chosen: models.Opportunity | None = None
+    for opportunity in list_opportunities(db, user):
+        overlap = len(wanted & _tokens(opportunity.title))
+        key = (overlap, 1 if opportunity.type == "internship" else 0, -opportunity.id)
+        if best is None or key > best:
+            best, chosen = key, opportunity
+    return chosen
+
+
+def target_fit(db: Session, user: models.User) -> models.FitAssessment | None:
+    target = target_opportunity(db, user)
+    return latest_fit(db, user, target.id) if target else None
