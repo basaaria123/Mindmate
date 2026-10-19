@@ -1,5 +1,5 @@
 # Root developer commands for MindMate (works on macOS/Linux; see docs/LOCAL_SETUP.md for Windows).
-.PHONY: setup setup-backend setup-frontend dev backend frontend test test-backend test-ai test-frontend reset-demo
+.PHONY: setup setup-backend setup-frontend dev backend frontend test test-backend test-ai test-ai-live test-frontend lint-frontend reset-demo
 
 setup: setup-backend setup-frontend
 
@@ -26,8 +26,11 @@ test: test-backend test-ai test-frontend
 test-backend:   ## memory layer, scoring, plans, API, migrations (no network needed)
 	MINDMATE_LLM_MODE=off python -m pytest tests -q
 
-test-ai:        ## schema and parser tests run offline; agent tests need NEBIUS_API_KEY
-	python -m pytest test_json_utils.py test_fit_schema.py test_opportunity_schema.py test_profile_schema.py -q
+test-ai:        ## all offline AI tests; the five live agent tests need NEBIUS_API_KEY (make test-ai-live)
+	python -m pytest test_*.py -q --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
+
+test-ai-live:   ## calls Nemotron on Nebius Token Factory; spends credits
+	python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q
 
 test-frontend:
 	cd mindmate-frontend && npm run build

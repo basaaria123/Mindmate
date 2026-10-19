@@ -15,7 +15,7 @@ from app.api.contracts import MemoryIn, MemoryPatch
 from app.api.deps import get_current_user, get_db
 from app.db import models
 from app.memory import service as memory_service
-from app.memory.retrieval import TASK_MEMORY_KINDS, prompt_text, retrieve_for_task
+from app.memory.retrieval import TASK_MEMORY_KINDS, active_weaknesses, prompt_text, retrieve_for_task
 from app.permissions import check_permission
 from app.services.events import list_events, serialize_event
 from app.services.memory_writes import add_constraint, add_decision, add_evidence, add_goal, add_skill
@@ -47,6 +47,18 @@ def _latest_practice(db: Session, user_id: int) -> dict | None:
     }
 
 
+def memory_notes(db: Session, user_id: int, items: list[models.MemoryItem]) -> list[str]:
+    """Plain-text notes for the frontend's Memory screen.
+
+    Each active weakness also appears as ``"Practice focus: <topic>"``: the
+    Memory and Pipeline screens use that exact text to show an insight as saved.
+    """
+
+    focus = [f"Practice focus: {weakness.topic}" for weakness in active_weaknesses(db, user_id)]
+    notes = focus + [item.content for item in items if item.deleted_at is None]
+    return list(dict.fromkeys(notes))
+
+
 def memory_state(db: Session, user: models.User, *, include_deleted: bool = False, types: set[str] | None = None) -> dict:
     items = memory_service.list_items(db, user.id, include_deleted=include_deleted, types=types)
     plan = active_plan(db, user.id)
@@ -54,7 +66,7 @@ def memory_state(db: Session, user: models.User, *, include_deleted: bool = Fals
     return {
         "total": len(items),
         "items": [memory_service.serialize_item(item) for item in items],
-        "memoryNotes": [item.content for item in items if item.deleted_at is None],
+        "memoryNotes": memory_notes(db, user.id, items),
         "latestPractice": _latest_practice(db, user.id),
         "trace": [serialize_event(event) for event in list_events(db, user_id=user.id, limit=50)],
         "originalPlan": plan_titles(previous) if previous else plan_titles(plan),

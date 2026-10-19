@@ -23,6 +23,7 @@ later response, prompt bundle, plan or rationale.
 |---|---|---|---|
 | GET | `/profile` | – | `{id, name, email, goal, targetRole, dailyMinutes, education, summary, allowTaskWrites, preferences, updatedAt}` |
 | PUT | `/profile` | any subset of the fields above | updated profile |
+| POST | `/profile/import` | Profile agent output `{education, goals[], skills[], interests[], daily_available_minutes, learning_preferences[]}` | `{added:{goals, skills, preferences}, skipped[], profile}`; idempotent; skills are stored at beginner level without evidence |
 | GET | `/goals` | – | `{goals: [goal...], current_goal}` ordered by `priority_rank`; each goal has `ref, title, target_role, deadline, hours_per_day, priority_rank, parent_goal, comes_before[]` |
 | POST | `/goals` | `{title, target_role?, deadline?, hours_per_day?, priority_rank?, parent_goal_id?}` | goal |
 | PATCH | `/goals/{id}` | subset | goal |
@@ -34,7 +35,7 @@ later response, prompt bundle, plan or rationale.
 
 | Method | Path | Body | Returns |
 |---|---|---|---|
-| GET | `/memory` | query `include_deleted`, `type` (repeatable) | `{total, items[], memoryNotes[], latestPractice, trace[], originalPlan[], updatedPlan, replanReason}` |
+| GET | `/memory` | query `include_deleted`, `type` (repeatable) | `{total, items[], memoryNotes[], latestPractice, trace[], originalPlan[], updatedPlan, replanReason}`; `memoryNotes` starts with `"Practice focus: <topic>"` for each active weakness |
 | GET | `/memory/context?task=planner` | task ∈ profile, opportunity, fit, gap, planner, practice, memory, replan | the exact memory slice that task may see: `{goals, constraints, skills, evidence, decisions, weaknesses, preferences, notes, prompt_text, refs}` |
 | POST | `/memory` | `{type, content, payload?, tags?, reason?, source?}` | memory item `{id, type, content, payload, source, visibility, ref, tags, createdAt, updatedAt, deletedAt}` |
 | GET | `/memory/{id}` | – | memory item |

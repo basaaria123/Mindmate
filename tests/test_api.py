@@ -199,3 +199,50 @@ def test_validation_errors_use_detail(client):
 @pytest.mark.parametrize("path", ["/memory/999", "/plans/999", "/opportunities/999"])
 def test_not_found(seeded_client, path):
     assert seeded_client.get(path).status_code == 404
+
+
+def test_saved_weakness_appears_as_practice_focus_note(seeded_client):
+    """Memory.tsx marks an insight as saved when memoryNotes contains 'Practice focus: <weakness>'."""
+    result = seeded_client.post("/practice/evaluate", json={"answer": "Only accuracy on the test set.", "topic": "Model evaluation"}).json()
+    assert result["weakness_recorded"] is True
+    notes = seeded_client.get("/memory").json()["memoryNotes"]
+    assert f"Practice focus: {result['weakness']}" in notes
+    seeded_client.post("/memory", json={"type": "weakness", "content": f"Practice focus: {result['weakness']}"})
+    notes = seeded_client.get("/memory").json()["memoryNotes"]
+    assert notes.count(f"Practice focus: {result['weakness']}") == 1
+
+    item = next(i for i in seeded_client.get("/memory").json()["items"] if i["ref"] == result["weakness_ref"])
+    seeded_client.delete(f"/memory/{item['id']}")
+    assert f"Practice focus: {result['weakness']}" not in seeded_client.get("/memory").json()["memoryNotes"]
+
+
+def test_profile_import_stores_agent_output_once(seeded_client):
+    extracted = {
+        "education": "Second-year engineering student",
+        "goals": ["Land an AI/ML internship", "Learn AI development"],
+        "skills": ["Python", "Basic machine learning", "Docker"],
+        "interests": ["Artificial intelligence"],
+        "daily_available_minutes": 45,
+        "learning_preferences": ["Step-by-step explanations"],
+    }
+    first = seeded_client.post("/profile/import", json=extracted).json()
+    assert first["added"]["goals"] == ["Learn AI development"]  # the internship goal already exists
+    assert first["added"]["skills"] == ["Docker"]  # Python and ML already known
+    assert "interest: Artificial intelligence" in first["added"]["preferences"]
+    assert first["profile"]["dailyMinutes"] == 45
+    assert first["profile"]["education"] == "Second-year engineering student"
+
+    docker = next(s for s in seeded_client.get("/skills").json()["skills"] if s["name"] == "Docker")
+    assert docker["level"] == "beginner" and docker["evidence_refs"] == []
+
+    second = seeded_client.post("/profile/import", json=extracted).json()
+    assert second["added"] == {"goals": [], "skills": [], "preferences": []}
+    assert any(e["action"] == "profile_imported" for e in seeded_client.get("/agent/events").json()["events"])
+
+
+def test_profile_import_ignores_placeholders(seeded_client):
+    before = seeded_client.get("/profile").json()
+    response = seeded_client.post("/profile/import", json={"education": "Not specified", "goals": [" "], "daily_available_minutes": None})
+    assert response.status_code == 200
+    assert response.json()["profile"]["education"] == before["education"]
+    assert response.json()["profile"]["dailyMinutes"] == before["dailyMinutes"]

@@ -103,8 +103,8 @@ origins with `CORS_ORIGINS=https://your-frontend.example` in `.env`.
 # backend (no network): memory layer, scoring, plans, API, migrations
 MINDMATE_LLM_MODE=off python -m pytest tests -q
 
-# AI, offline part: JSON parser and schema tests
-python -m pytest test_json_utils.py test_fit_schema.py test_opportunity_schema.py test_profile_schema.py -q
+# AI, offline part: parser, schema, memory-agent and model-config tests
+python -m pytest test_*.py -q --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
 
 # AI, live part (needs NEBIUS_API_KEY and network; costs Token Factory credits)
 python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q

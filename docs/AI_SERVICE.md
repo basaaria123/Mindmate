@@ -30,11 +30,12 @@ Owner: AI developer, branch `mindmate-ai`. Files: `app/agents/`, `app/schemas/`,
 | Variable | Default | Effect |
 |---|---|---|
 | `NEBIUS_API_KEY` | – | Required for any model call; never commit it |
+| `NEBIUS_BASE_URL` | `https://api.tokenfactory.nebius.com/v1` | OpenAI-compatible endpoint |
+| `MINDMATE_REASONING_MODEL` | `nvidia/Nemotron-3-Ultra-550b-a55b` | Fit, gap, planner, practice agents |
+| `MINDMATE_FAST_MODEL` | `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` | Profile, opportunity, suggestions agents |
 | `MINDMATE_LLM_MODE` | `live` | `off` makes the backend use its deterministic practice evaluator and skip model calls |
 
-Model IDs and the base URL are constants in `llm_client.py` today; moving them to environment variables
-(`NEBIUS_BASE_URL`, `MINDMATE_REASONING_MODEL`, `MINDMATE_FAST_MODEL`) is a recommended, backward-compatible
-next step for the AI developer.
+The model variables are read once at import, so restart the server after changing them.
 
 ## Cost and rate limits
 
@@ -55,7 +56,7 @@ Every agent call spends Token Factory credits; Ultra calls are the expensive one
 ```bash
 pip install -r requirements.txt
 cp .env.example .env && echo "NEBIUS_API_KEY=..." >> .env
-python -m pytest test_json_utils.py test_fit_schema.py test_opportunity_schema.py test_profile_schema.py -q   # offline
+python -m pytest test_*.py -q --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py   # offline
 python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q   # live
 uvicorn main:app --reload   # then POST /profile, /opportunity, /fit at http://localhost:8000/docs
 ```

@@ -32,9 +32,9 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      # Agent tests (test_*_agent.py, test_setup.py, test_model_selection.py) need NEBIUS_API_KEY
-      # and network access; they are run locally by the AI developer, not in CI.
-      - run: python -m pytest test_json_utils.py test_fit_schema.py test_opportunity_schema.py test_profile_schema.py -q
+      # Every root test_*.py runs here except the five that call Nemotron and need NEBIUS_API_KEY
+      # (test_setup, test_model_selection, test_profile_agent, test_opportunity_agent, test_fit_agent).
+      - run: python -m pytest test_*.py -q --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
 
   frontend:
     name: Frontend lint and build

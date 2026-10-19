@@ -29,11 +29,18 @@ Full reference with every field: `docs/contracts/backend-api.md`. Endpoints the 
 |---|---|---|---|
 | `getProfile` | `GET /profile` | – | `{name, goal, targetRole, dailyMinutes, education, summary, ...}` |
 | `updateProfile` | `PUT /profile` | `{name, goal, targetRole, dailyMinutes}` | same shape |
-| `getMemory` / `getDemoState` | `GET /memory` | – | `{items[], memoryNotes[], latestPractice, trace[], originalPlan[], updatedPlan, replanReason}` |
+| `getMemory` / `getDemoState` | `GET /memory` | – | `{items[], memoryNotes[], latestPractice, trace[], originalPlan[], updatedPlan, replanReason}`; every active weakness also appears in `memoryNotes` as `"Practice focus: <topic>"`, which the Memory screen uses to show an insight as saved |
 | `addMemoryEntry` / `saveWeaknessToMemoryApi` | `POST /memory` | `{type, content, payload?, reason?}` | `{id, type, content, createdAt, ref, ...}` |
 | `submitPracticeAnswer` | `POST /practice/evaluate` | `{answer, session_id?, question?, topic?}` | `{answer, score, weakness, feedback, submittedAt, rubric_scores, missing_concepts, weakness_recorded, weakness_ref}` |
 | `replanLearningPathApi` | `POST /plans/replan` | `{available_minutes?, reason?}` | `{plan, diff:{before, after, added, moved, deferred}, rationale, refs}` |
 | `getTraceEvents` | `GET /agent/events` | – | `{events:[{id, title, detail, occurredAt, agent, action, refs}]}` |
+
+Recommended next calls for the frontend (backend ready, UI not wired yet):
+
+| Purpose | Method and path | Request | Response |
+|---|---|---|---|
+| Store the Profile agent's output in memory after onboarding | `POST /profile/import` | the `AIProfile` returned by `POST /profile` | `{added:{goals, skills, preferences}, skipped[], profile}` |
+| Show the question the backend will grade | `POST /practice/start` | `{topic?}` | `{id, question, topic}`; then send `session_id` with `POST /practice/evaluate` |
 
 Other backend endpoints (not yet used by the UI): `/goals`, `/constraints`, `/decisions`, `/skills`,
 `/evidence`, `/weaknesses`, `/skills/gaps`, `/opportunities`, `/opportunities/search`,
@@ -88,6 +95,7 @@ Model configuration lives in `app/services/llm_client.py` (`REASONING_MODEL`, `F
 |---|---|---|
 | `VITE_API_BASE_URL` | frontend | Backend base URL (build-time; set in Vercel for production) |
 | `NEBIUS_API_KEY` | backend/AI | Nebius Token Factory key (server-side only) |
+| `NEBIUS_BASE_URL`, `MINDMATE_REASONING_MODEL`, `MINDMATE_FAST_MODEL` | AI | Optional provider and model overrides |
 | `DATABASE_URL` | backend | PostgreSQL URL; empty = SQLite |
 | `MINDMATE_AUTO_CREATE_SCHEMA`, `MINDMATE_AUTO_SEED` | backend | Dev conveniences; `false` in production with Alembic |
 | `MINDMATE_LLM_MODE` | backend | `live` or `off` |

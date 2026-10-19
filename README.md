@@ -47,8 +47,8 @@ Without `make`: follow `docs/LOCAL_SETUP.md` step by step (Windows included).
 make test           # backend tests, offline AI tests, frontend build
 ```
 
-Agent tests that call Nemotron (`test_*_agent.py`, `test_setup.py`, `test_model_selection.py`) need
-`NEBIUS_API_KEY` in `.env` and are run locally by the AI developer.
+The five agent tests that call Nemotron (`test_setup.py`, `test_model_selection.py`, `test_profile_agent.py`,
+`test_opportunity_agent.py`, `test_fit_agent.py`) need `NEBIUS_API_KEY` in `.env`; run them with `make test-ai-live`.
 
 ## Hackathon
 

@@ -21,6 +21,19 @@ class ProfileIn(BaseModel):
     preferences: dict | None = None
 
 
+class ProfileImportIn(BaseModel):
+    """Output of the Profile agent (app/schemas/profile.py UserProfile), accepted leniently."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    education: str | None = None
+    goals: list[str] = Field(default_factory=list)
+    skills: list[str] = Field(default_factory=list)
+    interests: list[str] = Field(default_factory=list)
+    daily_available_minutes: int | None = Field(default=None, ge=1, le=24 * 60)
+    learning_preferences: list[str] = Field(default_factory=list)
+
+
 class MemoryIn(BaseModel):
     model_config = ConfigDict(extra="allow")
 
