@@ -1,61 +1,59 @@
-import json
+from openai.types.chat import ChatCompletionMessageParam
 
 from app.schemas.profile import UserProfile
 from app.services.llm_client import create_llm_client, get_model
+from app.utils.json_utils import parse_json_response
+from app.utils.prompts import load_prompt, render_prompt
 
 
 def extract_user_profile(user_message: str) -> UserProfile:
-    """Extract a structured user profile from a natural-language message."""
+    """Extract a structured user profile from a natural-language message.
+
+    Like the other agents, an invalid or off-schema reply is retried once with
+    the validation error, then rejected with a ValueError.
+    """
 
     client = create_llm_client()
     model = get_model("fast")
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "system",
-                "content": """
-You are MindMate's Profile Extraction Agent.
+    messages: list[ChatCompletionMessageParam] = [
+        {"role": "system", "content": load_prompt("profile.system")},
+        {"role": "user", "content": render_prompt("profile", user_message=user_message)},
+    ]
 
-Extract information explicitly stated by the user.
+    for attempt in range(2):
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            response_format={"type": "json_object"},
+            max_tokens=1000,
+        )
 
-Rules:
-1. Do not invent personal information.
-2. If education is not mentioned, use "Not specified".
-3. If goals, skills, interests, or learning preferences are not mentioned,
-   return an empty list for those fields.
-4. If daily available time is not mentioned, return null.
-5. Convert time into minutes. For example, one hour is 60 minutes.
-6. Return only valid JSON matching the requested fields.
-""",
-            },
-            {
-                "role": "user",
-                "content": f"""
-Extract the profile from this message:
+        response_text = response.choices[0].message.content
 
-{user_message}
+        try:
+            if not response_text:
+                raise ValueError("The Profile Agent returned an empty response.")
 
-Return a JSON object with exactly these fields:
-- education: string
-- goals: list of strings
-- skills: list of strings
-- interests: list of strings
-- daily_available_minutes: integer or null
-- learning_preferences: list of strings
-""",
-            },
-        ],
-        response_format={"type": "json_object"},
-        max_tokens=1000,
-    )
+            profile_data = parse_json_response(response_text)
+            return UserProfile.model_validate(profile_data)
 
-    response_text = response.choices[0].message.content
+        except ValueError as error:
+            if attempt == 1:
+                raise ValueError(
+                    "The Profile Agent could not return a valid profile after one retry."
+                ) from error
 
-    if not response_text:
-        raise ValueError("The AI returned an empty response.")
+            messages.append({"role": "assistant", "content": response_text or ""})
+            messages.append(
+                {
+                    "role": "user",
+                    "content": (
+                        "Your previous response was invalid. Return only the corrected "
+                        "JSON object with exactly the requested fields. "
+                        f"Validation error: {error}"
+                    ),
+                }
+            )
 
-    profile_data = json.loads(response_text)
-
-    return UserProfile.model_validate(profile_data)
+    raise RuntimeError("Unexpected error in the Profile Agent.")

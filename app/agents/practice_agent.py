@@ -2,9 +2,10 @@
 from openai.types.chat import ChatCompletionMessageParam
 from pydantic import ValidationError
 
-from app.schemas.practice import PracticeEvaluation
+from app.schemas.practice import PracticeEvaluation, PracticeQuestionSet
 from app.services.llm_client import create_llm_client, get_model
 from app.utils.json_utils import parse_json_response
+from app.utils.prompts import load_prompt, render_prompt
 
 
 def evaluate_practice(
@@ -17,53 +18,18 @@ def evaluate_practice(
     client = create_llm_client()
     model = get_model("reasoning")
 
-    prompt = f"""
-You are MindMate's Practice Agent.
-
-Evaluate the user's answer to a practice question.
-
-TOPIC:
-{topic}
-
-QUESTION:
-{question}
-
-USER ANSWER:
-{user_answer}
-
-Return ONLY a JSON object with this structure:
-{{
-  "correctness": 80,
-  "depth": 70,
-  "clarity": 85,
-  "feedback": "Explain what is correct and what needs improvement.",
-  "weakness_candidate": "A specific weakness, or null if none is supported.",
-  "is_store_worthy": true,
-  "memory_tag": "weakness, or null if the result should not be stored."
-}}
-
-RULES:
-1. Score correctness, depth, and clarity independently from 0 to 100.
-2. Correctness measures factual and technical accuracy.
-3. Depth measures completeness and quality of reasoning.
-4. Clarity measures how understandable and well-organized the answer is.
-5. Give specific, constructive feedback grounded in the answer.
-6. Identify a weakness only when the answer provides evidence for it.
-7. Do not treat a missing detail as proof that the user lacks a skill.
-8. Set is_store_worthy to true only when the result contains a useful,
-   supported learning insight that could help future personalization.
-9. If is_store_worthy is false, set memory_tag to null.
-10. Do not invent memory IDs or claim that anything has been saved.
-11. Return valid JSON only, without Markdown.
-"""
+    prompt = render_prompt(
+        "practice",
+        topic=topic,
+        question=question,
+        user_answer=user_answer,
+    )
 
     messages: list[ChatCompletionMessageParam] = [
         {
             "role": "system",
             "content": (
-                "You are MindMate's Practice Agent. "
-                "Evaluate fairly and constructively. "
-                "Return only valid JSON matching the requested schema."
+                load_prompt("practice.system")
             ),
         },
         {"role": "user", "content": prompt},
@@ -110,6 +76,90 @@ RULES:
                         "Correct your previous JSON response to match the schema "
                         "and every rule. Return only JSON. "
                         f"Validation error: {error}"
+                    ),
+                }
+            )
+
+    raise RuntimeError("Unexpected error in the Practice Agent.")
+
+
+
+def generate_practice_questions(
+    target_role: str,
+    skills: list[str],
+    gaps: list[dict],
+    weaknesses: list[dict],
+    topic: str | None = None,
+    count: int = 3,
+    allowed_refs: list[str] | None = None,
+) -> PracticeQuestionSet:
+    """Generate mock-interview questions from the role, the learner's evidence, gaps and weaknesses.
+
+    Every cited reference must come from ``allowed_refs``; otherwise the reply is
+    retried once and then rejected.
+    """
+
+    if not 1 <= count <= 5:
+        raise ValueError("count must be between 1 and 5.")
+
+    client = create_llm_client()
+    model = get_model("reasoning")
+    allowed = sorted(set(allowed_refs or []))
+
+    messages: list[ChatCompletionMessageParam] = [
+        {"role": "system", "content": load_prompt("practice_questions.system")},
+        {
+            "role": "user",
+            "content": render_prompt(
+                "practice_questions",
+                count=count,
+                target_role=target_role or "Not specified",
+                topic=topic or "",
+                skills=skills,
+                gaps=gaps,
+                weaknesses=weaknesses,
+                allowed_refs=allowed,
+            ),
+        },
+    ]
+
+    for attempt in range(2):
+        response = client.chat.completions.create(model=model, messages=messages, temperature=0)
+        response_text = response.choices[0].message.content
+
+        try:
+            if not response_text:
+                raise ValueError("The Practice Agent returned an empty response.")
+
+            question_set = PracticeQuestionSet.model_validate(parse_json_response(response_text))
+
+            unknown = {
+                ref
+                for question in question_set.questions
+                for ref in question.source_refs
+                if ref not in allowed
+            }
+            if unknown:
+                raise ValueError(f"Questions cite unknown references: {sorted(unknown)}")
+
+            if topic and any(topic.lower() not in q.topic.lower() for q in question_set.questions):
+                raise ValueError(f"Every question must test the requested topic: {topic}")
+
+            return question_set
+
+        except ValueError as error:
+            if attempt == 1:
+                raise ValueError(
+                    "The Practice Agent could not generate valid questions after one retry."
+                ) from error
+
+            messages.append({"role": "assistant", "content": response_text or ""})
+            messages.append(
+                {
+                    "role": "user",
+                    "content": (
+                        "Correct your previous JSON so it matches the schema and every rule. "
+                        f"Return only JSON. Validation error: {error}"
                     ),
                 }
             )
