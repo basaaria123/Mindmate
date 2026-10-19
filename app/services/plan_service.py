@@ -535,7 +535,7 @@ def replan(
     elif reason:
         rationale_lines.append(f"Replanned because {reason}.")
     else:
-        rationale_lines.append(f"Replanned ({trigger}) against the current memory.")
+        rationale_lines.append("Replanned on request using the latest memory." if trigger == "user" else f"Replanned after {trigger} using the latest memory.")
 
     for entry in added_entries:
         weakness_refs = [r for r in entry["refs"] if r in weaknesses]
