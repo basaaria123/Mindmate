@@ -56,7 +56,7 @@ Every agent call spends Token Factory credits; Ultra calls are the expensive one
 ```bash
 pip install -r requirements.txt
 cp .env.example .env && echo "NEBIUS_API_KEY=..." >> .env
-python -m pytest test_*.py -q --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py   # offline
+python -m pytest . -q --ignore=tests --ignore=mindmate-frontend --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py   # offline
 python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q   # live
 uvicorn main:app --reload   # then POST /profile, /opportunity, /fit at http://localhost:8000/docs
 ```

@@ -27,7 +27,7 @@ test-backend:   ## memory layer, scoring, plans, API, migrations (no network nee
 	MINDMATE_LLM_MODE=off python -m pytest tests -q
 
 test-ai:        ## all offline AI tests; the five live agent tests need NEBIUS_API_KEY (make test-ai-live)
-	python -m pytest test_*.py -q --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
+	python -m pytest . -q --ignore=tests --ignore=mindmate-frontend --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
 
 test-ai-live:   ## calls Nemotron on Nebius Token Factory; spends credits
 	python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q

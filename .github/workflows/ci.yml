@@ -34,7 +34,7 @@ jobs:
       - run: pip install -r requirements.txt
       # Every root test_*.py runs here except the five that call Nemotron and need NEBIUS_API_KEY
       # (test_setup, test_model_selection, test_profile_agent, test_opportunity_agent, test_fit_agent).
-      - run: python -m pytest test_*.py -q --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
+      - run: python -m pytest . -q --ignore=tests --ignore=mindmate-frontend --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
 
   frontend:
     name: Frontend lint and build
