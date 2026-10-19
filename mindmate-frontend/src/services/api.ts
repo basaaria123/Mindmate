@@ -2,12 +2,12 @@ import * as mockApi from './mockApi'
 import type { DemoEvent, DemoState, PracticeResult } from './demoState'
 import type { MemoryEntry, UserProfile } from './mockApi'
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim().replace(/\/$/, '')
-const useMocks = !apiBaseUrl
+export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim().replace(/\/$/, '')
+export const useMocks = !apiBaseUrl
 
 let latestPracticeResult: PracticeResult | null = null
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (!apiBaseUrl) {
     throw new Error('Set VITE_API_BASE_URL to connect to the MindMate API.')
   }
@@ -119,7 +119,7 @@ export async function addMemoryEntry(
     : request<MemoryEntry>('/memory', { method: 'POST', body: jsonBody(entry) })
 }
 
-export async function submitPracticeAnswer(answer: string): Promise<PracticeResult> {
+export async function submitPracticeAnswer(answer: string, sessionId?: number): Promise<PracticeResult> {
   if (answer.trim().length < 10) {
     throw new Error('Please write at least 10 characters before submitting.')
   }
@@ -127,7 +127,8 @@ export async function submitPracticeAnswer(answer: string): Promise<PracticeResu
     ? await mockApi.evaluatePractice(answer)
     : await request<PracticeResult>('/practice/evaluate', {
         method: 'POST',
-        body: jsonBody({ answer: answer.trim() }),
+        // session_id ties the answer to the question the user was shown (POST /practice/start).
+        body: jsonBody(sessionId ? { answer: answer.trim(), session_id: sessionId } : { answer: answer.trim() }),
       })
   latestPracticeResult = result
   return result

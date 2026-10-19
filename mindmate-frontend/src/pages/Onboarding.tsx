@@ -14,6 +14,7 @@ import {
   getProfile,
   updateProfile,
 } from '../services/api'
+import { importProfile } from '../services/backend'
 import splashTrails from '../assets/mindmate-splash-trails.png'
 import splashEmblem from '../assets/mindmate-splash-emblem.png'
 import splashWordmark from '../assets/mindmate-splash-wordmark.png'
@@ -106,6 +107,8 @@ function Onboarding() {
           'mindmate-ai-profile',
           JSON.stringify(aiProfile),
         )
+        // Persist goals, skills and preferences in MindMate's memory (no-op in mock mode).
+        await importProfile(aiProfile).catch(() => undefined)
       }
       if (savePreferences) {
         window.localStorage.setItem(

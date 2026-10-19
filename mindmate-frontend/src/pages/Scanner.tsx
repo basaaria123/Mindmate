@@ -9,6 +9,9 @@ import {
   type AIOpportunitySuggestion,
 } from '../services/api'
 import { Building2, GraduationCap, Hospital, Sprout } from 'lucide-react'
+import { assessStoredFit, getOpportunities, type FitResult, type Opportunity } from '../services/backend'
+import { useLoad } from '../hooks/useLoad'
+import { RefTags } from '../components/RefText'
 
 const categories = ['Jobs', 'Projects', 'Resources', 'Other']
 function getSkillText(skill: unknown): string {
@@ -40,44 +43,42 @@ function getSkillText(skill: unknown): string {
   return ''
 }
 
-const opportunities = [
-  {
-    title: 'Junior Anesthesia Technologist',
-    organization: 'Apollo Hospitals · Hyderabad',
-    type: 'Job',
-    category: 'Jobs',
-    Icon: Building2,
+function categoryFor(type: string) {
+  const value = type.toLowerCase()
+  if (['internship', 'job', 'fellowship'].includes(value)) return 'Jobs'
+  if (value === 'project') return 'Projects'
+  if (['course', 'resource', 'learning resource'].includes(value)) return 'Resources'
+  return 'Other'
+}
+
+function bandClass(band: string) {
+  return band === 'Strong' ? 'bg-emerald-50 text-emerald-700' : band === 'Moderate' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'
+}
+
+type Card = {
+  title: string
+  organization: string
+  type: string
+  Icon: typeof Building2
+  iconColor: string
+  tagColor: string
+  category: string
+  stored?: Opportunity
+}
+
+function storedCard(opportunity: Opportunity): Card {
+  const category = categoryFor(opportunity.type)
+  return {
+    title: opportunity.title,
+    organization: [opportunity.org, opportunity.deadline ? `apply by ${opportunity.deadline}` : null].filter(Boolean).join(' · '),
+    type: opportunity.type.charAt(0).toUpperCase() + opportunity.type.slice(1),
+    Icon: category === 'Jobs' ? Building2 : category === 'Projects' ? Sprout : category === 'Resources' ? GraduationCap : Hospital,
     iconColor: 'bg-[#2865f2]',
     tagColor: 'bg-[#baf3f3] text-[#149eab]',
-  },
-  {
-    title: 'Research Intern – Medical AI',
-    organization: 'AI Health Labs · Remote',
-    type: 'Internship',
-    category: 'Jobs',
-    Icon: Sprout,
-    iconColor: 'bg-[#1ec6c9]',
-    tagColor: 'bg-[#baf3f3] text-[#149eab]',
-  },
-  {
-    title: 'Medical Coding Specialist',
-    organization: 'Dr. Reddy’s · Hyderabad',
-    type: 'Job',
-    category: 'Jobs',
-    Icon: Hospital,
-    iconColor: 'bg-[#20cda6]',
-    tagColor: 'bg-[#baf3f3] text-[#149eab]',
-  },
-  {
-    title: 'Healthcare Research Project',
-    organization: 'IIT Hyderabad',
-    type: 'Project',
-    category: 'Projects',
-    Icon: GraduationCap,
-    iconColor: 'bg-[#ffc400]',
-    tagColor: 'bg-[#c8f8df] text-[#10ac65]',
-  },
-]
+    category,
+    stored: opportunity,
+  }
+}
 
 function Scanner() {
   const [activeCategory, setActiveCategory] = useState('Jobs')
@@ -94,6 +95,27 @@ function Scanner() {
     useState<AIFitAssessment | null>(null)
   const [isAssessingFit, setIsAssessingFit] = useState(false)
   const [fitError, setFitError] = useState<string | null>(null)
+  const stored = useLoad(getOpportunities)
+  const [storedFits, setStoredFits] = useState<Record<number, FitResult>>({})
+  const [checking, setChecking] = useState<number | null>(null)
+  const [storedFitError, setStoredFitError] = useState<string | null>(null)
+
+  async function checkStoredFit(opportunityId: number) {
+    if (storedFits[opportunityId]) {
+      setStoredFits((current) => Object.fromEntries(Object.entries(current).filter(([key]) => Number(key) !== opportunityId)))
+      return
+    }
+    setChecking(opportunityId)
+    setStoredFitError(null)
+    try {
+      const fit = await assessStoredFit(opportunityId)
+      setStoredFits((current) => ({ ...current, [opportunityId]: fit }))
+    } catch (error) {
+      setStoredFitError(error instanceof Error ? error.message : 'Could not check your fit.')
+    } finally {
+      setChecking(null)
+    }
+  }
 
   async function handleExtractOpportunity() {
     if (!opportunityText.trim()) {
@@ -147,7 +169,9 @@ function Scanner() {
 }
 }
 useEffect(() => {
-  void handleLoadSuggestions()
+  // Start loading after the first render so no state is set synchronously inside the effect.
+  const timer = window.setTimeout(() => void handleLoadSuggestions(), 0)
+  return () => window.clearTimeout(timer)
 }, [])
 
   async function handleAssessFit() {
@@ -183,7 +207,7 @@ useEffect(() => {
     }
   }
 
- const visibleOpportunities =
+ const visibleOpportunities: Card[] =
     personalizedSuggestions.length > 0
       ? personalizedSuggestions
           .filter((suggestion) => suggestion.category === activeCategory)
@@ -207,7 +231,7 @@ useEffect(() => {
               category: suggestion.category,
             }
           })
-      : opportunities.filter(
+      : (stored.data ?? []).map(storedCard).filter(
           (opportunity) => opportunity.category === activeCategory,
         )
 
@@ -539,18 +563,21 @@ useEffect(() => {
 
         {/* Existing opportunity cards */}
         <div className="mt-[18px] overflow-hidden rounded-[16px] border border-[#e3dcff] bg-white/50">
-        {suggestionsError && (
-          <p role="alert" className="p-5 text-sm text-[#737ba6]">
-            {suggestionsError}
+        {suggestionsError && personalizedSuggestions.length === 0 && (
+          <p className="border-b border-[#e6e0ff] px-5 py-3 text-[12px] text-[#737ba6]">
+            Personalised suggestions: {suggestionsError} Showing your saved opportunities instead.
             </p>
           )}
-          {!suggestionsLoaded ? null : visibleOpportunities.length > 0 ? (
+          {stored.error && <p role="alert" className="p-5 text-sm text-rose-600">Could not load opportunities: {stored.error}</p>}
+          {storedFitError && <p role="alert" className="px-5 pt-3 text-sm text-rose-600">{storedFitError}</p>}
+          {!suggestionsLoaded || stored.loading ? <p role="status" className="p-5 text-sm text-[#737ba6]">Loading opportunities…</p> : visibleOpportunities.length > 0 ? (
             visibleOpportunities.map(
-              ({ title, organization, type, Icon, iconColor, tagColor }) => (
+              ({ title, organization, type, Icon, iconColor, tagColor, stored: saved }) => (
                 <article
                   key={title}
-                  className="flex min-h-[102px] items-center justify-between gap-4 border-b border-[#e6e0ff] px-[19px] py-4 last:border-b-0"
+                  className="border-b border-[#e6e0ff] px-[19px] py-4 last:border-b-0"
                 >
+                <div className="flex min-h-[70px] items-center justify-between gap-4">
                   <div className="flex min-w-0 items-center gap-[18px]">
                     <span
                       className={`grid size-[47px] shrink-0 place-items-center rounded-[10px] text-white ${iconColor}`}
@@ -568,11 +595,38 @@ useEffect(() => {
                     </span>
                   </div>
 
-                  <span
-                    className={`grid min-w-[90px] shrink-0 place-items-center rounded-full px-4 py-[7px] text-[12px] font-semibold ${tagColor}`}
-                  >
-                    {type}
-                  </span>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {saved?.fit && (
+                      <span className={`rounded-full px-3 py-[6px] text-[12px] font-bold ${bandClass(saved.fit.band)}`} title={saved.fit.top_gap ? `Top gap: ${saved.fit.top_gap}` : 'No gaps'}>
+                        {saved.fit.score}% {saved.fit.band}
+                      </span>
+                    )}
+                    <span
+                      className={`grid min-w-[90px] shrink-0 place-items-center rounded-full px-4 py-[7px] text-[12px] font-semibold ${tagColor}`}
+                    >
+                      {type}
+                    </span>
+                    {saved && (
+                      <button type="button" onClick={() => void checkStoredFit(saved.id)} disabled={checking === saved.id} className="rounded-full border border-violet-200 bg-white px-3 py-[6px] text-[12px] font-semibold text-[#6332c7] hover:bg-violet-50 disabled:opacity-60">
+                        {checking === saved.id ? 'Checking…' : storedFits[saved.id] ? 'Hide fit' : 'Check fit'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+                {saved?.fit?.top_gap && !storedFits[saved.id] && <p className="mt-1 pl-[65px] text-[12px] text-[#737ba6]">Top gap: {saved.fit.top_gap}</p>}
+                {saved && storedFits[saved.id] && (
+                  <ul className="mt-3 space-y-1.5 rounded-xl bg-[#f7f5ff] p-3 sm:ml-[65px]">
+                    {storedFits[saved.id].per_requirement.map((req) => (
+                      <li key={req.requirement} className="flex flex-wrap items-center gap-2 text-[12px] text-[#454166]">
+                        <span className={`rounded-md px-1.5 py-[1px] font-semibold ${req.coverage === 'demonstrated' ? 'bg-emerald-100 text-emerald-800' : req.coverage === 'partial' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'}`}>{req.coverage.replace('_', ' ')}</span>
+                        <strong>{req.requirement}</strong>
+                        <span className="text-[#737ba6]">{req.weight}{req.mandatory ? ', mandatory' : ''}</span>
+                        <RefTags refs={req.evidence_refs} />
+                      </li>
+                    ))}
+                    <li className="pt-1 text-[11px] text-[#737ba6]">Score computed by code from evidence in your memory ({storedFits[saved.id].judged_by}).</li>
+                  </ul>
+                )}
                 </article>
               ),
             )

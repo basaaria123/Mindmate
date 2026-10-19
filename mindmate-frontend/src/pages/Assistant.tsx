@@ -16,7 +16,7 @@ const quickActions = [
 
 const recentChats = [
   { title: 'Study Plan for Next Exam', detail: 'Exam preparation and study guides...', time: '2h ago' },
-  { title: 'Cardiovascular Study Notes', detail: 'Personalized study notes...', time: '5h ago' },
+  { title: 'Model Evaluation Study Notes', detail: 'Personalized study notes...', time: '5h ago' },
   { title: 'AI and Health Research', detail: 'Explore new research resources...', time: 'Yesterday' },
   { title: 'Career Opportunities', detail: 'Roles and projects for you...', time: 'Yesterday' },
   { title: 'Learning Progress', detail: 'Your recent learning insights...', time: '2d ago' },

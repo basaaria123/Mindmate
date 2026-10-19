@@ -2,14 +2,11 @@ import { useEffect, useState } from 'react'
 import { ArrowRight, BookOpen, Bot, ChartNoAxesColumn, CheckSquare, Circle, ClipboardPlus, UsersRound, X, Zap } from 'lucide-react'
 import { Link } from 'react-router'
 import { getFirstNameFromEmail } from '../services/userProfile'
-
-const tasks = [
-  { label: 'Study – Cardiovascular System', time: '10:00 AM' },
-  { label: 'Practice – Anatomy MCQs', time: '4:00 PM' },
-]
+import { getActivePlan, getGoals } from '../services/backend'
+import { useLoad } from '../hooks/useLoad'
 
 const dashboardTour = [
-  { title: "Today's Tasks", body: "You have 4 tasks pending for today. Stay consistent — you're doing great!", icon: 'tasks' },
+  { title: "Today's Tasks", body: "Your next tasks come straight from your 14-day plan, ordered by what matters most for your goal.", icon: 'tasks' },
   { title: 'Weekly Progress', body: 'See your progress at a glance and keep moving toward your weekly goal.', icon: 'progress' },
   { title: 'Study Streak', body: 'Build a steady routine one focused day at a time.', icon: 'streak' },
   { title: 'Quick Actions', body: 'Jump straight into a task, practice session, learning path, or opportunity.', icon: 'actions' },
@@ -110,13 +107,21 @@ function DashboardTourCard({ step, onClose, onNext, className = '', inert = fals
 
 function Boot() {
   const firstName = getFirstNameFromEmail()
+  const plan = useLoad(getActivePlan)
+  const goals = useLoad(getGoals)
+  const planTasks = (plan.data?.tasks ?? []).filter((task) => task.status !== 'deferred')
+  const week = planTasks.filter((task) => task.day_number <= 7)
+  const weekDone = week.filter((task) => task.status === 'done').length
+  const weekPercent = week.length ? Math.round((weekDone / week.length) * 100) : 0
+  const nextTasks = planTasks.filter((task) => task.status === 'todo').slice(0, 3)
+  const currentGoal = goals.data?.[0]
   return <div className="home-dashboard mx-auto max-w-[1200px] space-y-[21px]">
     <DashboardTour />
     <section className="mm-home-hero relative min-h-[310px] overflow-hidden rounded-[22px] border border-violet-200 bg-[linear-gradient(112deg,#eeebff_0%,#e9e9ff_57%,#ccecf7_100%)] px-6 py-7 sm:px-[27px] sm:pb-[52px] sm:pt-[60px]">
       <div className="pointer-events-none absolute -right-4 top-3 size-72 rounded-full bg-[#9b8cff]/30 blur-3xl"/><span className="absolute right-[26%] top-6 text-2xl text-white">✦</span><span className="absolute right-1 top-[68%] text-xs text-amber-200">•</span>
       <div className="relative z-10">
         <h1 className="text-[28px] font-bold leading-tight tracking-[-.025em] text-[#201d56] sm:text-[32px]">Good Morning, {firstName}!</h1>
-        <p className="mt-4 text-base text-[#5e6799] sm:text-[18px]">Small steps today, big progress tomorrow.</p>
+        <p className="mt-4 text-base text-[#5e6799] sm:text-[18px]">{currentGoal ? <>Goal: <strong className="text-[#211e58]">{currentGoal.title}</strong>{currentGoal.deadline ? ` · by ${new Date(currentGoal.deadline).toLocaleDateString()}` : ''}</> : 'Small steps today, big progress tomorrow.'}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link to="/pipeline" className="inline-flex h-[46px] items-center gap-2.5 rounded-2xl border border-violet-200 bg-[#e9e3ff] px-4 text-sm font-semibold text-[#211e58] hover:bg-[#dfd6ff]"><ClipboardPlus size={18} className="text-[#7154ff]"/>Continue your plan</Link>
           <Link to="/sim" className="inline-flex h-[46px] items-center gap-2.5 rounded-2xl border border-violet-200 bg-white px-4 text-sm font-semibold text-[#211e58] hover:bg-violet-50"><ClipboardPlus size={18} className="text-[#7154ff]"/>Create a new task</Link>
@@ -128,12 +133,12 @@ function Boot() {
     <section className="grid gap-4 xl:grid-cols-[1.1fr_1.2fr_.7fr]">
       <article className="mm-home-card min-h-[290px] rounded-[22px] border border-violet-200 bg-white p-5 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
         <div className="flex items-start justify-between"><h2 className="text-[19px] font-bold text-[#211e58]">Your Progress</h2><ChartNoAxesColumn size={27} className="text-emerald-400"/></div>
-        <div className="mt-5 flex items-center justify-center gap-4 sm:justify-start sm:gap-5"><div className="mm-home-progress-ring grid size-[150px] shrink-0 place-items-center rounded-full" style={{background:'conic-gradient(from -5deg,#8f6aff 0 68%,#eee8ff 68% 100%)'}}><div className="mm-home-progress-center grid size-[124px] place-items-center rounded-full bg-white text-[29px] font-bold text-[#211e58]">68%</div></div><div><h3 className="text-[16px] font-bold text-[#211e58]">Weekly Goal</h3><p className="mt-2 text-[13px] text-[#858dbb]">4 of 6 tasks completed</p></div></div>
+        <div className="mt-5 flex items-center justify-center gap-4 sm:justify-start sm:gap-5"><div className="mm-home-progress-ring grid size-[150px] shrink-0 place-items-center rounded-full" style={{background:`conic-gradient(from -5deg,#8f6aff 0 ${weekPercent}%,#eee8ff ${weekPercent}% 100%)`}}><div className="mm-home-progress-center grid size-[124px] place-items-center rounded-full bg-white text-[29px] font-bold text-[#211e58]">{weekPercent}%</div></div><div><h3 className="text-[16px] font-bold text-[#211e58]">This Week</h3><p className="mt-2 text-[13px] text-[#858dbb]">{plan.loading ? "Loading…" : `${weekDone} of ${week.length} planned tasks done`}</p></div></div>
       </article>
 
       <article className="mm-home-card min-h-[290px] rounded-[22px] border border-violet-200 bg-white p-5 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
-        <div className="flex items-end justify-between"><div><h2 className="text-[19px] font-bold text-[#211e58]">Today’s Tasks</h2><p className="mt-1 text-sm text-[#858dbb]">2 due today</p></div><Link to="/sim" className="mb-1 inline-flex items-center gap-1 text-sm font-semibold text-[#805cff]">View all <ArrowRight size={15}/></Link></div>
-        <div className="mt-4">{tasks.map((task)=><Link key={task.label} to="/sim" className="flex min-h-[65px] items-center gap-2.5 border-b border-[#f0edfb] last:border-0"><Circle size={22} strokeWidth={1.8} className="shrink-0 text-[#a28bff]"/><span className="flex-1 text-[13px] font-medium text-[#211e58]">{task.label}</span><span className="whitespace-nowrap text-xs text-[#858dbb]">{task.time}</span></Link>)}</div>
+        <div className="flex items-end justify-between"><div><h2 className="text-[19px] font-bold text-[#211e58]">Today’s Tasks</h2><p className="mt-1 text-sm text-[#858dbb]">{plan.error ? "Plan unavailable" : `${nextTasks.length} up next`}</p></div><Link to="/sim" className="mb-1 inline-flex items-center gap-1 text-sm font-semibold text-[#805cff]">View all <ArrowRight size={15}/></Link></div>
+        <div className="mt-4">{plan.loading && <p role="status" className="text-sm text-[#858dbb]">Loading your plan…</p>}{!plan.loading && nextTasks.length === 0 && <p className="text-sm text-[#858dbb]">No open tasks. Update your plan to get new ones.</p>}{nextTasks.map((task)=><Link key={task.id} to="/sim" className="flex min-h-[65px] items-center gap-2.5 border-b border-[#f0edfb] last:border-0"><Circle size={22} strokeWidth={1.8} className="shrink-0 text-[#a28bff]"/><span className="flex-1 text-[13px] font-medium text-[#211e58]">{task.title}</span><span className="whitespace-nowrap text-xs text-[#858dbb]">Day {task.day_number} · {task.minutes} min</span></Link>)}</div>
       </article>
 
       <article className="mm-home-card min-h-[290px] rounded-[22px] border border-violet-200 bg-white p-4 shadow-[0_8px_24px_rgba(82,62,163,.07)]">
