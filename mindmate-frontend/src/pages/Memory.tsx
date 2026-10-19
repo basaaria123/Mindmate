@@ -37,8 +37,16 @@ const TYPE_LABELS: Record<string, string> = {
 
 const TYPE_ORDER = ['goal', 'decision', 'weakness', 'skill', 'evidence', 'constraint', 'preference', 'learning_insight', 'note', 'profile']
 
+function rank(item: MemoryItem) {
+  const value = item.payload?.priority_rank
+  return typeof value === 'number' ? value : 99
+}
+
 function summarize(items: MemoryItem[], type: string, empty: string) {
-  const values = items.filter((item) => item.type === type).map((item) => item.content.split(' — because')[0].split(' (')[0])
+  const values = items
+    .filter((item) => item.type === type)
+    .sort((a, b) => rank(a) - rank(b))
+    .map((item) => item.content.split(' — because')[0].split(' (')[0])
   return values.length ? values.slice(0, 3).join(', ') + (values.length > 3 ? ` +${values.length - 3} more` : '') : empty
 }
 

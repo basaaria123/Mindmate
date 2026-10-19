@@ -269,8 +269,8 @@ function AppLayout() {
                 <h1
                   className={`font-bold leading-tight text-[#211e58] ${
                     location.pathname === '/memory'
-                      ? 'text-[29px]'
-                      : 'text-[27px]'
+                      ? 'text-[24px] sm:text-[29px]'
+                      : 'text-[22px] sm:text-[27px]'
                   }`}
                 >
                   {location.pathname === '/pipeline'
@@ -287,7 +287,7 @@ function AppLayout() {
                 </h1>
 
                 <p
-                  className={`mt-1 text-[#646b9d] ${
+                  className={`mt-1 hidden text-[#646b9d] sm:block ${
                     location.pathname === '/memory'
                       ? 'text-[15px]'
                       : 'text-sm'
