@@ -1,7 +1,7 @@
 // Offline mock for backend.ts. Answers come from personaSnapshot.json, a set of
 // real backend responses for the demo persona (exported with the backend's own
 // seed), loaded only in mock mode. Edits and deletes persist in localStorage.
-import type { FitResult, Gap, Goal, MemoryItem, Opportunity, PracticeSession, Plan, PlanTask, ReplanResult } from './backend'
+import type { FitResult, Gap, GapReport, Goal, MemoryItem, Opportunity, PracticeSession, Plan, PlanTask, ReplanResult } from './backend'
 import { loadDemoState } from './demoState'
 
 type Snapshot = {
@@ -104,9 +104,11 @@ export async function assessStoredFit(opportunityId: number): Promise<FitResult>
   }
 }
 
-export async function getGaps(opportunityId: number): Promise<Gap[]> {
+export async function getGaps(opportunityId: number): Promise<GapReport> {
   await wait()
-  return (await snapshot()).gaps[String(opportunityId)] ?? []
+  const snap = await snapshot()
+  const fit = snap.opportunities.find((item) => item.id === opportunityId)?.fit
+  return { fit: fit ? { score: fit.score, band: fit.band } : null, gaps: snap.gaps[String(opportunityId)] ?? [] }
 }
 
 export async function getMemoryItems(): Promise<MemoryItem[]> {

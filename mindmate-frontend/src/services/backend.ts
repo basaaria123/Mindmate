@@ -75,6 +75,7 @@ export type Opportunity = {
   requirements: { name: string; weight: string; mandatory: boolean }[]
   summary: string | null
   fit?: { score: number; band: string; top_gap: string | null; id: number }
+  target?: boolean
 }
 
 export type RequirementScore = {
@@ -163,9 +164,11 @@ export async function assessStoredFit(opportunityId: number): Promise<FitResult>
   return request<FitResult>(`/opportunities/${opportunityId}/fit`, { method: 'POST', body: JSON.stringify({}) })
 }
 
-export async function getGaps(opportunityId: number): Promise<Gap[]> {
+export type GapReport = { fit: { score: number; band: string } | null; gaps: Gap[] }
+
+export async function getGaps(opportunityId: number): Promise<GapReport> {
   if (useMocks) return mock.getGaps(opportunityId)
-  return (await request<{ gaps: Gap[] }>('/skills/gaps', { method: 'POST', body: JSON.stringify({ opportunity_id: opportunityId }) })).gaps
+  return request<GapReport>('/skills/gaps', { method: 'POST', body: JSON.stringify({ opportunity_id: opportunityId }) })
 }
 
 export async function getMemoryItems(): Promise<MemoryItem[]> {

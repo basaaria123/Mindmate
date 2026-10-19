@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react'
 import { ArrowRight, Target } from 'lucide-react'
+import type { Gap } from '../services/backend'
 import { Link } from 'react-router'
-import { getGaps, getOpportunities, type Gap } from '../services/backend'
+import { getGaps, getOpportunities, type GapReport } from '../services/backend'
 import { useLoad } from '../hooks/useLoad'
 import { RefTags } from '../components/RefText'
 
@@ -67,11 +68,12 @@ function SkillGapList({ gaps, loading, error }: { gaps: Gap[]; loading: boolean;
 function GapMap() {
   const opportunities = useLoad(getOpportunities)
   const [selected, setSelected] = useState<number | null>(null)
-  const opportunityId = selected ?? opportunities.data?.[0]?.id ?? null
-  const loadGaps = useCallback(() => (opportunityId === null ? Promise.resolve<Gap[]>([]) : getGaps(opportunityId)), [opportunityId])
+  const opportunityId = selected ?? opportunities.data?.find((item) => item.target)?.id ?? opportunities.data?.[0]?.id ?? null
+  const loadGaps = useCallback(() => (opportunityId === null ? Promise.resolve<GapReport>({ fit: null, gaps: [] }) : getGaps(opportunityId)), [opportunityId])
   const gaps = useLoad(loadGaps)
   const opportunity = opportunities.data?.find((item) => item.id === opportunityId)
-  const top = gaps.data?.[0]
+  const top = gaps.data?.gaps[0]
+  const fit = gaps.data?.fit ?? opportunity?.fit ?? null
 
   return (
     <div className="relative isolate mx-auto w-full max-w-[1120px]">
@@ -89,15 +91,15 @@ function GapMap() {
             className="h-10 min-w-[260px] rounded-xl border border-violet-200 bg-white px-3 text-sm text-[#262251] outline-none focus:border-violet-500"
           >
             {(opportunities.data ?? []).map((item) => (
-              <option key={item.id} value={item.id}>{item.title}{item.org ? ` · ${item.org}` : ''}{item.fit ? ` (${item.fit.score}%)` : ''}</option>
+              <option key={item.id} value={item.id}>{item.target ? '★ ' : ''}{item.title}{item.org ? ` · ${item.org}` : ''}{item.fit ? ` (${item.fit.score}%)` : ''}</option>
             ))}
           </select>
           {opportunities.error && <span role="alert" className="text-sm text-rose-600">{opportunities.error}</span>}
         </div>
 
         <div className="grid gap-[19px] lg:grid-cols-[280px_minmax(0,1fr)]">
-          <SkillLevelRing score={opportunity?.fit?.score ?? null} label={opportunity?.fit ? `${opportunity.fit.band} fit for this role` : 'Fit not assessed yet'} />
-          <SkillGapList gaps={gaps.data ?? []} loading={gaps.loading} error={gaps.error} />
+          <SkillLevelRing score={fit?.score ?? null} label={fit ? `${fit.band} fit for this role` : gaps.loading ? 'Scoring…' : 'Fit not assessed yet'} />
+          <SkillGapList gaps={gaps.data?.gaps ?? []} loading={gaps.loading} error={gaps.error} />
         </div>
 
         <h2 className="mb-[12px] mt-[18px] text-[18px] font-bold leading-6 text-[#262251]">Recommended Action</h2>
