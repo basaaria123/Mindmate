@@ -1,0 +1,40 @@
+{
+  "source": "hand-written default for the demo persona (Meera); replace by running with MINDMATE_DEMO_CACHE=record and a real NEBIUS_API_KEY",
+  "default": {
+    "opportunity_title": "AI/ML Engineering Intern",
+    "organization": "Nimbus Analytics",
+    "opportunity_type": "internship",
+    "required_skills": [
+      {
+        "skill_name": "Python",
+        "importance": "High",
+        "is_mandatory": true,
+        "description": "Python programming is required."
+      },
+      {
+        "skill_name": "Machine learning fundamentals",
+        "importance": "High",
+        "is_mandatory": true,
+        "description": "Build and train ML models."
+      },
+      {
+        "skill_name": "Model evaluation",
+        "importance": "High",
+        "is_mandatory": true,
+        "description": "Choose metrics and validate models fairly."
+      },
+      {
+        "skill_name": "SQL",
+        "importance": "Medium",
+        "is_mandatory": false,
+        "description": "Query analytics data."
+      }
+    ],
+    "preferred_skills": [
+      "Git"
+    ],
+    "experience_level": "Beginner",
+    "summary": "Build and evaluate ML models for customer analytics with a small research team."
+  },
+  "entries": {}
+}

@@ -9,7 +9,7 @@ from functools import lru_cache
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.config import DATA_DIR
+from app.config import data_file
 from app.db import models
 from app.memory.refs import filter_valid_refs, make_ref
 from app.memory.retrieval import active_skills, active_weaknesses
@@ -25,9 +25,13 @@ from app.scoring.gaps import rank_gaps
 from app.services.events import log_event
 
 
-@lru_cache(maxsize=1)
 def curated_opportunities() -> list[dict]:
-    with (DATA_DIR / "opportunities.json").open("r", encoding="utf-8") as handle:
+    return _load_opportunities(str(data_file("MINDMATE_OPPORTUNITIES_FILE", "opportunities.json")))
+
+
+@lru_cache(maxsize=4)
+def _load_opportunities(path: str) -> list[dict]:
+    with open(path, "r", encoding="utf-8") as handle:
         return json.load(handle)["opportunities"]
 
 
@@ -188,6 +192,7 @@ def assess_fit(
     *,
     judgments: list[dict] | None = None,
     ai_assessment: dict | None = None,
+    use_model: bool = True,
 ) -> models.FitAssessment:
     """Compute and store a fit assessment.
 
@@ -211,8 +216,18 @@ def assess_fit(
         parsed = judgments_from_ai_assessment(ai_assessment, opportunity.requirements, skills)
         judged_by = "fit_agent"
     else:
-        parsed = judge_from_skills(opportunity.requirements, skills)
-        judged_by = "deterministic"
+        live = None
+        if use_model:
+            from app.agents.fit_agent import assess_fit as fit_agent
+            from app.services.agent_bridge import call_agent, opportunity_input, user_profile_input
+
+            live = call_agent(db, user, "fit", fit_agent, user_profile=user_profile_input(db, user), opportunity=opportunity_input(opportunity))
+        if live is not None:
+            parsed = judgments_from_ai_assessment(live.model_dump(), opportunity.requirements, skills)
+            judged_by = "fit_agent"
+        else:
+            parsed = judge_from_skills(opportunity.requirements, skills)
+            judged_by = "deterministic"
 
     result = compute_fit(parsed)
     assessment = models.FitAssessment(
@@ -255,7 +270,7 @@ def serialize_fit(assessment: models.FitAssessment, opportunity: models.Opportun
 
 
 def gaps_for(db: Session, user: models.User, opportunity: models.Opportunity) -> dict:
-    assessment = latest_fit(db, user, opportunity.id) or assess_fit(db, user, opportunity)
+    assessment = latest_fit(db, user, opportunity.id) or assess_fit(db, user, opportunity, use_model=False)
     from app.scoring.fit import FitResult, RequirementScore
 
     per_requirement = tuple(
@@ -289,3 +304,61 @@ def gaps_for(db: Session, user: models.User, opportunity: models.Opportunity) ->
         "fit": {"id": assessment.id, "score": assessment.score, "band": assessment.band},
         "gaps": [gap.as_dict() for gap in gaps],
     }
+
+
+# ---------------------------------------------------------------------------
+# Extraction from posting text: Opportunity agent when live, keyword fallback otherwise
+# ---------------------------------------------------------------------------
+
+_MANDATORY_HINTS = ("required", "must", "mandatory", "essential", "need")
+_PREFERRED_HINTS = ("preferred", "nice to have", "bonus", "plus", "desirable")
+
+
+def skill_vocabulary(db: Session, user: models.User) -> list[str]:
+    names: list[str] = []
+    for data in curated_opportunities():
+        names.extend(req["name"] for req in data["requirements"])
+    names.extend(skill.name for skill in active_skills(db, user.id))
+    names.extend(["Python", "SQL", "Git", "Docker", "Statistics", "Deep learning", "Machine learning fundamentals", "Model evaluation", "Data structures", "Linux", "C++", "Java", "JavaScript", "React", "Cloud", "Communication"])
+    return list(dict.fromkeys(n for n in names if n))
+
+
+def deterministic_extract(db: Session, user: models.User, text: str) -> dict:
+    lines = [line.strip(" -*•\t") for line in text.splitlines() if line.strip()]
+    title = lines[0][:200] if lines else "Untitled opportunity"
+    lowered = text.lower()
+    requirements: list[dict] = []
+    for name in skill_vocabulary(db, user):
+        line = next((l for l in lines if skill_matches(name, l) or name.lower() in l.lower()), None)
+        if line is None:
+            continue
+        line_l = line.lower()
+        mandatory = any(hint in line_l for hint in _MANDATORY_HINTS)
+        preferred = any(hint in line_l for hint in _PREFERRED_HINTS)
+        weight = "High" if mandatory else "Low" if preferred else "Medium"
+        if not any(skill_matches(name, r["name"]) for r in requirements):
+            requirements.append({"name": name, "weight": weight, "mandatory": mandatory, "description": line[:300]})
+    kind = next((k for k in ("internship", "hackathon", "fellowship", "job") if k in lowered), "internship")
+    return {"title": title, "type": kind, "requirements": requirements, "summary": " ".join(lines[1:3])[:400] or title}
+
+
+def extract_and_store(db: Session, user: models.User, text: str) -> tuple[models.Opportunity, str]:
+    """Store an opportunity extracted from posting text. Returns (opportunity, extractor)."""
+
+    from app.services.agent_bridge import call_agent
+
+    if not text.strip():
+        raise ValueError("Paste the opportunity text to extract it.")
+    from app.agents.opportunity_agent import extract_opportunity
+
+    spec = call_agent(db, user, "opportunity", extract_opportunity, opportunity_text=text)
+    if spec is not None:
+        data = spec.model_dump()
+        extractor = "opportunity_agent"
+    else:
+        data = deterministic_extract(db, user, text)
+        extractor = "deterministic"
+    if not normalise_requirements(data):
+        raise ValueError("No skill requirements could be found in the text.")
+    opportunity = store_opportunity(db, user, data, source=extractor)
+    return opportunity, extractor

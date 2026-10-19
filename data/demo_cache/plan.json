@@ -1,0 +1,47 @@
+{
+  "source": "hand-written default for the demo persona (Meera); replace by running with MINDMATE_DEMO_CACHE=record and a real NEBIUS_API_KEY",
+  "default": {
+    "goal_id": "goal#1",
+    "daily_budget_minutes": 60,
+    "total_tasks": 4,
+    "schedule": [
+      {
+        "task_id": "task-01",
+        "day_number": 1,
+        "title": "Review precision, recall and F1 with a worked example",
+        "duration_minutes": 30,
+        "priority": "High",
+        "why_it_matters": "Model evaluation is the highest-impact gap.",
+        "source_refs": []
+      },
+      {
+        "task_id": "task-02",
+        "day_number": 1,
+        "title": "Log a confusion matrix in the spam classifier",
+        "duration_minutes": 30,
+        "priority": "High",
+        "why_it_matters": "Turns an existing project into evaluation evidence.",
+        "source_refs": []
+      },
+      {
+        "task_id": "task-03",
+        "day_number": 2,
+        "title": "Practice two SQL join questions",
+        "duration_minutes": 30,
+        "priority": "Medium",
+        "why_it_matters": "SQL is a medium-weight gap.",
+        "source_refs": []
+      },
+      {
+        "task_id": "task-04",
+        "day_number": 3,
+        "title": "Mock interview: model evaluation questions",
+        "duration_minutes": 30,
+        "priority": "High",
+        "why_it_matters": "Practice results feed back into the plan.",
+        "source_refs": []
+      }
+    ]
+  },
+  "entries": {}
+}

@@ -1,0 +1,92 @@
+{
+  "source": "hand-written default for the demo persona (Meera); replace by running with MINDMATE_DEMO_CACHE=record and a real NEBIUS_API_KEY",
+  "default": {
+    "suggestions": [
+      {
+        "title": "Search for AI/ML internships at analytics startups",
+        "organization": null,
+        "opportunity_type": "Internship",
+        "category": "Jobs",
+        "explanation": "Matches the internship goal and Python skills."
+      },
+      {
+        "title": "Apply to university research assistant roles in ML",
+        "organization": null,
+        "opportunity_type": "Job",
+        "category": "Jobs",
+        "explanation": "Builds evaluation experience close to coursework."
+      },
+      {
+        "title": "Target data science internships that value Python",
+        "organization": null,
+        "opportunity_type": "Internship",
+        "category": "Jobs",
+        "explanation": "Python is already demonstrated with projects."
+      },
+      {
+        "title": "Add cross-validation and metrics to the regression project",
+        "organization": null,
+        "opportunity_type": "Project",
+        "category": "Projects",
+        "explanation": "Creates evidence for the model-evaluation gap."
+      },
+      {
+        "title": "Build an imbalanced-classification case study",
+        "organization": null,
+        "opportunity_type": "Project",
+        "category": "Projects",
+        "explanation": "Shows metric choice beyond accuracy."
+      },
+      {
+        "title": "Publish a small SQL analytics notebook",
+        "organization": null,
+        "opportunity_type": "Project",
+        "category": "Projects",
+        "explanation": "Strengthens the SQL requirement."
+      },
+      {
+        "title": "Scikit-learn model evaluation guide",
+        "organization": null,
+        "opportunity_type": "Learning Resource",
+        "category": "Resources",
+        "explanation": "Directly covers the highest-impact gap."
+      },
+      {
+        "title": "SQL joins and aggregation exercises",
+        "organization": null,
+        "opportunity_type": "Learning Resource",
+        "category": "Resources",
+        "explanation": "Short daily practice fits one hour a day."
+      },
+      {
+        "title": "Intro deep learning course, first two modules",
+        "organization": null,
+        "opportunity_type": "Learning Resource",
+        "category": "Resources",
+        "explanation": "Needed by several target roles."
+      },
+      {
+        "title": "Join a student AI hackathon",
+        "organization": null,
+        "opportunity_type": "Hackathon",
+        "category": "Other",
+        "explanation": "Hands-on build with judging on evaluation rigor."
+      },
+      {
+        "title": "Write a portfolio page for existing projects",
+        "organization": null,
+        "opportunity_type": "Portfolio Activity",
+        "category": "Other",
+        "explanation": "Makes current evidence easy to review."
+      },
+      {
+        "title": "Schedule a weekly mock interview",
+        "organization": null,
+        "opportunity_type": "Career Activity",
+        "category": "Other",
+        "explanation": "Practice results update the plan."
+      }
+    ]
+  },
+  "entries": {}
+}

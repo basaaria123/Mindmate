@@ -54,12 +54,14 @@ Docker host works the same way (Render, Railway, Fly.io). Steps for a Docker hos
 | `MINDMATE_AUTO_CREATE_SCHEMA` | `false` (Alembic owns the schema) |
 | `MINDMATE_AUTO_SEED` | `false` |
 | `MINDMATE_LLM_MODE` | `live` (`off` for a cached/deterministic demo fallback) |
+| `MINDMATE_DEMO_CACHE` | `fallback` for the live demo (recorded answers only when Nebius fails); `replay` if the network is unreliable |
 | `CORS_ORIGINS` | `https://<vercel-domain>,https://<custom-domain>` |
 | `RATE_LIMIT_PER_MINUTE` | `120` |
 | `MINDMATE_ADMIN_TOKEN` | long random string |
 | `PORT` | `8000` (or the host's injected port) |
 
-Health check path: `/health`. Readiness and configuration: `/admin/status`.
+Liveness path: `/health`. Readiness path (checks the database, returns 503 when it is down): `/health/ready`.
+Configuration and row counts: `/admin/status`.
 
 ## 3. Connect the two
 
@@ -78,6 +80,8 @@ curl -s -X POST $B/practice/evaluate -H 'Content-Type: application/json' -d '{"a
 curl -s -X POST $B/plans/replan -H 'Content-Type: application/json' -d '{"available_minutes":30}' | head -c 400
 curl -s -X POST $B/profile -H 'Content-Type: application/json' -d '{"user_message":"Second-year CS student, one hour a day, knows Python"}'   # Nemotron path
 ```
+
+Or run the whole scripted path with its checks: `python scripts/demo_check.py --base-url $B --admin-token <token>`.
 
 Then in the browser: Onboarding (AI profile extraction), Scanner (opportunity + fit via Nemotron),
 Sim (practice), Memory (save weakness), Pipeline (Update my plan shows the cited rationale), Trace.

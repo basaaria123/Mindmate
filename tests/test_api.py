@@ -9,7 +9,7 @@ from app.rate_limit import limiter
 def test_health_and_status(seeded_client):
     assert seeded_client.get("/health").json() == {"status": "healthy"}
     status = seeded_client.get("/admin/status").json()
-    assert status["database"] == "sqlite" and status["counts"]["users"] == 1
+    assert status["database"] in {"sqlite", "postgresql"} and status["counts"]["users"] == 1
     assert status["llm_available"] is False
 
 
@@ -174,6 +174,7 @@ def test_reset_demo_restores_persona(seeded_client):
     assert reset["status"] == "reset"
     assert seeded_client.get("/memory").json()["total"] > 0
     assert seeded_client.get("/plans").json()["active"]["version"] == 1
+    assert seeded_client.get("/profile").json()["id"] == 1  # identities restart on every reset
 
 
 def test_admin_token_enforced(client, monkeypatch):

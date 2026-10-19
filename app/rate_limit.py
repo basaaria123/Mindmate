@@ -15,7 +15,7 @@ from starlette.responses import JSONResponse
 
 from app.config import get_settings
 
-EXEMPT_PATHS = {"/", "/health", "/docs", "/openapi.json", "/redoc"}
+EXEMPT_PATHS = {"/", "/health", "/health/ready", "/docs", "/openapi.json", "/redoc"}
 
 
 class TokenBucket:

@@ -1,0 +1,50 @@
+{
+  "source": "hand-written default for the demo persona (Meera); replace by running with MINDMATE_DEMO_CACHE=record and a real NEBIUS_API_KEY",
+  "default": {
+    "opportunity_title": "AI/ML Engineering Intern",
+    "overall_fit": "Moderate",
+    "matching_skills": [
+      {
+        "skill_name": "Python",
+        "user_level": "Intermediate",
+        "required_level": "Not specified",
+        "match_status": "Match",
+        "explanation": "Spam classifier project and a data-tools repository demonstrate Python."
+      }
+    ],
+    "partial_matches": [
+      {
+        "skill_name": "Machine learning fundamentals",
+        "user_level": "Intermediate",
+        "required_level": "Not specified",
+        "match_status": "Partial match",
+        "explanation": "Regression project and a course certificate; no production work yet."
+      },
+      {
+        "skill_name": "SQL",
+        "user_level": "Beginner",
+        "required_level": "Not specified",
+        "match_status": "Partial match",
+        "explanation": "Reporting queries during a summer internship."
+      }
+    ],
+    "missing_skills": [
+      {
+        "skill_name": "Model evaluation",
+        "user_level": "Not demonstrated",
+        "required_level": "Not specified",
+        "match_status": "Missing",
+        "explanation": "No project or practice result shows metric selection or validation."
+      }
+    ],
+    "strengths": [
+      "Python projects with code on GitHub",
+      "Prior internship experience"
+    ],
+    "improvement_areas": [
+      "Model evaluation: metrics beyond accuracy and cross-validation"
+    ],
+    "summary": "Solid Python base; model evaluation is the highest-impact gap for this role."
+  },
+  "entries": {}
+}

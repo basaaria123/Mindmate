@@ -1,5 +1,5 @@
 # Root developer commands for MindMate (works on macOS/Linux; see docs/LOCAL_SETUP.md for Windows).
-.PHONY: setup setup-backend setup-frontend dev backend frontend test test-backend test-ai test-ai-live test-frontend lint-frontend reset-demo
+.PHONY: demo-check test-backend-postgres setup setup-backend setup-frontend dev backend frontend test test-backend test-ai test-ai-live test-frontend lint-frontend reset-demo
 
 setup: setup-backend setup-frontend
 
@@ -40,3 +40,9 @@ lint-frontend:
 
 reset-demo:
 	python scripts/reset_demo.py
+
+demo-check:     ## rehearse the scripted demo and check success criteria (in-process; add BASE_URL=... for a deployment)
+	python scripts/demo_check.py $(if $(BASE_URL),--base-url $(BASE_URL),)
+
+test-backend-postgres:  ## backend tests against PostgreSQL (docker compose up -d first)
+	MINDMATE_TEST_DATABASE_URL=postgresql+psycopg://mindmate:mindmate@localhost:5432/mindmate MINDMATE_LLM_MODE=off python -m pytest tests -q

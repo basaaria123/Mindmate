@@ -641,3 +641,42 @@ def update_task_status(db: Session, user: models.User, task: models.Task, status
         refs=[make_ref(task), f"plan#{task.plan_id}"],
     )
     return task
+
+
+def plan_tasks_from_agent(db: Session, user: models.User, opportunity: models.Opportunity, gaps: list[dict], budget: int, goal_id: int | None) -> list[dict] | None:
+    """Ask the Planner agent for tasks using database memory; None when the model is off or fails.
+
+    The agent validates its own references against the memories it is given
+    (all database refs); create_plan validates them against the database again.
+    """
+
+    from app.agents.planner_agent import generate_plan
+    from app.services.agent_bridge import call_agent, gap_vector_input, opportunity_input, planner_memories, user_profile_input
+
+    decisions, memories = planner_memories(db, user)
+    plan = call_agent(
+        db,
+        user,
+        "planner",
+        generate_plan,
+        user_profile=user_profile_input(db, user, daily_minutes=budget),
+        opportunity=opportunity_input(opportunity),
+        gap_vector=gap_vector_input(opportunity, gaps),
+        goal_id=f"goal#{goal_id}" if goal_id else "goal#none",
+        existing_decisions=decisions,
+        existing_memories=memories,
+    )
+    if plan is None:
+        return None
+    return [
+        {
+            "title": task.title,
+            "minutes": task.duration_minutes,
+            "priority": task.priority,
+            "day_number": task.day_number,
+            "why": task.why_it_matters,
+            "refs": list(task.source_refs),
+            "role_impact": {"High": 0.85, "Medium": 0.6, "Low": 0.35}.get(task.priority, 0.5),
+        }
+        for task in plan.schedule
+    ]

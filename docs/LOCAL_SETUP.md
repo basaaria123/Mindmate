@@ -103,6 +103,9 @@ origins with `CORS_ORIGINS=https://your-frontend.example` in `.env`.
 # backend (no network): memory layer, scoring, plans, API, migrations
 MINDMATE_LLM_MODE=off python -m pytest tests -q
 
+# demo rehearsal with success-criteria checks
+python scripts/demo_check.py
+
 # AI, offline part: parser, schema, memory-agent and model-config tests
 python -m pytest . -q --ignore=tests --ignore=mindmate-frontend --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
 

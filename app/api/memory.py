@@ -17,7 +17,7 @@ from app.db import models
 from app.memory import service as memory_service
 from app.memory.retrieval import TASK_MEMORY_KINDS, active_weaknesses, prompt_text, retrieve_for_task
 from app.permissions import check_permission
-from app.services.events import list_events, serialize_event
+from app.services.events import list_events, log_event, serialize_event
 from app.services.memory_writes import add_constraint, add_decision, add_evidence, add_goal, add_skill
 from app.services.plan_service import active_plan, plan_titles, previous_plan
 from app.services.weakness_service import record_user_weakness
@@ -171,6 +171,51 @@ def create_memory(
     db.commit()
     db.refresh(item)
     return memory_service.serialize_item(item)
+
+
+@router.post("/memory/import-legacy")
+def import_legacy_memory(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)) -> dict:
+    """Copy memories the AI's /practice endpoint wrote to data/memories.json into the database.
+
+    Weaknesses become weakness entities (so they influence replanning),
+    decisions become decision entities, learning insights become notes.
+    Each legacy item is imported once (tracked by a ``legacy:<id>`` tag).
+    """
+
+    from app.services.memory_store import load_memories
+    from app.services.memory_writes import add_decision
+
+    try:
+        legacy = load_memories()
+    except (ValueError, OSError) as error:
+        raise HTTPException(status_code=422, detail=f"Could not read the legacy memory file: {error}") from error
+
+    already = {tag for item in memory_service.list_items(db, user.id, include_deleted=True) for tag in (item.tags or []) if tag.startswith("legacy:")}
+    imported: list[str] = []
+    for memory in legacy:
+        tag = f"legacy:{memory.memory_id}"
+        if tag in already:
+            continue
+        source = f"legacy:{memory.source}"
+        if memory.memory_type == "weakness":
+            weakness = record_user_weakness(db, user, memory.content, source=source)
+            ref = f"weakness#{weakness.id}"
+        elif memory.memory_type == "decision":
+            decision = add_decision(db, user, statement=memory.content, reason=f"Recorded by the Memory agent from {memory.source}.", source=source)
+            ref = f"decision#{decision.id}"
+        else:
+            note = memory_service.record_note(db, user.id, type="learning_insight", content=memory.content, source=source,
+                                              payload={"confidence": memory.confidence, "reference_tags": memory.reference_tags})
+            ref = f"memory#{note.id}"
+        item = next((i for i in memory_service.list_items(db, user.id) if i.ref_id == ref or f"memory#{i.id}" == ref), None)
+        if item is not None:
+            item.tags = sorted(set(item.tags or []) | {tag})
+        imported.append(memory.memory_id)
+    if imported:
+        log_event(db, user_id=user.id, agent="memory", action="legacy_imported",
+                  summary=f"Imported {len(imported)} memory item(s) from the legacy JSON store into the database.")
+    db.commit()
+    return {"imported": imported, "skipped": len(legacy) - len(imported), "total_legacy": len(legacy)}
 
 
 @router.get("/memory/{memory_id}")

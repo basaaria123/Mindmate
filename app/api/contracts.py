@@ -128,6 +128,11 @@ class OpportunitySearchIn(BaseModel):
 class FitIn(BaseModel):
     judgments: list[dict] | None = None
     ai_assessment: dict | None = None
+    use_model: bool = True
+
+
+class OpportunityExtractIn(BaseModel):
+    text: str = Field(min_length=1, max_length=20000)
 
 
 class GapsIn(BaseModel):
@@ -155,6 +160,7 @@ class PlanIn(BaseModel):
     rationale: str | None = None
     refs: list[str] = Field(default_factory=list)
     generate_from_opportunity_id: int | None = None
+    use_model: bool = True
 
 
 class ReplanIn(BaseModel):

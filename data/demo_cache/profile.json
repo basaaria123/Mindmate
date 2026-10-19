@@ -1,0 +1,26 @@
+{
+  "source": "hand-written default for the demo persona (Meera); replace by running with MINDMATE_DEMO_CACHE=record and a real NEBIUS_API_KEY",
+  "default": {
+    "education": "2nd-year B.E. CSE (AI & ML)",
+    "goals": [
+      "Land an AI/ML internship within three months",
+      "Prepare for GATE after semester exams"
+    ],
+    "skills": [
+      "Python",
+      "Machine learning fundamentals",
+      "SQL",
+      "Git"
+    ],
+    "interests": [
+      "Artificial intelligence",
+      "Machine learning"
+    ],
+    "daily_available_minutes": 60,
+    "learning_preferences": [
+      "Hands-on projects",
+      "Step-by-step explanations"
+    ]
+  },
+  "entries": {}
+}

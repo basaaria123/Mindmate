@@ -112,3 +112,14 @@ def llm_available() -> bool:
 
     settings = get_settings()
     return settings.llm_mode == "live" and bool(os.getenv("NEBIUS_API_KEY"))
+
+
+def data_file(env_name: str, default_name: str) -> Path:
+    """Path of a demo data file, overridable per environment variable.
+
+    MINDMATE_SEED_PERSONA, MINDMATE_OPPORTUNITIES_FILE and MINDMATE_QUESTION_BANK
+    let the product lead swap the demo persona without code changes.
+    """
+
+    override = os.getenv(env_name)
+    return Path(override) if override else DATA_DIR / default_name

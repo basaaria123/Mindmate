@@ -1,0 +1,14 @@
+{
+  "source": "hand-written default for the demo persona (Meera); replace by running with MINDMATE_DEMO_CACHE=record and a real NEBIUS_API_KEY",
+  "default": {
+    "correctness": 40,
+    "depth": 35,
+    "clarity": 55,
+    "feedback": "The answer relies on accuracy alone and does not address class imbalance, precision and recall, or a validation strategy.",
+    "weakness_candidate": "Model evaluation: metrics beyond accuracy and validation strategy",
+    "is_store_worthy": true,
+    "memory_tag": "weakness",
+    "memory_saved": false
+  },
+  "entries": {}
+}

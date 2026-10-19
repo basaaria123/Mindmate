@@ -32,7 +32,7 @@ def status(db: Session = Depends(get_db)) -> dict:
         table.__tablename__: db.scalar(select(func.count()).select_from(table)) or 0
         for table in (models.User, models.Goal, models.Skill, models.Evidence, models.Decision, models.Weakness, models.Opportunity, models.Plan, models.Task, models.PracticeSession, models.MemoryItem, models.Event)
     }
-    backend = settings.database_url.split(":", 1)[0]
+    backend = settings.database_url.split(":", 1)[0].split("+", 1)[0]
     return {
         "database": backend,
         "llm_mode": settings.llm_mode,

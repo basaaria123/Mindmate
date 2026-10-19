@@ -16,7 +16,7 @@ from functools import lru_cache
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.config import DATA_DIR, llm_available
+from app.config import data_file, llm_available
 from app.db import models
 from app.db.models import utcnow
 from app.memory.refs import make_ref
@@ -25,9 +25,13 @@ from app.services.events import log_event
 from app.services.weakness_service import apply_thresholds
 
 
-@lru_cache(maxsize=1)
 def question_bank() -> list[dict]:
-    with (DATA_DIR / "question_bank.json").open("r", encoding="utf-8") as handle:
+    return _load_bank(str(data_file("MINDMATE_QUESTION_BANK", "question_bank.json")))
+
+
+@lru_cache(maxsize=4)
+def _load_bank(path: str) -> list[dict]:
+    with open(path, "r", encoding="utf-8") as handle:
         return json.load(handle)["questions"]
 
 

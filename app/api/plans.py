@@ -9,11 +9,13 @@ from app.api.contracts import PlanIn, ReplanIn, TaskStatusIn
 from app.api.deps import get_current_user, get_db
 from app.db import models
 from app.permissions import check_permission
+from app.services.events import log_event
 from app.services.opportunity_service import gaps_for, get_opportunity
 from app.services.plan_service import (
     active_plan,
     create_plan,
     generate_candidates_from_gaps,
+    plan_tasks_from_agent,
     plan_history,
     replan,
     serialize_plan,
@@ -42,21 +44,34 @@ def create(body: PlanIn, db: Session = Depends(get_db), user: models.User = Depe
     rationale = body.rationale
     refs = list(body.refs)
     budget = body.daily_budget_minutes or user.daily_minutes
+    planner = "user"
+    gap_result: dict = {}
     if body.generate_from_opportunity_id is not None:
         opportunity = get_opportunity(db, user, body.generate_from_opportunity_id)
         if opportunity is None:
             raise HTTPException(status_code=404, detail="Opportunity not found.")
         gap_result = gaps_for(db, user, opportunity)
-        tasks = generate_candidates_from_gaps(gap_result["gaps"], budget) + tasks
-        rationale = rationale or f"Plan generated from the ranked gaps for '{opportunity.title}' (fit {gap_result['fit']['score']}%)."
+        agent_tasks = plan_tasks_from_agent(db, user, opportunity, gap_result["gaps"], budget, body.goal_id) if body.use_model else None
+        planner = "planner_agent" if agent_tasks else "deterministic"
+        tasks = (agent_tasks or generate_candidates_from_gaps(gap_result["gaps"], budget)) + tasks
+        rationale = rationale or f"Plan generated ({planner}) from the ranked gaps for '{opportunity.title}' (fit {gap_result['fit']['score']}%)."
         refs.append(f"opp#{opportunity.id}")
     if not tasks:
         raise HTTPException(status_code=422, detail="A plan needs at least one task (or generate_from_opportunity_id).")
     try:
         plan = create_plan(db, user, tasks=tasks, daily_budget_minutes=budget, goal_id=body.goal_id, rationale=rationale, refs=refs)
     except ValueError as error:
+        if planner != "planner_agent":
+            db.rollback()
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        # The model's plan failed database validation (for example a reference
+        # that does not exist): reject it and fall back to the deterministic plan.
         db.rollback()
-        raise HTTPException(status_code=422, detail=str(error)) from error
+        log_event(db, user_id=user.id, agent="planner", action="model_output_rejected",
+                  summary=f"Planner agent output rejected by validation: {error}. Deterministic plan used instead.")
+        tasks = generate_candidates_from_gaps(gap_result["gaps"], budget) + [task.model_dump() for task in body.tasks]
+        rationale = body.rationale or f"Plan generated (deterministic) from the ranked gaps for '{opportunity.title}' (fit {gap_result['fit']['score']}%)."
+        plan = create_plan(db, user, tasks=tasks, daily_budget_minutes=budget, goal_id=body.goal_id, rationale=rationale, refs=refs)
     db.commit()
     return serialize_plan(plan)
 

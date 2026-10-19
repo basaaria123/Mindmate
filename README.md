@@ -40,6 +40,7 @@ Without `make`: follow `docs/LOCAL_SETUP.md` step by step (Windows included).
 | `docs/AI_SERVICE.md` | Model/provider configuration, running and testing the agents, hardware |
 | `docs/DEPLOYMENT.md` | Vercel (frontend) and backend hosting, environment variables, verification |
 | `docs/backend.md`, `docs/contracts/backend-api.md` | Backend internals and the full endpoint reference |
+| `docs/feedback.md` | Shared log for the Nebius / NVIDIA tool feedback section |
 
 ## Tests
 

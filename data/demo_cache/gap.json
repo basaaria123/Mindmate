@@ -1,0 +1,27 @@
+{
+  "source": "hand-written default for the demo persona (Meera); replace by running with MINDMATE_DEMO_CACHE=record and a real NEBIUS_API_KEY",
+  "default": {
+    "opportunity_title": "AI/ML Engineering Intern",
+    "gaps": [
+      {
+        "skill_name": "Model evaluation",
+        "career_impact_score": 90,
+        "gap_type": "missing_skill",
+        "missing_evidence": "No evaluation work in projects or practice.",
+        "rationale": "Mandatory, high-weight requirement with no evidence.",
+        "recommended_focus": "Precision, recall, F1 and k-fold cross-validation on an existing project.",
+        "evidence_refs": []
+      },
+      {
+        "skill_name": "SQL",
+        "career_impact_score": 55,
+        "gap_type": "partial_skill",
+        "missing_evidence": "Only basic reporting queries.",
+        "rationale": "Medium-weight requirement at beginner level.",
+        "recommended_focus": "Joins and aggregation practice.",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "entries": {}
+}

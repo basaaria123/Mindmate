@@ -74,3 +74,45 @@ python -m pytest tests -q
 
 All thresholds and weights are environment variables (see `.env.example`), never code.
 `GET /admin/status` shows the values in effect.
+
+## Agent orchestration (backend calls the AI agents)
+
+`app/services/agent_bridge.py` builds agent inputs from the database, calls the agent only when live calls are
+enabled, logs every call, and returns `None` on any failure so deterministic code takes over:
+
+| Endpoint | Agent | Fallback |
+|---|---|---|
+| `POST /practice/evaluate` | Practice | Deterministic rubric over expected concepts |
+| `POST /opportunities/{id}/fit` | Fit | Deterministic judge over skills and evidence |
+| `POST /plans` with `generate_from_opportunity_id` | Planner | Deterministic tasks from the ranked gaps |
+| `POST /opportunities/extract` | Opportunity | Keyword extraction |
+
+Agent output is never trusted as-is: references must exist in the database, coverage needs evidence, and
+budgets are enforced by the scheduler.
+
+## Demo fallback, rehearsal and persona
+
+* `MINDMATE_DEMO_CACHE=fallback` serves recorded answers for the AI endpoints when Nebius fails; `replay`
+  never calls the model. The shipped recordings are hand-written defaults for the persona, validated against the
+  AI schemas; run once with `record` and a real key to replace them with real Nemotron output.
+* `python scripts/demo_check.py` (or `make demo-check BASE_URL=...`) resets the persona, runs the scripted demo
+  path, checks success criteria 1, 2, 3 and 7, and prints step timings.
+* `MINDMATE_SEED_PERSONA`, `MINDMATE_OPPORTUNITIES_FILE` and `MINDMATE_QUESTION_BANK` point the seed at other data
+  files; a persona file may also carry its own `opportunities` list.
+* `POST /memory/import-legacy` copies memories the AI `/practice` endpoint saved in `data/memories.json` into the
+  database so they affect replanning.
+
+## Weight tuning on the demo persona (plan days 8 to 11)
+
+With the default weights the scripted path produces: fit 67% (Moderate) for the AI/ML Engineering Intern with
+model evaluation as the top gap; the second weak model-evaluation answer records `weakness#1`; replanning at 30
+minutes per day moves "Mock interview: model evaluation questions" from day 3 to day 1 (priority 0.81, must-keep)
+and cites `weakness#1`, both practice sessions and both decisions. That is the intended demo behaviour, so the
+defaults stay. If the product lead changes the persona, rerun `scripts/demo_check.py` and adjust the
+`PRIORITY_WEIGHT_*` and `WEAKNESS_*` variables only if a check fails.
+
+## PostgreSQL
+
+Every backend test runs on PostgreSQL as well (`MINDMATE_TEST_DATABASE_URL=...` or `make test-backend-postgres`;
+CI job "Backend tests on PostgreSQL"). Demo resets restart identities, so reference IDs are identical after every
+reset on both databases.

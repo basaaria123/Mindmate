@@ -73,6 +73,9 @@ The backend calls the agents as Python functions; no HTTP hop:
 | Backend caller | AI function | Contract |
 |---|---|---|
 | `app/services/practice_service.py` | `app.agents.practice_agent.evaluate_practice(question, user_answer, topic) -> PracticeEvaluation` | Used when `MINDMATE_LLM_MODE=live` and `NEBIUS_API_KEY` is set; any exception falls back to the deterministic rubric |
+| `app/services/plan_service.py` via `POST /plans` | `app.agents.planner_agent.generate_plan(user_profile, opportunity, gap_vector, goal_id, existing_decisions, existing_memories)` | Inputs built from the database (`app/services/agent_bridge.py`); memory IDs are database refs; output re-validated against the database, invalid output falls back to the deterministic planner |
+| `app/services/opportunity_service.py` via `POST /opportunities/{id}/fit` | `app.agents.fit_agent.assess_fit(user_profile, opportunity)` | Coverage claims without evidence in memory are downgraded to "not shown" |
+| `app/services/opportunity_service.py` via `POST /opportunities/extract` | `app.agents.opportunity_agent.extract_opportunity(opportunity_text)` | Keyword extraction fallback when the model is off or fails |
 | `POST /opportunities/{id}/fit` body `ai_assessment` | `FitAssessment` dict from `POST /fit` | Converted to requirement judgements; coverage without evidence in memory is downgraded to "not shown" |
 | `POST /opportunities` | `OpportunitySpec` dict from `POST /opportunity` | Accepted directly and stored |
 | `POST /memory` type `weakness`/`decision` | – | Agents may propose memory; the backend validates refs and thresholds before storing |
@@ -86,7 +89,10 @@ Model configuration lives in `app/services/llm_client.py` (`REASONING_MODEL`, `F
   repair prompt, then raise `ValueError` → the backend converts it to `422` with the message.
 * Frontend: `fetch` has no timeout; network failures surface as "Could not reach the MindMate API".
   Long calls (Nemotron Ultra) can take 15–60 s; screens show loading states.
-* Backend fallback: practice evaluation never fails because of the model (deterministic rubric).
+* Backend fallback: practice, fit, plan generation and opportunity extraction never fail because of the model
+  (deterministic code); every call and fallback is logged (`model_call`, `model_fallback`, `model_output_rejected`).
+* Demo fallback for the AI endpoints in `main.py`: `MINDMATE_DEMO_CACHE=fallback` serves recorded responses when the
+  model fails, `replay` never calls the model (see `docs/contracts/backend-api.md`).
 * Rate limit: `RATE_LIMIT_PER_MINUTE` per client IP; `/health` and docs are exempt.
 
 ## E. Environment variables
@@ -99,6 +105,8 @@ Model configuration lives in `app/services/llm_client.py` (`REASONING_MODEL`, `F
 | `DATABASE_URL` | backend | PostgreSQL URL; empty = SQLite |
 | `MINDMATE_AUTO_CREATE_SCHEMA`, `MINDMATE_AUTO_SEED` | backend | Dev conveniences; `false` in production with Alembic |
 | `MINDMATE_LLM_MODE` | backend | `live` or `off` |
+| `MINDMATE_DEMO_CACHE`, `MINDMATE_DEMO_CACHE_DIR` | backend | Demo fallback for the AI endpoints |
+| `MINDMATE_SEED_PERSONA`, `MINDMATE_OPPORTUNITIES_FILE`, `MINDMATE_QUESTION_BANK` | backend | Swap the demo data without code changes |
 | `CORS_ORIGINS` | backend | Extra allowed origins (deployed frontend) |
 | `RATE_LIMIT_PER_MINUTE`, `MINDMATE_ADMIN_TOKEN` | backend | Protection |
 | `WEAKNESS_*`, `PRIORITY_WEIGHT_*`, `MINDMATE_*` | backend | Tunable decision logic (`.env.example`) |

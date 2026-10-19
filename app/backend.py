@@ -19,6 +19,7 @@ from app.api import actions, admin, events, goals, memory, opportunities, plans,
 from app.config import get_settings
 from app.db import get_session_factory, init_db, models
 from app.memory.refs import InvalidReference
+from app.demo_cache import DemoCacheMiddleware
 from app.rate_limit import RateLimitMiddleware
 
 ROUTERS = (
@@ -74,12 +75,37 @@ async def _validation_error_handler(_: Request, error: RequestValidationError) -
     )
 
 
+def _readiness() -> JSONResponse:
+    """Readiness for hosting platforms: the database answers and settings are loaded."""
+
+    from sqlalchemy import text
+
+    from app.config import llm_available
+    from app.demo_cache import cache_mode
+
+    checks = {"database": "ok"}
+    status = 200
+    try:
+        session = get_session_factory()()
+        try:
+            session.execute(text("SELECT 1"))
+        finally:
+            session.close()
+    except Exception as error:  # noqa: BLE001 - report any database failure as not ready
+        checks["database"] = f"error: {type(error).__name__}"
+        status = 503
+    checks.update({"llm_available": llm_available(), "demo_cache": cache_mode()})
+    return JSONResponse({"status": "ready" if status == 200 else "not_ready", "checks": checks}, status_code=status)
+
+
 def register_backend(app: FastAPI) -> FastAPI:
+    app.add_api_route("/health/ready", _readiness, methods=["GET"], tags=["health"])
     for router in ROUTERS:
         app.include_router(router)
     app.add_exception_handler(ValueError, _value_error_handler)
     app.add_exception_handler(InvalidReference, _value_error_handler)
     app.add_exception_handler(RequestValidationError, _validation_error_handler)
+    app.add_middleware(DemoCacheMiddleware)
     app.add_middleware(RateLimitMiddleware)
     _extend_cors(app)
 

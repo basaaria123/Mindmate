@@ -11,10 +11,10 @@ from __future__ import annotations
 import json
 from datetime import date, timedelta
 
-from sqlalchemy import delete
+from sqlalchemy import delete, text
 from sqlalchemy.orm import Session
 
-from app.config import DATA_DIR
+from app.config import data_file
 from app.db import models
 from app.db.models import utcnow
 from app.memory.refs import make_ref
@@ -45,13 +45,20 @@ WIPE_ORDER = (
 
 
 def load_persona() -> dict:
-    with (DATA_DIR / "seed_persona.json").open("r", encoding="utf-8") as handle:
+    with data_file("MINDMATE_SEED_PERSONA", "seed_persona.json").open("r", encoding="utf-8") as handle:
         return json.load(handle)
 
 
 def wipe(db: Session) -> None:
-    for model in WIPE_ORDER:
-        db.execute(delete(model))
+    """Remove all rows. On PostgreSQL identities restart too, so every reset
+    produces the same reference IDs (weakness#1, plan#1, ...) as on SQLite."""
+
+    if db.get_bind().dialect.name == "postgresql":
+        tables = ", ".join(model.__tablename__ for model in WIPE_ORDER)
+        db.execute(text(f"TRUNCATE TABLE {tables} RESTART IDENTITY CASCADE"))
+    else:
+        for model in WIPE_ORDER:
+            db.execute(delete(model))
     db.flush()
 
 
@@ -116,7 +123,8 @@ def seed(db: Session, *, today: date | None = None) -> dict:
         for evidence_data in skill_data.get("evidence", []):
             add_evidence(db, user, skill, type=evidence_data["type"], description=evidence_data["description"], url=evidence_data.get("url"), source="seed")
 
-    opportunities = [store_opportunity(db, None, data, source="curated", agent="seed") for data in curated_opportunities()]
+    opportunity_data = persona.get("opportunities") or curated_opportunities()
+    opportunities = [store_opportunity(db, None, data, source="curated", agent="seed") for data in opportunity_data]
 
     bank = question_bank()
     for history in persona.get("practice_history", []):

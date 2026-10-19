@@ -5,11 +5,12 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.api.contracts import FitIn, OpportunityIn, OpportunitySearchIn
+from app.api.contracts import FitIn, OpportunityExtractIn, OpportunityIn, OpportunitySearchIn
 from app.api.deps import get_current_user, get_db
 from app.db import models
 from app.services.opportunity_service import (
     assess_fit,
+    extract_and_store,
     get_opportunity,
     latest_fit,
     list_opportunities,
@@ -41,6 +42,19 @@ def create_opportunity(body: OpportunityIn, db: Session = Depends(get_db), user:
     return serialize_opportunity(opportunity)
 
 
+@router.post("/opportunities/extract", status_code=201)
+def extract(body: OpportunityExtractIn, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)) -> dict:
+    """Paste a posting: the Opportunity agent extracts requirements (keyword fallback offline) and it is stored."""
+
+    try:
+        opportunity, extractor = extract_and_store(db, user, body.text)
+    except ValueError as error:
+        db.rollback()
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    db.commit()
+    return {**serialize_opportunity(opportunity), "extracted_by": extractor}
+
+
 @router.post("/opportunities/search")
 def search(body: OpportunitySearchIn, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)) -> dict:
     results = search_opportunities(db, user, body.query, limit=body.limit)
@@ -67,7 +81,7 @@ def fit(opportunity_id: int, body: FitIn | None = None, db: Session = Depends(ge
         raise HTTPException(status_code=404, detail="Opportunity not found.")
     body = body or FitIn()
     try:
-        assessment = assess_fit(db, user, opportunity, judgments=body.judgments, ai_assessment=body.ai_assessment)
+        assessment = assess_fit(db, user, opportunity, judgments=body.judgments, ai_assessment=body.ai_assessment, use_model=body.use_model)
     except ValueError as error:
         db.rollback()
         raise HTTPException(status_code=422, detail=str(error)) from error

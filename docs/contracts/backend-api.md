@@ -42,6 +42,7 @@ later response, prompt bundle, plan or rationale.
 | PATCH | `/memory/{id}` | `{content?, payload?, tags?, visibility?}` | memory item (structured fields flow back to the entity) |
 | DELETE | `/memory/{id}` | – | `{deleted, id, ref}` soft delete |
 | POST | `/memory/purge` | – | `{purged}` permanently removes soft-deleted rows |
+| POST | `/memory/import-legacy` | – | `{imported[], skipped, total_legacy}`; copies `data/memories.json` (written by the AI `/practice` endpoint) into the database once |
 | DELETE | `/memory?confirm=true` | – | `{deleted, permission}`; `403` without `confirm=true` |
 
 `POST /memory` behaviour by `type`:
@@ -70,9 +71,10 @@ later response, prompt bundle, plan or rationale.
 |---|---|---|---|
 | GET | `/opportunities` | – | `{total, opportunities[]}` each with `fit` when assessed |
 | POST | `/opportunities` | backend shape `{title, org, type, deadline, requirements:[{name, weight, mandatory}]}` **or** the Opportunity Agent's `OpportunitySpec` | opportunity |
+| POST | `/opportunities/extract` | `{text}` posting text | opportunity + `extracted_by` (`opportunity_agent` when live, `deterministic` keyword extraction otherwise) |
 | POST | `/opportunities/search` | `{query, limit?}` | `{query, source: "curated", results[]}` (ranked over the stored set; no live search is claimed) |
 | GET | `/opportunities/{id}` | – | opportunity + `latest_fit` |
-| POST | `/opportunities/{id}/fit` | optional `{judgments: [{requirement, weight, coverage, evidence_refs[], mandatory}]}` or `{ai_assessment: <FitAssessment from app/schemas/fit.py>}` | `{score, band, per_requirement[], top_gap, refs[], judged_by}` |
+| POST | `/opportunities/{id}/fit` | optional `{judgments: [...]}`, `{ai_assessment: <FitAssessment>}` or `{use_model: false}`; with no judgement the Fit agent is called when live (database profile and evidence), else the deterministic judge | `{score, band, per_requirement[], top_gap, refs[], judged_by}` |
 
 Fit arithmetic (`app/scoring/fit.py`): `fit% = 100 × Σ(weight × coverage) / Σ(weight)`;
 weight High=3, Medium=2, Low=1; coverage not_shown=0, partial=0.5, demonstrated=1;
@@ -83,7 +85,7 @@ bands 75+ Strong, 50–74 Moderate, below 50 Weak. Any non-zero coverage must ci
 | Method | Path | Body | Returns |
 |---|---|---|---|
 | GET | `/plans` | – | `{active: plan, history[]}` |
-| POST | `/plans` | `{tasks:[{title, minutes, priority, day_number?, why?, refs[], role_impact?, goal_id?, deadline?}], daily_budget_minutes?, goal_id?, rationale?, refs?, generate_from_opportunity_id?}` | plan (new version) |
+| POST | `/plans` | `{tasks:[{title, minutes, priority, day_number?, why?, refs[], role_impact?, goal_id?, deadline?}], daily_budget_minutes?, goal_id?, rationale?, refs?, generate_from_opportunity_id?, use_model?}` | plan (new version); with `generate_from_opportunity_id` the Planner agent is called with database memory when live, its references are validated against the database, and invalid output falls back to the deterministic planner |
 | GET | `/plans/{id}` | – | plan |
 | PATCH | `/plans/tasks/{id}` | `{status: todo|done|deferred|dropped}` | task |
 | POST | `/plans/replan` | `{available_minutes?, reason?}` | `{plan, previous_plan_id, daily_budget_minutes, diff:{before[], after[], added[], moved[], deferred[], kept[]}, rationale, refs[]}` |
@@ -122,7 +124,15 @@ weak Model-evaluation answer, so the demo's second weak answer crosses the thres
 | POST | `/actions/{id}/confirm` / `/cancel` | – | draft |
 | POST | `/admin/reset-demo` | header `X-Admin-Token` when `MINDMATE_ADMIN_TOKEN` is set | `{status: "reset", ...counts}` |
 | GET | `/admin/status` | – | database backend, LLM mode, thresholds, weights, row counts |
+| GET | `/health/ready` | – | `{status, checks:{database, llm_available, demo_cache}}`; `503` when the database is unreachable |
 
 Permission levels (`app/permissions.py`): read-only (profile, opportunities, memory), optional write
 (tasks only in the MVP, opt-in via `allowTaskWrites`), application actions (drafts only).
 `submit_application` and `send_message` are always refused; the user submits manually.
+
+## Demo fallback for the AI endpoints
+
+`MINDMATE_DEMO_CACHE` = `off` (default) | `record` | `replay` | `fallback` applies to `POST /profile`, `/opportunity`,
+`/fit`, `/gap`, `/plan`, `/suggestions`, `/practice`. Cached answers carry the response header `X-MindMate-Cache`
+(`replay`, `fallback` or `recorded`) and are logged to the trace as `demo_cache_*` events. Request-validation
+errors are never hidden. Recordings: `data/demo_cache/<endpoint>.json`.
