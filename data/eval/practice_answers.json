@@ -1,0 +1,25 @@
+{
+  "description": "Evaluation set for the Practice agent and the deterministic rubric. expect_weak = the answer should score below the weakness threshold (60). Written by the team for calibration; not real user data.",
+  "answers": [
+    {"id": "pa-01", "topic": "Model evaluation", "question_index": 0, "expect_weak": true,
+     "answer": "I would look at the accuracy on the test set and if it is low I would try a different model."},
+    {"id": "pa-02", "topic": "Model evaluation", "question_index": 0, "expect_weak": false,
+     "answer": "Accuracy is misleading because of class imbalance: predicting the majority class always gives 95 percent. I would build a confusion matrix and report precision, recall and the F1 score for the positive class, and look at the precision-recall curve or ROC AUC. I would compare against a dummy baseline that predicts the majority class, and use stratified k-fold cross-validation so every fold keeps the class ratio. Finally I would pick a threshold based on the cost of false negatives versus false positives."},
+    {"id": "pa-03", "topic": "Model evaluation", "question_index": 1, "expect_weak": true,
+     "answer": "Overfitting is when the model is too good. I would train for less time."},
+    {"id": "pa-04", "topic": "Model evaluation", "question_index": 1, "expect_weak": false,
+     "answer": "I detect overfitting by holding out a validation set and comparing training loss with validation loss; a growing gap on the learning curve is the signal. To prevent it I use regularization such as L2 or dropout, early stopping on the validation loss, and k-fold cross-validation when data is small. To choose between two models I compare them on the same metric over the same folds, look at the variance across folds, and use a held-out test set only once at the end."},
+    {"id": "pa-05", "topic": "Python", "question_index": 0, "expect_weak": false,
+     "answer": "A list holds every element in memory at once, while a generator produces values lazily, on demand, using yield. For a large file I would iterate over the file object or a generator expression so only one line is in memory at a time, which keeps RAM usage flat. The trade-off is that a generator can only be consumed once in a single pass, so if I need random access or several passes I would use a list."},
+    {"id": "pa-06", "topic": "Python", "question_index": 0, "expect_weak": true,
+     "answer": "Lists use square brackets and generators use round brackets."},
+    {"id": "pa-07", "topic": "SQL", "question_index": 0, "expect_weak": false,
+     "answer": "An inner join keeps only matching rows that exist in both tables, while a left join keeps all rows from the left table and fills unmatched columns from the right with NULL. A common surprise is a one-to-many relationship: joining orders to order items multiplies rows, so a COUNT or SUM after a GROUP BY is inflated by duplicates. Filtering the right table in the WHERE clause can also silently turn a left join into an inner join."},
+    {"id": "pa-08", "topic": "SQL", "question_index": 0, "expect_weak": true,
+     "answer": "Inner join is the normal join and left join is the other one."},
+    {"id": "pa-09", "topic": "Machine learning fundamentals", "question_index": 0, "expect_weak": false,
+     "answer": "Bias is error from overly simple assumptions, which causes underfitting; variance is sensitivity to the training sample, which causes overfitting. Increasing model complexity lowers bias but raises variance, so we look for the balance. Linear regression on a curved relationship is a high-bias example, while a very deep decision tree or k-nearest neighbors with k equal to one is a high-variance example."},
+    {"id": "pa-10", "topic": "Deep learning", "question_index": 0, "expect_weak": true,
+     "answer": "Neural networks need activation functions to work properly, otherwise they do not learn."}
+  ]
+}

@@ -1,4 +1,4 @@
-
+from openai.types.chat import ChatCompletionMessageParam
 from pydantic import ValidationError
 
 from app.schemas.gap import GapVectorJSON
@@ -7,6 +7,7 @@ from app.schemas.plan import PlanScheduleJSON
 from app.schemas.profile import UserProfile
 from app.services.llm_client import create_llm_client, get_model
 from app.utils.json_utils import parse_json_response
+from app.utils.prompts import load_prompt, render_prompt
 
 
 def generate_plan(
@@ -26,75 +27,22 @@ def generate_plan(
     decisions = existing_decisions or []
     memories = existing_memories or []
 
-    prompt = f"""
-You are MindMate's Planner Agent.
+    prompt = render_prompt(
+        "planner",
+        profile=user_profile.model_dump(),
+        opportunity=opportunity.model_dump(),
+        gap_vector=gap_vector.model_dump(),
+        goal_id=goal_id,
+        decisions=decisions,
+        memories=memories,
+        daily_budget=daily_budget,
+    )
 
-Create a practical 14-day plan to help the user prepare for the target opportunity.
-
-USER PROFILE:
-{user_profile.model_dump()}
-
-TARGET OPPORTUNITY:
-{opportunity.model_dump()}
-
-RANKED SKILL GAPS:
-{gap_vector.model_dump()}
-
-GOAL ID:
-{goal_id}
-
-USER DECISIONS THAT MUST OVERRIDE GENERAL PREPARATION:
-{decisions}
-
-EXISTING STORED MEMORIES:
-{memories}
-
-DAILY TIME BUDGET:
-{daily_budget} minutes maximum per day.
-
-Return ONLY a JSON object in this structure:
-{{
-  "goal_id": "{goal_id}",
-  "daily_budget_minutes": {daily_budget},
-  "total_tasks": 2,
-  "schedule": [
-    {{
-      "task_id": "task-01",
-      "day_number": 1,
-      "title": "Practice a priority skill",
-      "duration_minutes": 30,
-      "priority": "High",
-      "why_it_matters": "Addresses a high-impact skill gap",
-      "source_refs": []
-    }}
-  ]
-}}
-
-RULES:
-1. Create a plan spanning the 14-day period. Tasks may be scheduled
-   on any days from 1 through 14.
-2. Never schedule more than {daily_budget} minutes on any day.
-3. Include tasks addressing the highest-impact skill gaps within days 1-3.
-4. Respect the user's existing decisions over generic preparation.
-5. Prioritize gaps using career impact and the available evidence.
-6. Use only supplied information. Do not invent user qualifications,
-   evidence, or reference IDs.
-7. Use unique task_id values.
-8. Every task must have a positive duration.
-9. priority must be High, Medium, or Low.
-10. total_tasks must equal the number of tasks in schedule.
-11. Include source_refs only when supported by existing reference IDs.
-12. If no reference IDs are supplied, use an empty source_refs list.
-13. Return valid JSON only, without Markdown.
-"""
-
-    messages = [
+    messages: list[ChatCompletionMessageParam] = [
         {
             "role": "system",
             "content": (
-                "You are MindMate's Planner Agent. "
-                "Return only valid JSON matching the requested schema. "
-                "Respect the user's time budget and decisions."
+                load_prompt("planner.system")
             ),
         },
         {"role": "user", "content": prompt},
@@ -154,11 +102,14 @@ RULES:
 
             return plan
 
-        except (ValueError, ValidationError) as error:
+        
+        except ValueError as error:
             if attempt == 1:
                 raise ValueError(
-                    "The Planner Agent could not return valid data after one retry."
+                    f"The Planner Agent failed validation after one retry. "
+                    f"Actual error: {error}"
                 ) from error
+
 
             messages.append(
                 {"role": "assistant", "content": response_text or ""}

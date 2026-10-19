@@ -1,0 +1,25 @@
+{
+  "description": "Evaluation set for requirement extraction (Opportunity agent and keyword fallback). expected_required = skills the posting requires. Postings are written for evaluation and are not real vacancies.",
+  "postings": [
+    {"id": "op-01", "expected_required": ["Python", "Model evaluation", "SQL"],
+     "text": "AI/ML Engineering Intern - Nimbus Analytics\nRequired: strong Python and experience with model evaluation (metrics, cross-validation).\nRequired: SQL for pulling training data.\nNice to have: Git."},
+    {"id": "op-02", "expected_required": ["Python", "Deep learning"],
+     "text": "Machine Learning Research Intern\nYou must be comfortable with Python and deep learning frameworks.\nWriting clear technical reports is a plus."},
+    {"id": "op-03", "expected_required": ["SQL", "Statistics"],
+     "text": "Data Analyst Intern, Harbor Retail\nMandatory: SQL and basic statistics.\nPreferred: data visualisation tools."},
+    {"id": "op-04", "expected_required": ["Python", "Docker", "Linux"],
+     "text": "ML Platform Intern\nRequired skills: Python, Docker and day-to-day Linux.\nBonus: experience with cloud deployments."},
+    {"id": "op-05", "expected_required": ["Java", "Data structures"],
+     "text": "Backend Developer Intern\nMust know Java and core data structures.\nGit experience desirable."},
+    {"id": "op-06", "expected_required": ["JavaScript", "React"],
+     "text": "Frontend Engineering Intern\nRequired: JavaScript and React.\nNice to have: accessibility knowledge."},
+    {"id": "op-07", "expected_required": ["Python", "Statistics", "Model evaluation"],
+     "text": "Quantitative Research Intern\nEssential: Python and statistics.\nYou need hands-on model evaluation and backtesting experience."},
+    {"id": "op-08", "expected_required": ["C++", "Deep learning"],
+     "text": "Applied AI Intern - robotics perception\nRequired: C++ and deep learning for vision.\nPython is a plus."},
+    {"id": "op-09", "expected_required": ["Python", "Git"],
+     "text": "Open-source ML Fellowship\nYou must contribute in Python and work through Git pull requests.\nTechnical writing is a bonus."},
+    {"id": "op-10", "expected_required": ["SQL", "Data visualisation"],
+     "text": "Analytics Engineering Intern\nRequired: SQL and data visualisation dashboards.\nPreferred: Python scripting."}
+  ]
+}
