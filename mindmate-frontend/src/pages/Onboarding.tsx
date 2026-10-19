@@ -14,7 +14,10 @@ import {
   getProfile,
   updateProfile,
 } from '../services/api'
-import splashMotion from '../assets/mindmate-splash.mp4'
+import { importProfile } from '../services/backend'
+import splashTrails from '../assets/mindmate-splash-trails.png'
+import splashEmblem from '../assets/mindmate-splash-emblem.png'
+import splashWordmark from '../assets/mindmate-splash-wordmark.png'
 import mindmateWordmark from '../assets/mindmate-wordmark.svg'
 import mindmateIntroEmblem from '../assets/mindmate-intro-emblem.png'
 import './Onboarding.css'
@@ -41,8 +44,12 @@ function Onboarding() {
   const [isSavingProfile, setIsSavingProfile] = useState(false)
   const [profileError, setProfileError] = useState<string | null>(null)
   useEffect(() => {
-    const fallback = window.setTimeout(() => setShowSplash(false), 5000)
-    return () => window.clearTimeout(fallback)
+    const fadeTimer = window.setTimeout(() => setSplashFading(true), 4800)
+    const closeTimer = window.setTimeout(() => setShowSplash(false), 5250)
+    return () => {
+      window.clearTimeout(fadeTimer)
+      window.clearTimeout(closeTimer)
+    }
   }, [])
 
   useEffect(() => {
@@ -100,6 +107,8 @@ function Onboarding() {
           'mindmate-ai-profile',
           JSON.stringify(aiProfile),
         )
+        // Persist goals, skills and preferences in MindMate's memory (no-op in mock mode).
+        await importProfile(aiProfile).catch(() => undefined)
       }
       if (savePreferences) {
         window.localStorage.setItem(
@@ -130,19 +139,28 @@ function Onboarding() {
   if (showSplash) {
     return (
       <main className={`mm-splash${splashFading ? ' is-fading' : ''}`} aria-label="MindMate splash animation">
-        <video
-          className="mm-splash__video"
-          src={splashMotion}
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          aria-label="MindMate animated logo"
-          onEnded={() => {
-            setSplashFading(true)
-            window.setTimeout(() => setShowSplash(false), 450)
-          }}
-        />
+        <img className="mm-splash__backdrop" src={splashTrails} alt="" aria-hidden="true" />
+        <svg className="mm-splash__orbits" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="mm-splash-orbit-blue" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#263aff" stopOpacity="0" />
+              <stop offset="38%" stopColor="#5277ff" stopOpacity=".9" />
+              <stop offset="58%" stopColor="#bba2ff" stopOpacity=".72" />
+              <stop offset="100%" stopColor="#6334ff" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="mm-splash-orbit-violet" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#4528d9" stopOpacity="0" />
+              <stop offset="48%" stopColor="#8d55ff" stopOpacity=".8" />
+              <stop offset="67%" stopColor="#a7aaff" stopOpacity=".9" />
+              <stop offset="100%" stopColor="#462bff" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <ellipse className="mm-splash__orbit mm-splash__orbit--outer" cx="960" cy="540" rx="900" ry="455" />
+          <ellipse className="mm-splash__orbit mm-splash__orbit--middle" cx="960" cy="540" rx="790" ry="350" transform="rotate(-12 960 540)" />
+          <ellipse className="mm-splash__orbit mm-splash__orbit--inner" cx="960" cy="540" rx="675" ry="270" transform="rotate(15 960 540)" />
+        </svg>
+        <img className="mm-splash__emblem" src={splashEmblem} alt="" aria-hidden="true" />
+        <img className="mm-splash__wordmark" src={splashWordmark} alt="MindMate — Smarter minds. Brighter tomorrows." />
       </main>
     )
   }

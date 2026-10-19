@@ -1,12 +1,6 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Moon, Sun } from 'lucide-react'
-
-type ThemeContextValue = {
-  sleepMode: boolean
-  toggleSleepMode: () => void
-}
-
-const ThemeContext = createContext<ThemeContextValue | null>(null)
+import { ThemeContext, useMindMateTheme } from './theme'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [sleepMode, setSleepMode] = useState(() =>
@@ -28,12 +22,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       </div>
     </ThemeContext.Provider>
   )
-}
-
-export function useMindMateTheme() {
-  const theme = useContext(ThemeContext)
-  if (!theme) throw new Error('useMindMateTheme must be used inside ThemeProvider')
-  return theme
 }
 
 export function GlassThemeToggle() {

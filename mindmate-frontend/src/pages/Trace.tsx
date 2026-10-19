@@ -14,35 +14,9 @@ type ActivityItem = {
 const filters = ['All', 'Tasks', 'AI Activity', 'Plans'] as const
 type ActivityFilter = (typeof filters)[number]
 
-const exampleActivity: ActivityItem[] = [
-  {
-    title: 'Completed task: Study – Cardiovascular System',
-    time: 'Today • 10:00 AM',
-    category: 'Tasks',
-    state: 'complete',
-  },
-  {
-    title: 'AI generated new plan for you',
-    time: 'Today • 9:45 AM',
-    category: 'AI Activity',
-    state: 'ai',
-  },
-  {
-    title: 'Viewed skill gap: Respiratory System',
-    time: 'Yesterday • 8:25 PM',
-    category: 'AI Activity',
-    state: 'upcoming',
-  },
-  {
-    title: 'Completed task: Practice – Anatomy MCQs',
-    time: 'Yesterday • 4:12 PM',
-    category: 'Tasks',
-    state: 'upcoming',
-  },
-]
-
 function classifyEvent(event: DemoEvent): ActivityItem {
   const title = event.title.toLowerCase()
+  const detail = event.detail || event.title
   const category: ActivityCategory = title.includes('plan')
     ? 'Plans'
     : title.includes('practice') || title.includes('task')
@@ -54,10 +28,10 @@ function classifyEvent(event: DemoEvent): ActivityItem {
     : `${date.toLocaleDateString()} • ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
 
   return {
-    title: event.title,
-    time,
+    title: detail,
+    time: `${event.title} · ${time}`,
     category,
-    state: category === 'Plans' ? 'ai' : 'upcoming',
+    state: category === 'Plans' ? 'ai' : title.includes('evaluated') || title.includes('recorded') ? 'complete' : 'upcoming',
   }
 }
 
@@ -78,16 +52,21 @@ function HistoryClock() {
 function Trace() {
   const [filter, setFilter] = useState<ActivityFilter>('All')
   const [events, setEvents] = useState<DemoEvent[]>([])
+  const [loaded, setLoaded] = useState(false)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   useEffect(() => {
     let isCurrent = true
 
     getTraceEvents()
       .then((savedEvents) => {
-        if (isCurrent) setEvents([...savedEvents].reverse())
+        if (isCurrent) setEvents(savedEvents)
       })
-      .catch(() => {
-        // The sample activity remains available if local history cannot load.
+      .catch((error: unknown) => {
+        if (isCurrent) setLoadError(error instanceof Error ? error.message : 'Could not load activity.')
+      })
+      .finally(() => {
+        if (isCurrent) setLoaded(true)
       })
 
     return () => {
@@ -96,8 +75,7 @@ function Trace() {
   }, [])
 
   const activity = useMemo(() => {
-    const savedActivity = events.map(classifyEvent)
-    const allActivity = [...exampleActivity, ...savedActivity]
+    const allActivity = events.map(classifyEvent)
     return filter === 'All'
       ? allActivity
       : allActivity.filter((item) => item.category === filter)
@@ -126,6 +104,9 @@ function Trace() {
 
         <div className="relative mt-[59px] md:grid md:grid-cols-[minmax(0,1fr)_260px]">
           <ol className="relative z-10">
+            {!loaded && <li role="status" className="pl-11 text-[13px] text-[#737ba6]">Loading activity…</li>}
+            {loadError && <li role="alert" className="pl-11 text-[13px] text-rose-600">{loadError}</li>}
+            {loaded && !loadError && activity.length === 0 && <li className="pl-11 text-[13px] text-[#737ba6]">No activity in this category yet.</li>}
             <span aria-hidden="true" className="absolute left-[12px] top-[16px] h-[274px] w-[2px] bg-[#d7d0ff]" />
             {activity.map((item, index) => (
               <li key={`${item.title}-${index}`} className="relative flex min-h-[91px] items-start gap-[17px]">

@@ -16,7 +16,7 @@ const quickActions = [
 
 const recentChats = [
   { title: 'Study Plan for Next Exam', detail: 'Exam preparation and study guides...', time: '2h ago' },
-  { title: 'Cardiovascular Study Notes', detail: 'Personalized study notes...', time: '5h ago' },
+  { title: 'Model Evaluation Study Notes', detail: 'Personalized study notes...', time: '5h ago' },
   { title: 'AI and Health Research', detail: 'Explore new research resources...', time: 'Yesterday' },
   { title: 'Career Opportunities', detail: 'Roles and projects for you...', time: 'Yesterday' },
   { title: 'Learning Progress', detail: 'Your recent learning insights...', time: '2d ago' },
@@ -72,6 +72,7 @@ function Assistant() {
             <button onClick={() => setSidebarOpen(false)} aria-label="Collapse chat sidebar" className="grid size-8 shrink-0 place-items-center rounded-lg text-violet-600 hover:bg-white"><PanelIcon /></button>
           </div>
           <p className="px-4 pt-2 text-[13px] text-[#73779e]">Your AI assistant</p>
+          <p className="px-4 pt-1 text-[11px] text-[#8580a8]">Click on MindMate to go back</p>
           <button onClick={startNewChat} className="mx-3 mt-3 flex h-10 items-center gap-2 rounded-xl bg-[#e7dcff] px-3 text-[14px] font-semibold text-violet-700 hover:bg-[#ddd0ff]"><Plus size={16}/>New Chat</button>
           <div className="mt-5 px-4 text-[12px] font-medium tracking-wide text-[#8588aa]">Recent Chats</div>
           <nav className="mt-1 flex-1 space-y-1 overflow-y-auto px-2 py-1">

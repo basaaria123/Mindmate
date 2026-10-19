@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import mindmateEmblem from '../assets/mindmate-intro-emblem.png'
-import { useMindMateTheme } from '../ThemeContext'
+import { useMindMateTheme } from '../theme'
 
 type StoredProfile = { name?: string; firstName?: string; lastName?: string; email?: string }
 

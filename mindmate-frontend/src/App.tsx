@@ -37,6 +37,7 @@ import SettingsPage from './pages/Settings'
 import Onboarding from './pages/Onboarding'
 import Assistant from './pages/Assistant'
 import { GlassThemeToggle, ThemeProvider } from './ThemeContext'
+import { ModelChip } from './components/ModelChip'
 import mindmateWordmark from './assets/mindmate-wordmark.svg'
 import mindmateIntroEmblem from './assets/mindmate-intro-emblem.png'
 
@@ -268,8 +269,8 @@ function AppLayout() {
                 <h1
                   className={`font-bold leading-tight text-[#211e58] ${
                     location.pathname === '/memory'
-                      ? 'text-[29px]'
-                      : 'text-[27px]'
+                      ? 'text-[24px] sm:text-[29px]'
+                      : 'text-[22px] sm:text-[27px]'
                   }`}
                 >
                   {location.pathname === '/pipeline'
@@ -286,7 +287,7 @@ function AppLayout() {
                 </h1>
 
                 <p
-                  className={`mt-1 text-[#646b9d] ${
+                  className={`mt-1 hidden text-[#646b9d] sm:block ${
                     location.pathname === '/memory'
                       ? 'text-[15px]'
                       : 'text-sm'
@@ -343,6 +344,8 @@ function AppLayout() {
               <NavLink to="/settings" aria-label="Open Settings" title="Settings" className="grid size-[38px] place-items-center rounded-full border-2 border-white bg-gradient-to-br from-[#a288ff] to-[#7658f6] text-sm font-semibold text-white shadow-md transition hover:scale-105 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2">
                 {profileInitial}
               </NavLink>
+
+              <ModelChip />
 
               <GlassThemeToggle />
             </div>

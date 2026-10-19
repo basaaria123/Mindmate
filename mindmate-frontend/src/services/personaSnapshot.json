@@ -1,0 +1,4863 @@
+{
+ "profile": {
+  "id": 1,
+  "name": "Meera",
+  "email": "meera@example.edu",
+  "goal": "Land an AI/ML internship within three months",
+  "targetRole": "AI/ML Intern",
+  "dailyMinutes": 60,
+  "education": "2nd-year B.E. CSE (AI & ML)",
+  "summary": "Second-year computer science student aiming for an AI/ML internship within three months, then GATE preparation.",
+  "allowTaskWrites": true,
+  "preferences": {
+   "learning_style": [
+    "hands-on projects",
+    "step-by-step"
+   ],
+   "study_window": "evenings"
+  },
+  "updatedAt": "2026-10-19T12:57:37.497478Z"
+ },
+ "goals": [
+  {
+   "ref": "goal#1",
+   "id": 1,
+   "title": "Land an AI/ML internship",
+   "target_role": "AI/ML Intern",
+   "deadline": "2027-01-17",
+   "hours_per_day": 1.0,
+   "priority_rank": 1,
+   "parent_goal": null,
+   "status": "active",
+   "parent_chain": [],
+   "comes_before": [
+    "goal#3",
+    "goal#2"
+   ]
+  },
+  {
+   "ref": "goal#3",
+   "id": 3,
+   "title": "Pass college semester exams",
+   "target_role": null,
+   "deadline": "2026-12-03",
+   "hours_per_day": 1.0,
+   "priority_rank": 2,
+   "parent_goal": null,
+   "status": "active",
+   "parent_chain": [],
+   "comes_before": [
+    "goal#2"
+   ]
+  },
+  {
+   "ref": "goal#2",
+   "id": 2,
+   "title": "Prepare for GATE",
+   "target_role": null,
+   "deadline": "2027-08-15",
+   "hours_per_day": 0.5,
+   "priority_rank": 3,
+   "parent_goal": null,
+   "status": "active",
+   "parent_chain": [],
+   "comes_before": []
+  }
+ ],
+ "plan": {
+  "id": 1,
+  "ref": "plan#1",
+  "version": 1,
+  "status": "active",
+  "goal": "goal#1",
+  "daily_budget_minutes": 60,
+  "rationale": "Day-one plan built from the internship goal, the ranked gaps and the exams-first decision.",
+  "refs": [
+   "decision#1",
+   "goal#1",
+   "skill#3",
+   "skill#4",
+   "goal#3",
+   "skill#5"
+  ],
+  "created_at": "2026-10-19T12:57:37.632692Z",
+  "minutes_by_day": {
+   "1": 60,
+   "2": 60,
+   "3": 50,
+   "4": 40,
+   "5": 45,
+   "6": 30,
+   "7": 50,
+   "9": 45
+  },
+  "tasks": [
+   {
+    "id": 1,
+    "ref": "task#1",
+    "title": "Review precision, recall and F1 with a worked example",
+    "minutes": 30,
+    "priority": "High",
+    "day_number": 1,
+    "order_index": 0,
+    "deadline": null,
+    "status": "todo",
+    "why": "Model evaluation is mandatory for the target internship and is currently a gap.",
+    "refs": [
+     "goal#1"
+    ],
+    "role_impact": 0.9,
+    "must_keep": false,
+    "priority_score": 0.56,
+    "goal": "goal#1"
+   },
+   {
+    "id": 2,
+    "ref": "task#2",
+    "title": "Refactor the spam classifier to log a confusion matrix",
+    "minutes": 30,
+    "priority": "Medium",
+    "day_number": 1,
+    "order_index": 1,
+    "deadline": null,
+    "status": "todo",
+    "why": "Turns an existing project into evidence of evaluation skills.",
+    "refs": [
+     "goal#1"
+    ],
+    "role_impact": 0.7,
+    "must_keep": false,
+    "priority_score": 0.48,
+    "goal": "goal#1"
+   },
+   {
+    "id": 3,
+    "ref": "task#3",
+    "title": "Practice two SQL join questions",
+    "minutes": 30,
+    "priority": "Medium",
+    "day_number": 2,
+    "order_index": 0,
+    "deadline": null,
+    "status": "todo",
+    "why": "SQL is a medium-weight requirement at beginner level.",
+    "refs": [
+     "goal#1",
+     "skill#3"
+    ],
+    "role_impact": 0.5,
+    "must_keep": false,
+    "priority_score": 0.4,
+    "goal": "goal#1"
+   },
+   {
+    "id": 4,
+    "ref": "task#4",
+    "title": "Write a one-page summary of the house-price project",
+    "minutes": 30,
+    "priority": "Low",
+    "day_number": 2,
+    "order_index": 1,
+    "deadline": null,
+    "status": "todo",
+    "why": "Strengthens evidence for machine learning fundamentals.",
+    "refs": [
+     "goal#1"
+    ],
+    "role_impact": 0.4,
+    "must_keep": false,
+    "priority_score": 0.36,
+    "goal": "goal#1"
+   },
+   {
+    "id": 5,
+    "ref": "task#5",
+    "title": "Mock interview: model evaluation questions",
+    "minutes": 30,
+    "priority": "High",
+    "day_number": 3,
+    "order_index": 0,
+    "deadline": null,
+    "status": "todo",
+    "why": "Practice answers feed back into the plan.",
+    "refs": [
+     "goal#1",
+     "skill#4"
+    ],
+    "role_impact": 0.9,
+    "must_keep": false,
+    "priority_score": 0.56,
+    "goal": "goal#1"
+   },
+   {
+    "id": 6,
+    "ref": "task#6",
+    "title": "Read the intern posting and list its requirements",
+    "minutes": 20,
+    "priority": "Medium",
+    "day_number": 3,
+    "order_index": 1,
+    "deadline": null,
+    "status": "todo",
+    "why": "Keeps preparation anchored to the real posting.",
+    "refs": [
+     "goal#1"
+    ],
+    "role_impact": 0.6,
+    "must_keep": false,
+    "priority_score": 0.44,
+    "goal": "goal#1"
+   },
+   {
+    "id": 7,
+    "ref": "task#7",
+    "title": "Revise semester exam topics: operating systems",
+    "minutes": 40,
+    "priority": "Medium",
+    "day_number": 4,
+    "order_index": 0,
+    "deadline": null,
+    "status": "todo",
+    "why": "Exams come before GATE prep [decision#1].",
+    "refs": [
+     "goal#3",
+     "decision#1"
+    ],
+    "role_impact": 0.3,
+    "must_keep": false,
+    "priority_score": 0.22,
+    "goal": "goal#3"
+   },
+   {
+    "id": 8,
+    "ref": "task#8",
+    "title": "Implement k-fold cross-validation on the regression project",
+    "minutes": 45,
+    "priority": "High",
+    "day_number": 5,
+    "order_index": 0,
+    "deadline": null,
+    "status": "todo",
+    "why": "Creates evidence for model evaluation.",
+    "refs": [
+     "goal#1"
+    ],
+    "role_impact": 0.8,
+    "must_keep": false,
+    "priority_score": 0.52,
+    "goal": "goal#1"
+   },
+   {
+    "id": 9,
+    "ref": "task#9",
+    "title": "Learn Git rebase and clean up repository history",
+    "minutes": 30,
+    "priority": "Low",
+    "day_number": 6,
+    "order_index": 0,
+    "deadline": null,
+    "status": "todo",
+    "why": "Git is a low-weight requirement already partly demonstrated.",
+    "refs": [
+     "goal#1",
+     "skill#5"
+    ],
+    "role_impact": 0.3,
+    "must_keep": false,
+    "priority_score": 0.32,
+    "goal": "goal#1"
+   },
+   {
+    "id": 10,
+    "ref": "task#10",
+    "title": "Draft resume bullet points from existing evidence",
+    "minutes": 30,
+    "priority": "Medium",
+    "day_number": 7,
+    "order_index": 0,
+    "deadline": null,
+    "status": "todo",
+    "why": "Application drafts cite evidence; the user submits.",
+    "refs": [
+     "goal#1"
+    ],
+    "role_impact": 0.6,
+    "must_keep": false,
+    "priority_score": 0.44,
+    "goal": "goal#1"
+   },
+   {
+    "id": 11,
+    "ref": "task#11",
+    "title": "Weekly review: what changed, what stalled",
+    "minutes": 20,
+    "priority": "Medium",
+    "day_number": 7,
+    "order_index": 1,
+    "deadline": null,
+    "status": "todo",
+    "why": "Closes the adapt loop each week.",
+    "refs": [
+     "goal#1"
+    ],
+    "role_impact": 0.5,
+    "must_keep": false,
+    "priority_score": 0.4,
+    "goal": "goal#1"
+   },
+   {
+    "id": 12,
+    "ref": "task#12",
+    "title": "Intro to neural networks: one tutorial notebook",
+    "minutes": 45,
+    "priority": "Low",
+    "day_number": 9,
+    "order_index": 0,
+    "deadline": null,
+    "status": "todo",
+    "why": "Deep learning is required by two other target opportunities.",
+    "refs": [
+     "goal#1"
+    ],
+    "role_impact": 0.5,
+    "must_keep": false,
+    "priority_score": 0.4,
+    "goal": "goal#1"
+   }
+  ]
+ },
+ "opportunities": [
+  {
+   "id": 9,
+   "ref": "opp#9",
+   "title": "Student AI Hackathon",
+   "org": "Campus AI Guild",
+   "deadline": "2026-10-29",
+   "type": "hackathon",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Machine learning fundamentals",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Git",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "48-hour build with judging on evaluation rigor and demo quality.",
+   "source": "curated",
+   "fit": {
+    "score": 100,
+    "band": "Strong",
+    "top_gap": null,
+    "id": 13
+   },
+   "target": false
+  },
+  {
+   "id": 3,
+   "ref": "opp#3",
+   "title": "Data Science Intern",
+   "org": "Harbor Retail",
+   "deadline": "2026-11-02",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "SQL",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Statistics",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Data visualisation",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Analyse sales data, build forecasting prototypes and present findings.",
+   "source": "curated",
+   "fit": {
+    "score": 45,
+    "band": "Weak",
+    "top_gap": "Statistics",
+    "id": 14
+   },
+   "target": false
+  },
+  {
+   "id": 7,
+   "ref": "opp#7",
+   "title": "Analytics Engineering Intern",
+   "org": "Beacon Health",
+   "deadline": "2026-11-06",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "SQL",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Python",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Data visualisation",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Model healthcare data pipelines and dashboards.",
+   "source": "curated",
+   "fit": {
+    "score": 50,
+    "band": "Moderate",
+    "top_gap": "Data visualisation",
+    "id": 15
+   },
+   "target": false
+  },
+  {
+   "id": 1,
+   "ref": "opp#1",
+   "title": "AI/ML Engineering Intern",
+   "org": "Nimbus Analytics",
+   "deadline": "2026-11-09",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Machine learning fundamentals",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Model evaluation",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "SQL",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Git",
+     "weight": "Low",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Build and evaluate ML models for customer analytics with a small research team.",
+   "source": "curated",
+   "fit": {
+    "score": 67,
+    "band": "Moderate",
+    "top_gap": "Model evaluation",
+    "id": 16
+   },
+   "target": true
+  },
+  {
+   "id": 8,
+   "ref": "opp#8",
+   "title": "Applied AI Intern",
+   "org": "Cobalt Robotics",
+   "deadline": "2026-11-13",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Deep learning",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Data structures",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "C++",
+     "weight": "Low",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Prototype perception models for warehouse robots.",
+   "source": "curated",
+   "fit": {
+    "score": 33,
+    "band": "Weak",
+    "top_gap": "Deep learning",
+    "id": 17
+   },
+   "target": false
+  },
+  {
+   "id": 4,
+   "ref": "opp#4",
+   "title": "Computer Vision Intern",
+   "org": "Orbital Imaging",
+   "deadline": "2026-11-16",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Deep learning",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Model evaluation",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Linux",
+     "weight": "Low",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Train and evaluate detection models on satellite imagery.",
+   "source": "curated",
+   "fit": {
+    "score": 33,
+    "band": "Weak",
+    "top_gap": "Deep learning",
+    "id": 18
+   },
+   "target": false
+  },
+  {
+   "id": 6,
+   "ref": "opp#6",
+   "title": "ML Platform Intern",
+   "org": "Gridline Systems",
+   "deadline": "2026-11-18",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Docker",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Git",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Machine learning fundamentals",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Build tooling that trains, evaluates and deploys models reliably.",
+   "source": "curated",
+   "fit": {
+    "score": 78,
+    "band": "Strong",
+    "top_gap": "Docker",
+    "id": 19
+   },
+   "target": false
+  },
+  {
+   "id": 12,
+   "ref": "opp#12",
+   "title": "Backend Engineering Intern",
+   "org": "Parcel Labs",
+   "deadline": "2026-11-21",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "SQL",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Data structures",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Docker",
+     "weight": "Low",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Build APIs and data services for a logistics product.",
+   "source": "curated",
+   "fit": {
+    "score": 50,
+    "band": "Moderate",
+    "top_gap": "Data structures",
+    "id": 20
+   },
+   "target": false
+  },
+  {
+   "id": 2,
+   "ref": "opp#2",
+   "title": "Machine Learning Research Intern",
+   "org": "Vector Lab",
+   "deadline": "2026-11-23",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Deep learning",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Model evaluation",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Technical writing",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Reproduce and extend published models; write up evaluation results.",
+   "source": "curated",
+   "fit": {
+    "score": 30,
+    "band": "Weak",
+    "top_gap": "Deep learning",
+    "id": 21
+   },
+   "target": false
+  },
+  {
+   "id": 10,
+   "ref": "opp#10",
+   "title": "Quantitative Research Intern",
+   "org": "Meridian Capital",
+   "deadline": "2026-11-28",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Statistics",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Model evaluation",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Data structures",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Statistical modelling of market data with rigorous backtesting.",
+   "source": "curated",
+   "fit": {
+    "score": 30,
+    "band": "Weak",
+    "top_gap": "Statistics",
+    "id": 22
+   },
+   "target": false
+  },
+  {
+   "id": 5,
+   "ref": "opp#5",
+   "title": "NLP Engineering Intern",
+   "org": "Lexica AI",
+   "deadline": "2026-11-30",
+   "type": "internship",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Deep learning",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Model evaluation",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Data structures",
+     "weight": "Low",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Fine-tune language models and build evaluation pipelines.",
+   "source": "curated",
+   "fit": {
+    "score": 33,
+    "band": "Weak",
+    "top_gap": "Model evaluation",
+    "id": 23
+   },
+   "target": false
+  },
+  {
+   "id": 11,
+   "ref": "opp#11",
+   "title": "Open-source ML Fellowship",
+   "org": "Open Models Foundation",
+   "deadline": "2026-12-08",
+   "type": "fellowship",
+   "requirements": [
+    {
+     "name": "Python",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Git",
+     "weight": "High",
+     "mandatory": true,
+     "description": ""
+    },
+    {
+     "name": "Model evaluation",
+     "weight": "Medium",
+     "mandatory": false,
+     "description": ""
+    },
+    {
+     "name": "Technical writing",
+     "weight": "Low",
+     "mandatory": false,
+     "description": ""
+    }
+   ],
+   "url": null,
+   "summary": "Contribute evaluation tooling to an open-source ML library.",
+   "source": "curated",
+   "fit": {
+    "score": 67,
+    "band": "Moderate",
+    "top_gap": "Model evaluation",
+    "id": 24
+   },
+   "target": false
+  }
+ ],
+ "gaps": {
+  "9": [],
+  "3": [
+   {
+    "requirement": "Data visualisation",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Data visualisation"
+   },
+   {
+    "requirement": "Statistics",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Statistics"
+   },
+   {
+    "requirement": "SQL",
+    "impact": 1.5,
+    "impact_score": 43,
+    "weight": "High",
+    "coverage": "partial",
+    "mandatory": true,
+    "refs": [
+     "ev#5"
+    ],
+    "rationale": "High weight requirement is partial and mandatory.",
+    "recommended_focus": "Deepen SQL and document it with a project or practice result"
+   }
+  ],
+  "7": [
+   {
+    "requirement": "Data visualisation",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Data visualisation"
+   },
+   {
+    "requirement": "SQL",
+    "impact": 1.5,
+    "impact_score": 43,
+    "weight": "High",
+    "coverage": "partial",
+    "mandatory": true,
+    "refs": [
+     "ev#5"
+    ],
+    "rationale": "High weight requirement is partial and mandatory.",
+    "recommended_focus": "Deepen SQL and document it with a project or practice result"
+   }
+  ],
+  "1": [
+   {
+    "requirement": "Model evaluation",
+    "impact": 3.0,
+    "impact_score": 86,
+    "weight": "High",
+    "coverage": "not_shown",
+    "mandatory": true,
+    "refs": [],
+    "rationale": "High weight requirement is not shown and mandatory.",
+    "recommended_focus": "Build demonstrable evidence for Model evaluation"
+   },
+   {
+    "requirement": "SQL",
+    "impact": 0.8,
+    "impact_score": 23,
+    "weight": "Medium",
+    "coverage": "partial",
+    "mandatory": false,
+    "refs": [
+     "ev#5"
+    ],
+    "rationale": "Medium weight requirement is partial.",
+    "recommended_focus": "Deepen SQL and document it with a project or practice result"
+   }
+  ],
+  "8": [
+   {
+    "requirement": "Deep learning",
+    "impact": 3.0,
+    "impact_score": 86,
+    "weight": "High",
+    "coverage": "not_shown",
+    "mandatory": true,
+    "refs": [],
+    "rationale": "High weight requirement is not shown and mandatory.",
+    "recommended_focus": "Build demonstrable evidence for Deep learning"
+   },
+   {
+    "requirement": "Data structures",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Data structures"
+   },
+   {
+    "requirement": "C++",
+    "impact": 0.8,
+    "impact_score": 23,
+    "weight": "Low",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Low weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for C++"
+   }
+  ],
+  "4": [
+   {
+    "requirement": "Deep learning",
+    "impact": 3.0,
+    "impact_score": 86,
+    "weight": "High",
+    "coverage": "not_shown",
+    "mandatory": true,
+    "refs": [],
+    "rationale": "High weight requirement is not shown and mandatory.",
+    "recommended_focus": "Build demonstrable evidence for Deep learning"
+   },
+   {
+    "requirement": "Model evaluation",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Model evaluation"
+   },
+   {
+    "requirement": "Linux",
+    "impact": 0.8,
+    "impact_score": 23,
+    "weight": "Low",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Low weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Linux"
+   }
+  ],
+  "6": [
+   {
+    "requirement": "Docker",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Docker"
+   }
+  ],
+  "12": [
+   {
+    "requirement": "Data structures",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Data structures"
+   },
+   {
+    "requirement": "Docker",
+    "impact": 0.8,
+    "impact_score": 23,
+    "weight": "Low",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Low weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Docker"
+   },
+   {
+    "requirement": "SQL",
+    "impact": 0.8,
+    "impact_score": 23,
+    "weight": "Medium",
+    "coverage": "partial",
+    "mandatory": false,
+    "refs": [
+     "ev#5"
+    ],
+    "rationale": "Medium weight requirement is partial.",
+    "recommended_focus": "Deepen SQL and document it with a project or practice result"
+   }
+  ],
+  "2": [
+   {
+    "requirement": "Deep learning",
+    "impact": 3.0,
+    "impact_score": 86,
+    "weight": "High",
+    "coverage": "not_shown",
+    "mandatory": true,
+    "refs": [],
+    "rationale": "High weight requirement is not shown and mandatory.",
+    "recommended_focus": "Build demonstrable evidence for Deep learning"
+   },
+   {
+    "requirement": "Model evaluation",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Model evaluation"
+   },
+   {
+    "requirement": "Technical writing",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Technical writing"
+   }
+  ],
+  "10": [
+   {
+    "requirement": "Statistics",
+    "impact": 3.0,
+    "impact_score": 86,
+    "weight": "High",
+    "coverage": "not_shown",
+    "mandatory": true,
+    "refs": [],
+    "rationale": "High weight requirement is not shown and mandatory.",
+    "recommended_focus": "Build demonstrable evidence for Statistics"
+   },
+   {
+    "requirement": "Data structures",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Data structures"
+   },
+   {
+    "requirement": "Model evaluation",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Model evaluation"
+   }
+  ],
+  "5": [
+   {
+    "requirement": "Model evaluation",
+    "impact": 3.0,
+    "impact_score": 86,
+    "weight": "High",
+    "coverage": "not_shown",
+    "mandatory": true,
+    "refs": [],
+    "rationale": "High weight requirement is not shown and mandatory.",
+    "recommended_focus": "Build demonstrable evidence for Model evaluation"
+   },
+   {
+    "requirement": "Deep learning",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Deep learning"
+   },
+   {
+    "requirement": "Data structures",
+    "impact": 0.8,
+    "impact_score": 23,
+    "weight": "Low",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Low weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Data structures"
+   }
+  ],
+  "11": [
+   {
+    "requirement": "Model evaluation",
+    "impact": 1.6,
+    "impact_score": 46,
+    "weight": "Medium",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Medium weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Model evaluation"
+   },
+   {
+    "requirement": "Technical writing",
+    "impact": 0.8,
+    "impact_score": 23,
+    "weight": "Low",
+    "coverage": "not_shown",
+    "mandatory": false,
+    "refs": [],
+    "rationale": "Low weight requirement is not shown.",
+    "recommended_focus": "Build demonstrable evidence for Technical writing"
+   }
+  ]
+ },
+ "memory": [
+  {
+   "id": 23,
+   "type": "skill",
+   "content": "Deep learning (none, confidence 15)",
+   "payload": {
+    "id": 6,
+    "user_id": 1,
+    "name": "Deep learning",
+    "level": "none",
+    "confidence": 15,
+    "last_updated": "2026-10-19T12:57:37.569503",
+    "ref": "skill#6"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#6",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.570495Z",
+   "updatedAt": "2026-10-19T12:57:37.570498Z",
+   "deletedAt": null
+  },
+  {
+   "id": 22,
+   "type": "evidence",
+   "content": "repo: Maintains personal GitHub repositories with branches and pull requests",
+   "payload": {
+    "id": 6,
+    "user_id": 1,
+    "skill_id": 5,
+    "type": "repo",
+    "description": "Maintains personal GitHub repositories with branches and pull requests",
+    "url": "https://github.com/example/meera-data-tools",
+    "ref": "ev#6"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#6",
+   "tags": [
+    "Git"
+   ],
+   "createdAt": "2026-10-19T12:57:37.567645Z",
+   "updatedAt": "2026-10-19T12:57:37.567648Z",
+   "deletedAt": null
+  },
+  {
+   "id": 21,
+   "type": "skill",
+   "content": "Git (intermediate, confidence 70)",
+   "payload": {
+    "id": 5,
+    "user_id": 1,
+    "name": "Git",
+    "level": "intermediate",
+    "confidence": 70,
+    "last_updated": "2026-10-19T12:57:37.567833",
+    "ref": "skill#5"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#5",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.565931Z",
+   "updatedAt": "2026-10-19T12:57:37.568915Z",
+   "deletedAt": null
+  },
+  {
+   "id": 20,
+   "type": "skill",
+   "content": "Model evaluation (beginner, confidence 35)",
+   "payload": {
+    "id": 4,
+    "user_id": 1,
+    "name": "Model evaluation",
+    "level": "beginner",
+    "confidence": 35,
+    "last_updated": "2026-10-19T12:57:37.563237",
+    "ref": "skill#4"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#4",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.564358Z",
+   "updatedAt": "2026-10-19T12:57:37.564362Z",
+   "deletedAt": null
+  },
+  {
+   "id": 19,
+   "type": "evidence",
+   "content": "internship: Summer internship: wrote reporting queries for a campus startup",
+   "payload": {
+    "id": 5,
+    "user_id": 1,
+    "skill_id": 3,
+    "type": "internship",
+    "description": "Summer internship: wrote reporting queries for a campus startup",
+    "url": null,
+    "ref": "ev#5"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#5",
+   "tags": [
+    "SQL"
+   ],
+   "createdAt": "2026-10-19T12:57:37.561562Z",
+   "updatedAt": "2026-10-19T12:57:37.561566Z",
+   "deletedAt": null
+  },
+  {
+   "id": 18,
+   "type": "skill",
+   "content": "SQL (beginner, confidence 45)",
+   "payload": {
+    "id": 3,
+    "user_id": 1,
+    "name": "SQL",
+    "level": "beginner",
+    "confidence": 45,
+    "last_updated": "2026-10-19T12:57:37.561755",
+    "ref": "skill#3"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#3",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.559907Z",
+   "updatedAt": "2026-10-19T12:57:37.562737Z",
+   "deletedAt": null
+  },
+  {
+   "id": 17,
+   "type": "evidence",
+   "content": "cert: Certificate: Introduction to Machine Learning (online course)",
+   "payload": {
+    "id": 4,
+    "user_id": 1,
+    "skill_id": 2,
+    "type": "cert",
+    "description": "Certificate: Introduction to Machine Learning (online course)",
+    "url": null,
+    "ref": "ev#4"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#4",
+   "tags": [
+    "Machine learning fundamentals"
+   ],
+   "createdAt": "2026-10-19T12:57:37.556541Z",
+   "updatedAt": "2026-10-19T12:57:37.556545Z",
+   "deletedAt": null
+  },
+  {
+   "id": 16,
+   "type": "evidence",
+   "content": "project: House-price regression project with feature engineering",
+   "payload": {
+    "id": 3,
+    "user_id": 1,
+    "skill_id": 2,
+    "type": "project",
+    "description": "House-price regression project with feature engineering",
+    "url": null,
+    "ref": "ev#3"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#3",
+   "tags": [
+    "Machine learning fundamentals"
+   ],
+   "createdAt": "2026-10-19T12:57:37.553429Z",
+   "updatedAt": "2026-10-19T12:57:37.553432Z",
+   "deletedAt": null
+  },
+  {
+   "id": 15,
+   "type": "skill",
+   "content": "Machine learning fundamentals (intermediate, confidence 65)",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "name": "Machine learning fundamentals",
+    "level": "intermediate",
+    "confidence": 65,
+    "last_updated": "2026-10-19T12:57:37.556775",
+    "ref": "skill#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#2",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.551557Z",
+   "updatedAt": "2026-10-19T12:57:37.557985Z",
+   "deletedAt": null
+  },
+  {
+   "id": 14,
+   "type": "evidence",
+   "content": "repo: GitHub repository: data-cleaning utilities with tests",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "skill_id": 1,
+    "type": "repo",
+    "description": "GitHub repository: data-cleaning utilities with tests",
+    "url": "https://github.com/example/meera-data-tools",
+    "ref": "ev#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#2",
+   "tags": [
+    "Python"
+   ],
+   "createdAt": "2026-10-19T12:57:37.548477Z",
+   "updatedAt": "2026-10-19T12:57:37.548481Z",
+   "deletedAt": null
+  },
+  {
+   "id": 13,
+   "type": "evidence",
+   "content": "project: Spam classifier project in Python with scikit-learn",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "skill_id": 1,
+    "type": "project",
+    "description": "Spam classifier project in Python with scikit-learn",
+    "url": null,
+    "ref": "ev#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#1",
+   "tags": [
+    "Python"
+   ],
+   "createdAt": "2026-10-19T12:57:37.543344Z",
+   "updatedAt": "2026-10-19T12:57:37.543349Z",
+   "deletedAt": null
+  },
+  {
+   "id": 12,
+   "type": "skill",
+   "content": "Python (intermediate, confidence 80)",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "name": "Python",
+    "level": "intermediate",
+    "confidence": 80,
+    "last_updated": "2026-10-19T12:57:37.548685",
+    "ref": "skill#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#1",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.540187Z",
+   "updatedAt": "2026-10-19T12:57:37.549805Z",
+   "deletedAt": null
+  },
+  {
+   "id": 11,
+   "type": "decision",
+   "content": "Prioritise model-evaluation skills over new frameworks — because Every target internship lists evaluation; frameworks can be learned on the job.",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "statement": "Prioritise model-evaluation skills over new frameworks",
+    "reason": "Every target internship lists evaluation; frameworks can be learned on the job.",
+    "goal_id": 1,
+    "source": "seed",
+    "ref": "decision#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "decision#2",
+   "tags": [
+    "decision"
+   ],
+   "createdAt": "2026-10-19T12:57:37.536921Z",
+   "updatedAt": "2026-10-19T12:57:37.536925Z",
+   "deletedAt": null
+  },
+  {
+   "id": 10,
+   "type": "decision",
+   "content": "College exams come before GATE preparation — because Semester results decide eligibility; GATE is next year.",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "statement": "College exams come before GATE preparation",
+    "reason": "Semester results decide eligibility; GATE is next year.",
+    "goal_id": 3,
+    "source": "seed",
+    "ref": "decision#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "decision#1",
+   "tags": [
+    "decision"
+   ],
+   "createdAt": "2026-10-19T12:57:37.535050Z",
+   "updatedAt": "2026-10-19T12:57:37.535053Z",
+   "deletedAt": null
+  },
+  {
+   "id": 9,
+   "type": "constraint",
+   "content": "deadline: Internship applications close within three months",
+   "payload": {
+    "id": 3,
+    "user_id": 1,
+    "kind": "deadline",
+    "value": "Internship applications close within three months",
+    "valid_from": null,
+    "valid_to": null,
+    "ref": "constraint#3"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "constraint#3",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.531734Z",
+   "updatedAt": "2026-10-19T12:57:37.531737Z",
+   "deletedAt": null
+  },
+  {
+   "id": 8,
+   "type": "constraint",
+   "content": "boundary: College exams come first during exam weeks",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "kind": "boundary",
+    "value": "College exams come first during exam weeks",
+    "valid_from": null,
+    "valid_to": null,
+    "ref": "constraint#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "constraint#2",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.530013Z",
+   "updatedAt": "2026-10-19T12:57:37.530017Z",
+   "deletedAt": null
+  },
+  {
+   "id": 7,
+   "type": "constraint",
+   "content": "hours: About 60 minutes per day on weekdays",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "kind": "hours",
+    "value": "About 60 minutes per day on weekdays",
+    "valid_from": null,
+    "valid_to": null,
+    "ref": "constraint#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "constraint#1",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.528119Z",
+   "updatedAt": "2026-10-19T12:57:37.528124Z",
+   "deletedAt": null
+  },
+  {
+   "id": 6,
+   "type": "goal",
+   "content": "Pass college semester exams by 2026-12-03 (priority 2)",
+   "payload": {
+    "id": 3,
+    "user_id": 1,
+    "title": "Pass college semester exams",
+    "target_role": null,
+    "deadline": "2026-12-03",
+    "hours_per_day": 1.0,
+    "priority_rank": 2,
+    "parent_goal_id": null,
+    "status": "active",
+    "ref": "goal#3"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "goal#3",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.524755Z",
+   "updatedAt": "2026-10-19T12:57:37.524758Z",
+   "deletedAt": null
+  },
+  {
+   "id": 5,
+   "type": "goal",
+   "content": "Prepare for GATE by 2027-08-15 (priority 3)",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "title": "Prepare for GATE",
+    "target_role": null,
+    "deadline": "2027-08-15",
+    "hours_per_day": 0.5,
+    "priority_rank": 3,
+    "parent_goal_id": null,
+    "status": "active",
+    "ref": "goal#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "goal#2",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.522495Z",
+   "updatedAt": "2026-10-19T12:57:37.522501Z",
+   "deletedAt": null
+  },
+  {
+   "id": 4,
+   "type": "goal",
+   "content": "Land an AI/ML internship by 2027-01-17 (priority 1)",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "title": "Land an AI/ML internship",
+    "target_role": "AI/ML Intern",
+    "deadline": "2027-01-17",
+    "hours_per_day": 1.0,
+    "priority_rank": 1,
+    "parent_goal_id": null,
+    "status": "active",
+    "ref": "goal#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "goal#1",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.518103Z",
+   "updatedAt": "2026-10-19T12:57:37.518115Z",
+   "deletedAt": null
+  },
+  {
+   "id": 3,
+   "type": "preference",
+   "content": "study window: evenings",
+   "payload": {
+    "study_window": "evenings"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": null,
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.502343Z",
+   "updatedAt": "2026-10-19T12:57:37.502347Z",
+   "deletedAt": null
+  },
+  {
+   "id": 2,
+   "type": "preference",
+   "content": "learning style: ['hands-on projects', 'step-by-step']",
+   "payload": {
+    "learning_style": [
+     "hands-on projects",
+     "step-by-step"
+    ]
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": null,
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.501832Z",
+   "updatedAt": "2026-10-19T12:57:37.501836Z",
+   "deletedAt": null
+  },
+  {
+   "id": 1,
+   "type": "profile",
+   "content": "Meera: 2nd-year B.E. CSE (AI & ML). Second-year computer science student aiming for an AI/ML internship within three months, then GATE preparation.",
+   "payload": {
+    "education": "2nd-year B.E. CSE (AI & ML)",
+    "target_role": "AI/ML Intern",
+    "daily_minutes": 60
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": null,
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.500611Z",
+   "updatedAt": "2026-10-19T12:57:37.500621Z",
+   "deletedAt": null
+  }
+ ],
+ "status": {
+  "llm_mode": "off",
+  "llm_available": false
+ },
+ "practice_question": {
+  "topic": "Model evaluation",
+  "question": "How would you detect and prevent overfitting when training a model, and how would you choose between two candidate models?",
+  "expected_concepts": [
+   "train-test split",
+   "validation set",
+   "cross-validation",
+   "regularization",
+   "learning curve",
+   "early stopping",
+   "metric comparison"
+  ],
+  "question_source": "question_bank"
+ },
+ "practice_result": {
+  "topic": "Model evaluation",
+  "score": 23,
+  "rubric_scores": {
+   "correctness": 14,
+   "depth": 14,
+   "clarity": 60
+  },
+  "matched_concepts": [
+   "train-test split"
+  ],
+  "missing_concepts": [
+   "validation set",
+   "cross-validation",
+   "regularization",
+   "learning curve",
+   "early stopping",
+   "metric comparison"
+  ],
+  "feedback": "You covered: train-test split. Not addressed: validation set, cross-validation, regularization, learning curve, early stopping, metric comparison. The answer is short; explain the reasoning behind each point.",
+  "weakness": "Model evaluation",
+  "weakness_recorded": true,
+  "weakness_ref": "weakness#1"
+ },
+ "memory_after_practice": [
+  {
+   "id": 24,
+   "type": "weakness",
+   "content": "Model evaluation (high, seen 2x)",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "topic": "Model evaluation",
+    "severity": "high",
+    "evidence_count": 2,
+    "last_seen": "2026-10-19T12:57:38.222116",
+    "status": "active",
+    "refs": [
+     "practice#1",
+     "practice#2"
+    ],
+    "ref": "weakness#1"
+   },
+   "source": "practice",
+   "visibility": "private",
+   "ref": "weakness#1",
+   "tags": [
+    "practice",
+    "Model evaluation"
+   ],
+   "createdAt": "2026-10-19T12:57:38.225981Z",
+   "updatedAt": "2026-10-19T12:57:38.225986Z",
+   "deletedAt": null
+  },
+  {
+   "id": 23,
+   "type": "skill",
+   "content": "Deep learning (none, confidence 15)",
+   "payload": {
+    "id": 6,
+    "user_id": 1,
+    "name": "Deep learning",
+    "level": "none",
+    "confidence": 15,
+    "last_updated": "2026-10-19T12:57:37.569503",
+    "ref": "skill#6"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#6",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.570495Z",
+   "updatedAt": "2026-10-19T12:57:37.570498Z",
+   "deletedAt": null
+  },
+  {
+   "id": 22,
+   "type": "evidence",
+   "content": "repo: Maintains personal GitHub repositories with branches and pull requests",
+   "payload": {
+    "id": 6,
+    "user_id": 1,
+    "skill_id": 5,
+    "type": "repo",
+    "description": "Maintains personal GitHub repositories with branches and pull requests",
+    "url": "https://github.com/example/meera-data-tools",
+    "ref": "ev#6"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#6",
+   "tags": [
+    "Git"
+   ],
+   "createdAt": "2026-10-19T12:57:37.567645Z",
+   "updatedAt": "2026-10-19T12:57:37.567648Z",
+   "deletedAt": null
+  },
+  {
+   "id": 21,
+   "type": "skill",
+   "content": "Git (intermediate, confidence 70)",
+   "payload": {
+    "id": 5,
+    "user_id": 1,
+    "name": "Git",
+    "level": "intermediate",
+    "confidence": 70,
+    "last_updated": "2026-10-19T12:57:37.567833",
+    "ref": "skill#5"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#5",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.565931Z",
+   "updatedAt": "2026-10-19T12:57:37.568915Z",
+   "deletedAt": null
+  },
+  {
+   "id": 20,
+   "type": "skill",
+   "content": "Model evaluation (beginner, confidence 35)",
+   "payload": {
+    "id": 4,
+    "user_id": 1,
+    "name": "Model evaluation",
+    "level": "beginner",
+    "confidence": 35,
+    "last_updated": "2026-10-19T12:57:37.563237",
+    "ref": "skill#4"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#4",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.564358Z",
+   "updatedAt": "2026-10-19T12:57:37.564362Z",
+   "deletedAt": null
+  },
+  {
+   "id": 19,
+   "type": "evidence",
+   "content": "internship: Summer internship: wrote reporting queries for a campus startup",
+   "payload": {
+    "id": 5,
+    "user_id": 1,
+    "skill_id": 3,
+    "type": "internship",
+    "description": "Summer internship: wrote reporting queries for a campus startup",
+    "url": null,
+    "ref": "ev#5"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#5",
+   "tags": [
+    "SQL"
+   ],
+   "createdAt": "2026-10-19T12:57:37.561562Z",
+   "updatedAt": "2026-10-19T12:57:37.561566Z",
+   "deletedAt": null
+  },
+  {
+   "id": 18,
+   "type": "skill",
+   "content": "SQL (beginner, confidence 45)",
+   "payload": {
+    "id": 3,
+    "user_id": 1,
+    "name": "SQL",
+    "level": "beginner",
+    "confidence": 45,
+    "last_updated": "2026-10-19T12:57:37.561755",
+    "ref": "skill#3"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#3",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.559907Z",
+   "updatedAt": "2026-10-19T12:57:37.562737Z",
+   "deletedAt": null
+  },
+  {
+   "id": 17,
+   "type": "evidence",
+   "content": "cert: Certificate: Introduction to Machine Learning (online course)",
+   "payload": {
+    "id": 4,
+    "user_id": 1,
+    "skill_id": 2,
+    "type": "cert",
+    "description": "Certificate: Introduction to Machine Learning (online course)",
+    "url": null,
+    "ref": "ev#4"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#4",
+   "tags": [
+    "Machine learning fundamentals"
+   ],
+   "createdAt": "2026-10-19T12:57:37.556541Z",
+   "updatedAt": "2026-10-19T12:57:37.556545Z",
+   "deletedAt": null
+  },
+  {
+   "id": 16,
+   "type": "evidence",
+   "content": "project: House-price regression project with feature engineering",
+   "payload": {
+    "id": 3,
+    "user_id": 1,
+    "skill_id": 2,
+    "type": "project",
+    "description": "House-price regression project with feature engineering",
+    "url": null,
+    "ref": "ev#3"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#3",
+   "tags": [
+    "Machine learning fundamentals"
+   ],
+   "createdAt": "2026-10-19T12:57:37.553429Z",
+   "updatedAt": "2026-10-19T12:57:37.553432Z",
+   "deletedAt": null
+  },
+  {
+   "id": 15,
+   "type": "skill",
+   "content": "Machine learning fundamentals (intermediate, confidence 65)",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "name": "Machine learning fundamentals",
+    "level": "intermediate",
+    "confidence": 65,
+    "last_updated": "2026-10-19T12:57:37.556775",
+    "ref": "skill#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#2",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.551557Z",
+   "updatedAt": "2026-10-19T12:57:37.557985Z",
+   "deletedAt": null
+  },
+  {
+   "id": 14,
+   "type": "evidence",
+   "content": "repo: GitHub repository: data-cleaning utilities with tests",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "skill_id": 1,
+    "type": "repo",
+    "description": "GitHub repository: data-cleaning utilities with tests",
+    "url": "https://github.com/example/meera-data-tools",
+    "ref": "ev#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#2",
+   "tags": [
+    "Python"
+   ],
+   "createdAt": "2026-10-19T12:57:37.548477Z",
+   "updatedAt": "2026-10-19T12:57:37.548481Z",
+   "deletedAt": null
+  },
+  {
+   "id": 13,
+   "type": "evidence",
+   "content": "project: Spam classifier project in Python with scikit-learn",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "skill_id": 1,
+    "type": "project",
+    "description": "Spam classifier project in Python with scikit-learn",
+    "url": null,
+    "ref": "ev#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "ev#1",
+   "tags": [
+    "Python"
+   ],
+   "createdAt": "2026-10-19T12:57:37.543344Z",
+   "updatedAt": "2026-10-19T12:57:37.543349Z",
+   "deletedAt": null
+  },
+  {
+   "id": 12,
+   "type": "skill",
+   "content": "Python (intermediate, confidence 80)",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "name": "Python",
+    "level": "intermediate",
+    "confidence": 80,
+    "last_updated": "2026-10-19T12:57:37.548685",
+    "ref": "skill#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "skill#1",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.540187Z",
+   "updatedAt": "2026-10-19T12:57:37.549805Z",
+   "deletedAt": null
+  },
+  {
+   "id": 11,
+   "type": "decision",
+   "content": "Prioritise model-evaluation skills over new frameworks — because Every target internship lists evaluation; frameworks can be learned on the job.",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "statement": "Prioritise model-evaluation skills over new frameworks",
+    "reason": "Every target internship lists evaluation; frameworks can be learned on the job.",
+    "goal_id": 1,
+    "source": "seed",
+    "ref": "decision#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "decision#2",
+   "tags": [
+    "decision"
+   ],
+   "createdAt": "2026-10-19T12:57:37.536921Z",
+   "updatedAt": "2026-10-19T12:57:37.536925Z",
+   "deletedAt": null
+  },
+  {
+   "id": 10,
+   "type": "decision",
+   "content": "College exams come before GATE preparation — because Semester results decide eligibility; GATE is next year.",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "statement": "College exams come before GATE preparation",
+    "reason": "Semester results decide eligibility; GATE is next year.",
+    "goal_id": 3,
+    "source": "seed",
+    "ref": "decision#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "decision#1",
+   "tags": [
+    "decision"
+   ],
+   "createdAt": "2026-10-19T12:57:37.535050Z",
+   "updatedAt": "2026-10-19T12:57:37.535053Z",
+   "deletedAt": null
+  },
+  {
+   "id": 9,
+   "type": "constraint",
+   "content": "deadline: Internship applications close within three months",
+   "payload": {
+    "id": 3,
+    "user_id": 1,
+    "kind": "deadline",
+    "value": "Internship applications close within three months",
+    "valid_from": null,
+    "valid_to": null,
+    "ref": "constraint#3"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "constraint#3",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.531734Z",
+   "updatedAt": "2026-10-19T12:57:37.531737Z",
+   "deletedAt": null
+  },
+  {
+   "id": 8,
+   "type": "constraint",
+   "content": "boundary: College exams come first during exam weeks",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "kind": "boundary",
+    "value": "College exams come first during exam weeks",
+    "valid_from": null,
+    "valid_to": null,
+    "ref": "constraint#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "constraint#2",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.530013Z",
+   "updatedAt": "2026-10-19T12:57:37.530017Z",
+   "deletedAt": null
+  },
+  {
+   "id": 7,
+   "type": "constraint",
+   "content": "hours: About 60 minutes per day on weekdays",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "kind": "hours",
+    "value": "About 60 minutes per day on weekdays",
+    "valid_from": null,
+    "valid_to": null,
+    "ref": "constraint#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "constraint#1",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.528119Z",
+   "updatedAt": "2026-10-19T12:57:37.528124Z",
+   "deletedAt": null
+  },
+  {
+   "id": 6,
+   "type": "goal",
+   "content": "Pass college semester exams by 2026-12-03 (priority 2)",
+   "payload": {
+    "id": 3,
+    "user_id": 1,
+    "title": "Pass college semester exams",
+    "target_role": null,
+    "deadline": "2026-12-03",
+    "hours_per_day": 1.0,
+    "priority_rank": 2,
+    "parent_goal_id": null,
+    "status": "active",
+    "ref": "goal#3"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "goal#3",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.524755Z",
+   "updatedAt": "2026-10-19T12:57:37.524758Z",
+   "deletedAt": null
+  },
+  {
+   "id": 5,
+   "type": "goal",
+   "content": "Prepare for GATE by 2027-08-15 (priority 3)",
+   "payload": {
+    "id": 2,
+    "user_id": 1,
+    "title": "Prepare for GATE",
+    "target_role": null,
+    "deadline": "2027-08-15",
+    "hours_per_day": 0.5,
+    "priority_rank": 3,
+    "parent_goal_id": null,
+    "status": "active",
+    "ref": "goal#2"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "goal#2",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.522495Z",
+   "updatedAt": "2026-10-19T12:57:37.522501Z",
+   "deletedAt": null
+  },
+  {
+   "id": 4,
+   "type": "goal",
+   "content": "Land an AI/ML internship by 2027-01-17 (priority 1)",
+   "payload": {
+    "id": 1,
+    "user_id": 1,
+    "title": "Land an AI/ML internship",
+    "target_role": "AI/ML Intern",
+    "deadline": "2027-01-17",
+    "hours_per_day": 1.0,
+    "priority_rank": 1,
+    "parent_goal_id": null,
+    "status": "active",
+    "ref": "goal#1"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": "goal#1",
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.518103Z",
+   "updatedAt": "2026-10-19T12:57:37.518115Z",
+   "deletedAt": null
+  },
+  {
+   "id": 3,
+   "type": "preference",
+   "content": "study window: evenings",
+   "payload": {
+    "study_window": "evenings"
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": null,
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.502343Z",
+   "updatedAt": "2026-10-19T12:57:37.502347Z",
+   "deletedAt": null
+  },
+  {
+   "id": 2,
+   "type": "preference",
+   "content": "learning style: ['hands-on projects', 'step-by-step']",
+   "payload": {
+    "learning_style": [
+     "hands-on projects",
+     "step-by-step"
+    ]
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": null,
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.501832Z",
+   "updatedAt": "2026-10-19T12:57:37.501836Z",
+   "deletedAt": null
+  },
+  {
+   "id": 1,
+   "type": "profile",
+   "content": "Meera: 2nd-year B.E. CSE (AI & ML). Second-year computer science student aiming for an AI/ML internship within three months, then GATE preparation.",
+   "payload": {
+    "education": "2nd-year B.E. CSE (AI & ML)",
+    "target_role": "AI/ML Intern",
+    "daily_minutes": 60
+   },
+   "source": "seed",
+   "visibility": "private",
+   "ref": null,
+   "tags": [],
+   "createdAt": "2026-10-19T12:57:37.500611Z",
+   "updatedAt": "2026-10-19T12:57:37.500621Z",
+   "deletedAt": null
+  }
+ ],
+ "replan": {
+  "60": {
+   "plan": {
+    "id": 2,
+    "ref": "plan#2",
+    "version": 2,
+    "status": "active",
+    "goal": "goal#1",
+    "daily_budget_minutes": 60,
+    "rationale": "Replanned on request using the latest memory. Moved 'Mock interview: model evaluation questions' from day 3 to day 1 because it targets active weakness [weakness#1] (priority 0.81). Re-ranked 'Review precision, recall and F1 with a worked example' on day 1 from #1 to #2. Moved 'Refactor the spam classifier to log a confusion matrix' from day 1 to day 2 (priority 0.48). Re-ranked 'Practice two SQL join questions' on day 2 from #3 to #4. Re-ranked 'Read the intern posting and list its requirements' on day 3 from #6 to #5. Moved 'Write a one-page summary of the house-price project' from day 2 to day 3 (priority 0.36). Kept regardless of budget (active weakness or hard deadline): Mock interview: model evaluation questions. Respected decision [decision#2]: Prioritise model-evaluation skills over new frameworks. Respected decision [decision#1]: College exams come before GATE preparation.",
+    "refs": [
+     "weakness#1",
+     "practice#1",
+     "practice#2",
+     "decision#2",
+     "decision#1",
+     "goal#1",
+     "skill#3",
+     "skill#4",
+     "goal#3",
+     "skill#5"
+    ],
+    "created_at": "2026-10-19T12:57:38.415742Z",
+    "minutes_by_day": {
+     "1": 60,
+     "2": 60,
+     "3": 50,
+     "4": 40,
+     "5": 45,
+     "6": 30,
+     "7": 50,
+     "9": 45
+    },
+    "tasks": [
+     {
+      "id": 13,
+      "ref": "task#13",
+      "title": "Mock interview: model evaluation questions",
+      "minutes": 30,
+      "priority": "High",
+      "day_number": 1,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Practice answers feed back into the plan. Linked to active weakness weakness#1 (Model evaluation).",
+      "refs": [
+       "goal#1",
+       "skill#4",
+       "weakness#1"
+      ],
+      "role_impact": 0.9,
+      "must_keep": true,
+      "priority_score": 0.81,
+      "goal": "goal#1"
+     },
+     {
+      "id": 14,
+      "ref": "task#14",
+      "title": "Review precision, recall and F1 with a worked example",
+      "minutes": 30,
+      "priority": "High",
+      "day_number": 1,
+      "order_index": 1,
+      "deadline": null,
+      "status": "todo",
+      "why": "Model evaluation is mandatory for the target internship and is currently a gap.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.9,
+      "must_keep": false,
+      "priority_score": 0.56,
+      "goal": "goal#1"
+     },
+     {
+      "id": 15,
+      "ref": "task#15",
+      "title": "Refactor the spam classifier to log a confusion matrix",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 2,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Turns an existing project into evidence of evaluation skills.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.7,
+      "must_keep": false,
+      "priority_score": 0.48,
+      "goal": "goal#1"
+     },
+     {
+      "id": 16,
+      "ref": "task#16",
+      "title": "Practice two SQL join questions",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 2,
+      "order_index": 1,
+      "deadline": null,
+      "status": "todo",
+      "why": "SQL is a medium-weight requirement at beginner level.",
+      "refs": [
+       "goal#1",
+       "skill#3"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     },
+     {
+      "id": 17,
+      "ref": "task#17",
+      "title": "Read the intern posting and list its requirements",
+      "minutes": 20,
+      "priority": "Medium",
+      "day_number": 3,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Keeps preparation anchored to the real posting.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.6,
+      "must_keep": false,
+      "priority_score": 0.44,
+      "goal": "goal#1"
+     },
+     {
+      "id": 18,
+      "ref": "task#18",
+      "title": "Write a one-page summary of the house-price project",
+      "minutes": 30,
+      "priority": "Low",
+      "day_number": 3,
+      "order_index": 1,
+      "deadline": null,
+      "status": "todo",
+      "why": "Strengthens evidence for machine learning fundamentals.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.4,
+      "must_keep": false,
+      "priority_score": 0.36,
+      "goal": "goal#1"
+     },
+     {
+      "id": 19,
+      "ref": "task#19",
+      "title": "Revise semester exam topics: operating systems",
+      "minutes": 40,
+      "priority": "Medium",
+      "day_number": 4,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Exams come before GATE prep [decision#1].",
+      "refs": [
+       "goal#3",
+       "decision#1"
+      ],
+      "role_impact": 0.3,
+      "must_keep": false,
+      "priority_score": 0.22,
+      "goal": "goal#3"
+     },
+     {
+      "id": 20,
+      "ref": "task#20",
+      "title": "Implement k-fold cross-validation on the regression project",
+      "minutes": 45,
+      "priority": "High",
+      "day_number": 5,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Creates evidence for model evaluation.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.8,
+      "must_keep": false,
+      "priority_score": 0.52,
+      "goal": "goal#1"
+     },
+     {
+      "id": 21,
+      "ref": "task#21",
+      "title": "Learn Git rebase and clean up repository history",
+      "minutes": 30,
+      "priority": "Low",
+      "day_number": 6,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Git is a low-weight requirement already partly demonstrated.",
+      "refs": [
+       "goal#1",
+       "skill#5"
+      ],
+      "role_impact": 0.3,
+      "must_keep": false,
+      "priority_score": 0.32,
+      "goal": "goal#1"
+     },
+     {
+      "id": 22,
+      "ref": "task#22",
+      "title": "Draft resume bullet points from existing evidence",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 7,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Application drafts cite evidence; the user submits.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.6,
+      "must_keep": false,
+      "priority_score": 0.44,
+      "goal": "goal#1"
+     },
+     {
+      "id": 23,
+      "ref": "task#23",
+      "title": "Weekly review: what changed, what stalled",
+      "minutes": 20,
+      "priority": "Medium",
+      "day_number": 7,
+      "order_index": 1,
+      "deadline": null,
+      "status": "todo",
+      "why": "Closes the adapt loop each week.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     },
+     {
+      "id": 24,
+      "ref": "task#24",
+      "title": "Intro to neural networks: one tutorial notebook",
+      "minutes": 45,
+      "priority": "Low",
+      "day_number": 9,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Deep learning is required by two other target opportunities.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     }
+    ]
+   },
+   "diff": {
+    "before": [
+     "Day 1: Review precision, recall and F1 with a worked example",
+     "Day 1: Refactor the spam classifier to log a confusion matrix",
+     "Day 2: Practice two SQL join questions",
+     "Day 2: Write a one-page summary of the house-price project",
+     "Day 3: Mock interview: model evaluation questions",
+     "Day 3: Read the intern posting and list its requirements",
+     "Day 4: Revise semester exam topics: operating systems",
+     "Day 5: Implement k-fold cross-validation on the regression project",
+     "Day 6: Learn Git rebase and clean up repository history",
+     "Day 7: Draft resume bullet points from existing evidence",
+     "Day 7: Weekly review: what changed, what stalled",
+     "Day 9: Intro to neural networks: one tutorial notebook"
+    ],
+    "after": [
+     "Day 1: Mock interview: model evaluation questions",
+     "Day 1: Review precision, recall and F1 with a worked example",
+     "Day 2: Refactor the spam classifier to log a confusion matrix",
+     "Day 2: Practice two SQL join questions",
+     "Day 3: Read the intern posting and list its requirements",
+     "Day 3: Write a one-page summary of the house-price project",
+     "Day 4: Revise semester exam topics: operating systems",
+     "Day 5: Implement k-fold cross-validation on the regression project",
+     "Day 6: Learn Git rebase and clean up repository history",
+     "Day 7: Draft resume bullet points from existing evidence",
+     "Day 7: Weekly review: what changed, what stalled",
+     "Day 9: Intro to neural networks: one tutorial notebook"
+    ],
+    "added": [],
+    "moved": [
+     {
+      "title": "Mock interview: model evaluation questions",
+      "to_day": 1,
+      "to_rank": 1,
+      "minutes": 30,
+      "priority_score": 0.81,
+      "must_keep": true,
+      "refs": [
+       "goal#1",
+       "skill#4",
+       "weakness#1"
+      ],
+      "breakdown": {
+       "score": 0.81,
+       "must_keep": true,
+       "inputs": {
+        "role_impact": 0.9,
+        "weakness_boost": 1.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [
+         "weakness#1"
+        ],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 3,
+      "from_rank": 5
+     },
+     {
+      "title": "Review precision, recall and F1 with a worked example",
+      "to_day": 1,
+      "to_rank": 2,
+      "minutes": 30,
+      "priority_score": 0.56,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.56,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.9,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 1,
+      "from_rank": 1
+     },
+     {
+      "title": "Refactor the spam classifier to log a confusion matrix",
+      "to_day": 2,
+      "to_rank": 3,
+      "minutes": 30,
+      "priority_score": 0.48,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.48,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.7,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 1,
+      "from_rank": 2
+     },
+     {
+      "title": "Practice two SQL join questions",
+      "to_day": 2,
+      "to_rank": 4,
+      "minutes": 30,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1",
+       "skill#3"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 2,
+      "from_rank": 3
+     },
+     {
+      "title": "Read the intern posting and list its requirements",
+      "to_day": 3,
+      "to_rank": 5,
+      "minutes": 20,
+      "priority_score": 0.44,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.44,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.6,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 3,
+      "from_rank": 6
+     },
+     {
+      "title": "Write a one-page summary of the house-price project",
+      "to_day": 3,
+      "to_rank": 6,
+      "minutes": 30,
+      "priority_score": 0.36,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.36,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 2,
+      "from_rank": 4
+     }
+    ],
+    "deferred": [],
+    "kept": [
+     {
+      "title": "Revise semester exam topics: operating systems",
+      "to_day": 4,
+      "to_rank": 7,
+      "minutes": 40,
+      "priority_score": 0.22,
+      "must_keep": false,
+      "refs": [
+       "goal#3",
+       "decision#1"
+      ],
+      "breakdown": {
+       "score": 0.22,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.3,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 0.5,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 4,
+      "from_rank": 7
+     },
+     {
+      "title": "Implement k-fold cross-validation on the regression project",
+      "to_day": 5,
+      "to_rank": 8,
+      "minutes": 45,
+      "priority_score": 0.52,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.52,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.8,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 5,
+      "from_rank": 8
+     },
+     {
+      "title": "Learn Git rebase and clean up repository history",
+      "to_day": 6,
+      "to_rank": 9,
+      "minutes": 30,
+      "priority_score": 0.32,
+      "must_keep": false,
+      "refs": [
+       "goal#1",
+       "skill#5"
+      ],
+      "breakdown": {
+       "score": 0.32,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.3,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 6,
+      "from_rank": 9
+     },
+     {
+      "title": "Draft resume bullet points from existing evidence",
+      "to_day": 7,
+      "to_rank": 10,
+      "minutes": 30,
+      "priority_score": 0.44,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.44,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.6,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 7,
+      "from_rank": 10
+     },
+     {
+      "title": "Weekly review: what changed, what stalled",
+      "to_day": 7,
+      "to_rank": 11,
+      "minutes": 20,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 7,
+      "from_rank": 11
+     },
+     {
+      "title": "Intro to neural networks: one tutorial notebook",
+      "to_day": 9,
+      "to_rank": 12,
+      "minutes": 45,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 9,
+      "from_rank": 12
+     }
+    ]
+   },
+   "rationale": "Replanned on request using the latest memory. Moved 'Mock interview: model evaluation questions' from day 3 to day 1 because it targets active weakness [weakness#1] (priority 0.81). Re-ranked 'Review precision, recall and F1 with a worked example' on day 1 from #1 to #2. Moved 'Refactor the spam classifier to log a confusion matrix' from day 1 to day 2 (priority 0.48). Re-ranked 'Practice two SQL join questions' on day 2 from #3 to #4. Re-ranked 'Read the intern posting and list its requirements' on day 3 from #6 to #5. Moved 'Write a one-page summary of the house-price project' from day 2 to day 3 (priority 0.36). Kept regardless of budget (active weakness or hard deadline): Mock interview: model evaluation questions. Respected decision [decision#2]: Prioritise model-evaluation skills over new frameworks. Respected decision [decision#1]: College exams come before GATE preparation.",
+   "refs": [
+    "weakness#1",
+    "practice#1",
+    "practice#2",
+    "decision#2",
+    "decision#1",
+    "goal#1",
+    "skill#3",
+    "skill#4",
+    "goal#3",
+    "skill#5"
+   ],
+   "daily_budget_minutes": 60
+  },
+  "45": {
+   "plan": {
+    "id": 2,
+    "ref": "plan#2",
+    "version": 2,
+    "status": "active",
+    "goal": "goal#1",
+    "daily_budget_minutes": 45,
+    "rationale": "Daily budget changed from 60 to 45 minutes; the plan was re-fitted so no day exceeds the new budget. Moved 'Mock interview: model evaluation questions' from day 3 to day 1 because it targets active weakness [weakness#1] (priority 0.81). Moved 'Review precision, recall and F1 with a worked example' from day 1 to day 2 to fit the reduced daily budget (priority 0.56). Moved 'Refactor the spam classifier to log a confusion matrix' from day 1 to day 3 to fit the reduced daily budget (priority 0.48). Moved 'Read the intern posting and list its requirements' from day 3 to day 4 to fit the reduced daily budget (priority 0.44). Re-ranked 'Implement k-fold cross-validation on the regression project' on day 5 from #8 to #5 to fit the reduced daily budget. Moved 'Practice two SQL join questions' from day 2 to day 6 to fit the reduced daily budget (priority 0.4). 6 more task(s) shifted to fit the budget. Kept regardless of budget (active weakness or hard deadline): Mock interview: model evaluation questions. Respected decision [decision#2]: Prioritise model-evaluation skills over new frameworks. Respected decision [decision#1]: College exams come before GATE preparation.",
+    "refs": [
+     "weakness#1",
+     "practice#1",
+     "practice#2",
+     "decision#2",
+     "decision#1",
+     "goal#1",
+     "skill#3",
+     "skill#4",
+     "goal#3",
+     "skill#5"
+    ],
+    "created_at": "2026-10-19T12:57:38.578148Z",
+    "minutes_by_day": {
+     "1": 30,
+     "2": 30,
+     "3": 30,
+     "4": 20,
+     "5": 45,
+     "6": 30,
+     "7": 30,
+     "8": 20,
+     "9": 45,
+     "10": 30,
+     "11": 30,
+     "12": 40
+    },
+    "tasks": [
+     {
+      "id": 13,
+      "ref": "task#13",
+      "title": "Mock interview: model evaluation questions",
+      "minutes": 30,
+      "priority": "High",
+      "day_number": 1,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Practice answers feed back into the plan. Linked to active weakness weakness#1 (Model evaluation).",
+      "refs": [
+       "goal#1",
+       "skill#4",
+       "weakness#1"
+      ],
+      "role_impact": 0.9,
+      "must_keep": true,
+      "priority_score": 0.81,
+      "goal": "goal#1"
+     },
+     {
+      "id": 14,
+      "ref": "task#14",
+      "title": "Review precision, recall and F1 with a worked example",
+      "minutes": 30,
+      "priority": "High",
+      "day_number": 2,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Model evaluation is mandatory for the target internship and is currently a gap.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.9,
+      "must_keep": false,
+      "priority_score": 0.56,
+      "goal": "goal#1"
+     },
+     {
+      "id": 15,
+      "ref": "task#15",
+      "title": "Refactor the spam classifier to log a confusion matrix",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 3,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Turns an existing project into evidence of evaluation skills.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.7,
+      "must_keep": false,
+      "priority_score": 0.48,
+      "goal": "goal#1"
+     },
+     {
+      "id": 16,
+      "ref": "task#16",
+      "title": "Read the intern posting and list its requirements",
+      "minutes": 20,
+      "priority": "Medium",
+      "day_number": 4,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Keeps preparation anchored to the real posting.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.6,
+      "must_keep": false,
+      "priority_score": 0.44,
+      "goal": "goal#1"
+     },
+     {
+      "id": 17,
+      "ref": "task#17",
+      "title": "Implement k-fold cross-validation on the regression project",
+      "minutes": 45,
+      "priority": "High",
+      "day_number": 5,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Creates evidence for model evaluation.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.8,
+      "must_keep": false,
+      "priority_score": 0.52,
+      "goal": "goal#1"
+     },
+     {
+      "id": 18,
+      "ref": "task#18",
+      "title": "Practice two SQL join questions",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 6,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "SQL is a medium-weight requirement at beginner level.",
+      "refs": [
+       "goal#1",
+       "skill#3"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     },
+     {
+      "id": 19,
+      "ref": "task#19",
+      "title": "Draft resume bullet points from existing evidence",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 7,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Application drafts cite evidence; the user submits.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.6,
+      "must_keep": false,
+      "priority_score": 0.44,
+      "goal": "goal#1"
+     },
+     {
+      "id": 20,
+      "ref": "task#20",
+      "title": "Weekly review: what changed, what stalled",
+      "minutes": 20,
+      "priority": "Medium",
+      "day_number": 8,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Closes the adapt loop each week.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     },
+     {
+      "id": 21,
+      "ref": "task#21",
+      "title": "Intro to neural networks: one tutorial notebook",
+      "minutes": 45,
+      "priority": "Low",
+      "day_number": 9,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Deep learning is required by two other target opportunities.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     },
+     {
+      "id": 22,
+      "ref": "task#22",
+      "title": "Write a one-page summary of the house-price project",
+      "minutes": 30,
+      "priority": "Low",
+      "day_number": 10,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Strengthens evidence for machine learning fundamentals.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.4,
+      "must_keep": false,
+      "priority_score": 0.36,
+      "goal": "goal#1"
+     },
+     {
+      "id": 23,
+      "ref": "task#23",
+      "title": "Learn Git rebase and clean up repository history",
+      "minutes": 30,
+      "priority": "Low",
+      "day_number": 11,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Git is a low-weight requirement already partly demonstrated.",
+      "refs": [
+       "goal#1",
+       "skill#5"
+      ],
+      "role_impact": 0.3,
+      "must_keep": false,
+      "priority_score": 0.32,
+      "goal": "goal#1"
+     },
+     {
+      "id": 24,
+      "ref": "task#24",
+      "title": "Revise semester exam topics: operating systems",
+      "minutes": 40,
+      "priority": "Medium",
+      "day_number": 12,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Exams come before GATE prep [decision#1].",
+      "refs": [
+       "goal#3",
+       "decision#1"
+      ],
+      "role_impact": 0.3,
+      "must_keep": false,
+      "priority_score": 0.22,
+      "goal": "goal#3"
+     }
+    ]
+   },
+   "diff": {
+    "before": [
+     "Day 1: Review precision, recall and F1 with a worked example",
+     "Day 1: Refactor the spam classifier to log a confusion matrix",
+     "Day 2: Practice two SQL join questions",
+     "Day 2: Write a one-page summary of the house-price project",
+     "Day 3: Mock interview: model evaluation questions",
+     "Day 3: Read the intern posting and list its requirements",
+     "Day 4: Revise semester exam topics: operating systems",
+     "Day 5: Implement k-fold cross-validation on the regression project",
+     "Day 6: Learn Git rebase and clean up repository history",
+     "Day 7: Draft resume bullet points from existing evidence",
+     "Day 7: Weekly review: what changed, what stalled",
+     "Day 9: Intro to neural networks: one tutorial notebook"
+    ],
+    "after": [
+     "Day 1: Mock interview: model evaluation questions",
+     "Day 2: Review precision, recall and F1 with a worked example",
+     "Day 3: Refactor the spam classifier to log a confusion matrix",
+     "Day 4: Read the intern posting and list its requirements",
+     "Day 5: Implement k-fold cross-validation on the regression project",
+     "Day 6: Practice two SQL join questions",
+     "Day 7: Draft resume bullet points from existing evidence",
+     "Day 8: Weekly review: what changed, what stalled",
+     "Day 9: Intro to neural networks: one tutorial notebook",
+     "Day 10: Write a one-page summary of the house-price project",
+     "Day 11: Learn Git rebase and clean up repository history",
+     "Day 12: Revise semester exam topics: operating systems"
+    ],
+    "added": [],
+    "moved": [
+     {
+      "title": "Mock interview: model evaluation questions",
+      "to_day": 1,
+      "to_rank": 1,
+      "minutes": 30,
+      "priority_score": 0.81,
+      "must_keep": true,
+      "refs": [
+       "goal#1",
+       "skill#4",
+       "weakness#1"
+      ],
+      "breakdown": {
+       "score": 0.81,
+       "must_keep": true,
+       "inputs": {
+        "role_impact": 0.9,
+        "weakness_boost": 1.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [
+         "weakness#1"
+        ],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 3,
+      "from_rank": 5
+     },
+     {
+      "title": "Review precision, recall and F1 with a worked example",
+      "to_day": 2,
+      "to_rank": 2,
+      "minutes": 30,
+      "priority_score": 0.56,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.56,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.9,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 1,
+      "from_rank": 1
+     },
+     {
+      "title": "Refactor the spam classifier to log a confusion matrix",
+      "to_day": 3,
+      "to_rank": 3,
+      "minutes": 30,
+      "priority_score": 0.48,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.48,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.7,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 1,
+      "from_rank": 2
+     },
+     {
+      "title": "Read the intern posting and list its requirements",
+      "to_day": 4,
+      "to_rank": 4,
+      "minutes": 20,
+      "priority_score": 0.44,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.44,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.6,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 3,
+      "from_rank": 6
+     },
+     {
+      "title": "Implement k-fold cross-validation on the regression project",
+      "to_day": 5,
+      "to_rank": 5,
+      "minutes": 45,
+      "priority_score": 0.52,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.52,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.8,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 5,
+      "from_rank": 8
+     },
+     {
+      "title": "Practice two SQL join questions",
+      "to_day": 6,
+      "to_rank": 6,
+      "minutes": 30,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1",
+       "skill#3"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 2,
+      "from_rank": 3
+     },
+     {
+      "title": "Draft resume bullet points from existing evidence",
+      "to_day": 7,
+      "to_rank": 7,
+      "minutes": 30,
+      "priority_score": 0.44,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.44,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.6,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 7,
+      "from_rank": 10
+     },
+     {
+      "title": "Weekly review: what changed, what stalled",
+      "to_day": 8,
+      "to_rank": 8,
+      "minutes": 20,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 7,
+      "from_rank": 11
+     },
+     {
+      "title": "Intro to neural networks: one tutorial notebook",
+      "to_day": 9,
+      "to_rank": 9,
+      "minutes": 45,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 9,
+      "from_rank": 12
+     },
+     {
+      "title": "Write a one-page summary of the house-price project",
+      "to_day": 10,
+      "to_rank": 10,
+      "minutes": 30,
+      "priority_score": 0.36,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.36,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 2,
+      "from_rank": 4
+     },
+     {
+      "title": "Learn Git rebase and clean up repository history",
+      "to_day": 11,
+      "to_rank": 11,
+      "minutes": 30,
+      "priority_score": 0.32,
+      "must_keep": false,
+      "refs": [
+       "goal#1",
+       "skill#5"
+      ],
+      "breakdown": {
+       "score": 0.32,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.3,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 6,
+      "from_rank": 9
+     },
+     {
+      "title": "Revise semester exam topics: operating systems",
+      "to_day": 12,
+      "to_rank": 12,
+      "minutes": 40,
+      "priority_score": 0.22,
+      "must_keep": false,
+      "refs": [
+       "goal#3",
+       "decision#1"
+      ],
+      "breakdown": {
+       "score": 0.22,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.3,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 0.5,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 4,
+      "from_rank": 7
+     }
+    ],
+    "deferred": [],
+    "kept": []
+   },
+   "rationale": "Daily budget changed from 60 to 45 minutes; the plan was re-fitted so no day exceeds the new budget. Moved 'Mock interview: model evaluation questions' from day 3 to day 1 because it targets active weakness [weakness#1] (priority 0.81). Moved 'Review precision, recall and F1 with a worked example' from day 1 to day 2 to fit the reduced daily budget (priority 0.56). Moved 'Refactor the spam classifier to log a confusion matrix' from day 1 to day 3 to fit the reduced daily budget (priority 0.48). Moved 'Read the intern posting and list its requirements' from day 3 to day 4 to fit the reduced daily budget (priority 0.44). Re-ranked 'Implement k-fold cross-validation on the regression project' on day 5 from #8 to #5 to fit the reduced daily budget. Moved 'Practice two SQL join questions' from day 2 to day 6 to fit the reduced daily budget (priority 0.4). 6 more task(s) shifted to fit the budget. Kept regardless of budget (active weakness or hard deadline): Mock interview: model evaluation questions. Respected decision [decision#2]: Prioritise model-evaluation skills over new frameworks. Respected decision [decision#1]: College exams come before GATE preparation.",
+   "refs": [
+    "weakness#1",
+    "practice#1",
+    "practice#2",
+    "decision#2",
+    "decision#1",
+    "goal#1",
+    "skill#3",
+    "skill#4",
+    "goal#3",
+    "skill#5"
+   ],
+   "daily_budget_minutes": 45
+  },
+  "30": {
+   "plan": {
+    "id": 2,
+    "ref": "plan#2",
+    "version": 2,
+    "status": "active",
+    "goal": "goal#1",
+    "daily_budget_minutes": 30,
+    "rationale": "Daily budget changed from 60 to 30 minutes; the plan was re-fitted so no day exceeds the new budget. Moved 'Mock interview: model evaluation questions' from day 3 to day 1 because it targets active weakness [weakness#1] (priority 0.81). Moved 'Review precision, recall and F1 with a worked example' from day 1 to day 2 to fit the reduced daily budget (priority 0.56). Moved 'Refactor the spam classifier to log a confusion matrix' from day 1 to day 3 to fit the reduced daily budget (priority 0.48). Moved 'Read the intern posting and list its requirements' from day 3 to day 4 to fit the reduced daily budget (priority 0.44). Re-ranked 'Implement k-fold cross-validation on the regression project' on day 5 from #8 to #5 to fit the reduced daily budget. Moved 'Practice two SQL join questions' from day 2 to day 6 to fit the reduced daily budget (priority 0.4). 6 more task(s) shifted to fit the budget. Kept regardless of budget (active weakness or hard deadline): Mock interview: model evaluation questions. Respected decision [decision#2]: Prioritise model-evaluation skills over new frameworks. Respected decision [decision#1]: College exams come before GATE preparation.",
+    "refs": [
+     "weakness#1",
+     "practice#1",
+     "practice#2",
+     "decision#2",
+     "decision#1",
+     "goal#1",
+     "skill#3",
+     "skill#4",
+     "goal#3",
+     "skill#5"
+    ],
+    "created_at": "2026-10-19T12:57:38.735801Z",
+    "minutes_by_day": {
+     "1": 30,
+     "2": 30,
+     "3": 30,
+     "4": 20,
+     "5": 30,
+     "6": 30,
+     "7": 30,
+     "8": 20,
+     "9": 30,
+     "10": 30,
+     "11": 30,
+     "12": 30
+    },
+    "tasks": [
+     {
+      "id": 13,
+      "ref": "task#13",
+      "title": "Mock interview: model evaluation questions",
+      "minutes": 30,
+      "priority": "High",
+      "day_number": 1,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Practice answers feed back into the plan. Linked to active weakness weakness#1 (Model evaluation).",
+      "refs": [
+       "goal#1",
+       "skill#4",
+       "weakness#1"
+      ],
+      "role_impact": 0.9,
+      "must_keep": true,
+      "priority_score": 0.81,
+      "goal": "goal#1"
+     },
+     {
+      "id": 14,
+      "ref": "task#14",
+      "title": "Review precision, recall and F1 with a worked example",
+      "minutes": 30,
+      "priority": "High",
+      "day_number": 2,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Model evaluation is mandatory for the target internship and is currently a gap.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.9,
+      "must_keep": false,
+      "priority_score": 0.56,
+      "goal": "goal#1"
+     },
+     {
+      "id": 15,
+      "ref": "task#15",
+      "title": "Refactor the spam classifier to log a confusion matrix",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 3,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Turns an existing project into evidence of evaluation skills.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.7,
+      "must_keep": false,
+      "priority_score": 0.48,
+      "goal": "goal#1"
+     },
+     {
+      "id": 16,
+      "ref": "task#16",
+      "title": "Read the intern posting and list its requirements",
+      "minutes": 20,
+      "priority": "Medium",
+      "day_number": 4,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Keeps preparation anchored to the real posting.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.6,
+      "must_keep": false,
+      "priority_score": 0.44,
+      "goal": "goal#1"
+     },
+     {
+      "id": 17,
+      "ref": "task#17",
+      "title": "Implement k-fold cross-validation on the regression project",
+      "minutes": 30,
+      "priority": "High",
+      "day_number": 5,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Creates evidence for model evaluation. Clipped from 45 to 30 minutes to fit the daily budget.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.8,
+      "must_keep": false,
+      "priority_score": 0.52,
+      "goal": "goal#1"
+     },
+     {
+      "id": 18,
+      "ref": "task#18",
+      "title": "Practice two SQL join questions",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 6,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "SQL is a medium-weight requirement at beginner level.",
+      "refs": [
+       "goal#1",
+       "skill#3"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     },
+     {
+      "id": 19,
+      "ref": "task#19",
+      "title": "Draft resume bullet points from existing evidence",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 7,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Application drafts cite evidence; the user submits.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.6,
+      "must_keep": false,
+      "priority_score": 0.44,
+      "goal": "goal#1"
+     },
+     {
+      "id": 20,
+      "ref": "task#20",
+      "title": "Weekly review: what changed, what stalled",
+      "minutes": 20,
+      "priority": "Medium",
+      "day_number": 8,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Closes the adapt loop each week.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     },
+     {
+      "id": 21,
+      "ref": "task#21",
+      "title": "Intro to neural networks: one tutorial notebook",
+      "minutes": 30,
+      "priority": "Low",
+      "day_number": 9,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Deep learning is required by two other target opportunities. Clipped from 45 to 30 minutes to fit the daily budget.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.5,
+      "must_keep": false,
+      "priority_score": 0.4,
+      "goal": "goal#1"
+     },
+     {
+      "id": 22,
+      "ref": "task#22",
+      "title": "Write a one-page summary of the house-price project",
+      "minutes": 30,
+      "priority": "Low",
+      "day_number": 10,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Strengthens evidence for machine learning fundamentals.",
+      "refs": [
+       "goal#1"
+      ],
+      "role_impact": 0.4,
+      "must_keep": false,
+      "priority_score": 0.36,
+      "goal": "goal#1"
+     },
+     {
+      "id": 23,
+      "ref": "task#23",
+      "title": "Learn Git rebase and clean up repository history",
+      "minutes": 30,
+      "priority": "Low",
+      "day_number": 11,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Git is a low-weight requirement already partly demonstrated.",
+      "refs": [
+       "goal#1",
+       "skill#5"
+      ],
+      "role_impact": 0.3,
+      "must_keep": false,
+      "priority_score": 0.32,
+      "goal": "goal#1"
+     },
+     {
+      "id": 24,
+      "ref": "task#24",
+      "title": "Revise semester exam topics: operating systems",
+      "minutes": 30,
+      "priority": "Medium",
+      "day_number": 12,
+      "order_index": 0,
+      "deadline": null,
+      "status": "todo",
+      "why": "Exams come before GATE prep [decision#1]. Clipped from 40 to 30 minutes to fit the daily budget.",
+      "refs": [
+       "goal#3",
+       "decision#1"
+      ],
+      "role_impact": 0.3,
+      "must_keep": false,
+      "priority_score": 0.22,
+      "goal": "goal#3"
+     }
+    ]
+   },
+   "diff": {
+    "before": [
+     "Day 1: Review precision, recall and F1 with a worked example",
+     "Day 1: Refactor the spam classifier to log a confusion matrix",
+     "Day 2: Practice two SQL join questions",
+     "Day 2: Write a one-page summary of the house-price project",
+     "Day 3: Mock interview: model evaluation questions",
+     "Day 3: Read the intern posting and list its requirements",
+     "Day 4: Revise semester exam topics: operating systems",
+     "Day 5: Implement k-fold cross-validation on the regression project",
+     "Day 6: Learn Git rebase and clean up repository history",
+     "Day 7: Draft resume bullet points from existing evidence",
+     "Day 7: Weekly review: what changed, what stalled",
+     "Day 9: Intro to neural networks: one tutorial notebook"
+    ],
+    "after": [
+     "Day 1: Mock interview: model evaluation questions",
+     "Day 2: Review precision, recall and F1 with a worked example",
+     "Day 3: Refactor the spam classifier to log a confusion matrix",
+     "Day 4: Read the intern posting and list its requirements",
+     "Day 5: Implement k-fold cross-validation on the regression project",
+     "Day 6: Practice two SQL join questions",
+     "Day 7: Draft resume bullet points from existing evidence",
+     "Day 8: Weekly review: what changed, what stalled",
+     "Day 9: Intro to neural networks: one tutorial notebook",
+     "Day 10: Write a one-page summary of the house-price project",
+     "Day 11: Learn Git rebase and clean up repository history",
+     "Day 12: Revise semester exam topics: operating systems"
+    ],
+    "added": [],
+    "moved": [
+     {
+      "title": "Mock interview: model evaluation questions",
+      "to_day": 1,
+      "to_rank": 1,
+      "minutes": 30,
+      "priority_score": 0.81,
+      "must_keep": true,
+      "refs": [
+       "goal#1",
+       "skill#4",
+       "weakness#1"
+      ],
+      "breakdown": {
+       "score": 0.81,
+       "must_keep": true,
+       "inputs": {
+        "role_impact": 0.9,
+        "weakness_boost": 1.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [
+         "weakness#1"
+        ],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 3,
+      "from_rank": 5
+     },
+     {
+      "title": "Review precision, recall and F1 with a worked example",
+      "to_day": 2,
+      "to_rank": 2,
+      "minutes": 30,
+      "priority_score": 0.56,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.56,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.9,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 1,
+      "from_rank": 1
+     },
+     {
+      "title": "Refactor the spam classifier to log a confusion matrix",
+      "to_day": 3,
+      "to_rank": 3,
+      "minutes": 30,
+      "priority_score": 0.48,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.48,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.7,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 1,
+      "from_rank": 2
+     },
+     {
+      "title": "Read the intern posting and list its requirements",
+      "to_day": 4,
+      "to_rank": 4,
+      "minutes": 20,
+      "priority_score": 0.44,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.44,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.6,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 3,
+      "from_rank": 6
+     },
+     {
+      "title": "Implement k-fold cross-validation on the regression project",
+      "to_day": 5,
+      "to_rank": 5,
+      "minutes": 30,
+      "priority_score": 0.52,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.52,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.8,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 5,
+      "from_rank": 8
+     },
+     {
+      "title": "Practice two SQL join questions",
+      "to_day": 6,
+      "to_rank": 6,
+      "minutes": 30,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1",
+       "skill#3"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 2,
+      "from_rank": 3
+     },
+     {
+      "title": "Draft resume bullet points from existing evidence",
+      "to_day": 7,
+      "to_rank": 7,
+      "minutes": 30,
+      "priority_score": 0.44,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.44,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.6,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 7,
+      "from_rank": 10
+     },
+     {
+      "title": "Weekly review: what changed, what stalled",
+      "to_day": 8,
+      "to_rank": 8,
+      "minutes": 20,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 7,
+      "from_rank": 11
+     },
+     {
+      "title": "Intro to neural networks: one tutorial notebook",
+      "to_day": 9,
+      "to_rank": 9,
+      "minutes": 30,
+      "priority_score": 0.4,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.4,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.5,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 9,
+      "from_rank": 12
+     },
+     {
+      "title": "Write a one-page summary of the house-price project",
+      "to_day": 10,
+      "to_rank": 10,
+      "minutes": 30,
+      "priority_score": 0.36,
+      "must_keep": false,
+      "refs": [
+       "goal#1"
+      ],
+      "breakdown": {
+       "score": 0.36,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 2,
+      "from_rank": 4
+     },
+     {
+      "title": "Learn Git rebase and clean up repository history",
+      "to_day": 11,
+      "to_rank": 11,
+      "minutes": 30,
+      "priority_score": 0.32,
+      "must_keep": false,
+      "refs": [
+       "goal#1",
+       "skill#5"
+      ],
+      "breakdown": {
+       "score": 0.32,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.3,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 1.0,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 6,
+      "from_rank": 9
+     },
+     {
+      "title": "Revise semester exam topics: operating systems",
+      "to_day": 12,
+      "to_rank": 12,
+      "minutes": 30,
+      "priority_score": 0.22,
+      "must_keep": false,
+      "refs": [
+       "goal#3",
+       "decision#1"
+      ],
+      "breakdown": {
+       "score": 0.22,
+       "must_keep": false,
+       "inputs": {
+        "role_impact": 0.3,
+        "weakness_boost": 0.0,
+        "goal_hierarchy_weight": 0.5,
+        "deadline_urgency": 0.0,
+        "weakness_refs": [],
+        "hard_deadline": false
+       },
+       "weights": {
+        "role_impact": 0.4,
+        "weakness_boost": 0.25,
+        "goal_hierarchy": 0.2,
+        "deadline_urgency": 0.15
+       }
+      },
+      "from_day": 4,
+      "from_rank": 7
+     }
+    ],
+    "deferred": [],
+    "kept": []
+   },
+   "rationale": "Daily budget changed from 60 to 30 minutes; the plan was re-fitted so no day exceeds the new budget. Moved 'Mock interview: model evaluation questions' from day 3 to day 1 because it targets active weakness [weakness#1] (priority 0.81). Moved 'Review precision, recall and F1 with a worked example' from day 1 to day 2 to fit the reduced daily budget (priority 0.56). Moved 'Refactor the spam classifier to log a confusion matrix' from day 1 to day 3 to fit the reduced daily budget (priority 0.48). Moved 'Read the intern posting and list its requirements' from day 3 to day 4 to fit the reduced daily budget (priority 0.44). Re-ranked 'Implement k-fold cross-validation on the regression project' on day 5 from #8 to #5 to fit the reduced daily budget. Moved 'Practice two SQL join questions' from day 2 to day 6 to fit the reduced daily budget (priority 0.4). 6 more task(s) shifted to fit the budget. Kept regardless of budget (active weakness or hard deadline): Mock interview: model evaluation questions. Respected decision [decision#2]: Prioritise model-evaluation skills over new frameworks. Respected decision [decision#1]: College exams come before GATE preparation.",
+   "refs": [
+    "weakness#1",
+    "practice#1",
+    "practice#2",
+    "decision#2",
+    "decision#1",
+    "goal#1",
+    "skill#3",
+    "skill#4",
+    "goal#3",
+    "skill#5"
+   ],
+   "daily_budget_minutes": 30
+  }
+ },
+ "events": [
+  {
+   "id": 51,
+   "timestamp": "2026-10-19T12:57:38.741484Z",
+   "agent": "replan",
+   "action": "replan",
+   "summary": "Daily budget changed from 60 to 30 minutes; the plan was re-fitted so no day exceeds the new budget. Moved 'Mock interview: model evaluation questions' from day 3 to day 1 because it targets active weakness [weakness#1] (priority 0.81). Moved 'Review precision, recall and F1 with a worked example' from day 1 to day 2 to fit the reduced daily budget (priority 0.56). Moved 'Refactor the spam classifier to log a confusion matrix' from day 1 to day 3 to fit the reduced daily budget (priority 0.48). Moved 'Read the intern posting and list its requirements' from day 3 to day 4 to fit the reduced daily budget (priority 0.44). Re-ranked 'Implement k-fold cross-validation on the regression project' on day 5 from #8 to #5 to fit the reduced daily budget. Moved 'Practice two SQL join questions' from day 2 to day 6 to fit the reduced daily budget (priority 0.4). 6 more task(s) shifted to fit the budget. Kept regardless of budget (active weakness or hard deadline): Mock interview: model evaluation questions. Respected decision [decision#2]: Prioritise model-evaluation skills over new frameworks. Respected decision [decision#1]: College exams come before GATE preparation.",
+   "refs": [
+    "plan#2",
+    "plan#1",
+    "weakness#1",
+    "practice#1",
+    "practice#2",
+    "decision#2",
+    "decision#1",
+    "goal#1",
+    "skill#3",
+    "skill#4",
+    "goal#3",
+    "skill#5"
+   ],
+   "payload": {
+    "added": 0,
+    "moved": 12,
+    "deferred": 0,
+    "budget": 30
+   },
+   "title": "replan: replan",
+   "detail": "Daily budget changed from 60 to 30 minutes; the plan was re-fitted so no day exceeds the new budget. Moved 'Mock interview: model evaluation questions' from day 3 to day 1 because it targets active weakness [weakness#1] (priority 0.81). Moved 'Review precision, recall and F1 with a worked example' from day 1 to day 2 to fit the reduced daily budget (priority 0.56). Moved 'Refactor the spam classifier to log a confusion matrix' from day 1 to day 3 to fit the reduced daily budget (priority 0.48). Moved 'Read the intern posting and list its requirements' from day 3 to day 4 to fit the reduced daily budget (priority 0.44). Re-ranked 'Implement k-fold cross-validation on the regression project' on day 5 from #8 to #5 to fit the reduced daily budget. Moved 'Practice two SQL join questions' from day 2 to day 6 to fit the reduced daily budget (priority 0.4). 6 more task(s) shifted to fit the budget. Kept regardless of budget (active weakness or hard deadline): Mock interview: model evaluation questions. Respected decision [decision#2]: Prioritise model-evaluation skills over new frameworks. Respected decision [decision#1]: College exams come before GATE preparation.",
+   "occurredAt": "2026-10-19T12:57:38.741484Z"
+  },
+  {
+   "id": 50,
+   "timestamp": "2026-10-19T12:57:38.717534Z",
+   "agent": "memory",
+   "action": "weakness_recorded",
+   "summary": "Recorded weakness 'Model evaluation' (high): 2 practice answers scored below 60.",
+   "refs": [
+    "weakness#1",
+    "practice#1",
+    "practice#2"
+   ],
+   "payload": {},
+   "title": "memory: weakness_recorded",
+   "detail": "Recorded weakness 'Model evaluation' (high): 2 practice answers scored below 60.",
+   "occurredAt": "2026-10-19T12:57:38.717534Z"
+  },
+  {
+   "id": 49,
+   "timestamp": "2026-10-19T12:57:38.714219Z",
+   "agent": "practice",
+   "action": "answer_evaluated",
+   "summary": "Answer on Model evaluation scored 23/100 (deterministic); missing: validation set, cross-validation, regularization, learning curve, early stopping, metric comparison.",
+   "refs": [
+    "practice#2"
+   ],
+   "payload": {
+    "rubric": {
+     "correctness": 14,
+     "depth": 14,
+     "clarity": 60
+    }
+   },
+   "title": "practice: answer_evaluated",
+   "detail": "Answer on Model evaluation scored 23/100 (deterministic); missing: validation set, cross-validation, regularization, learning curve, early stopping, metric comparison.",
+   "occurredAt": "2026-10-19T12:57:38.714219Z"
+  },
+  {
+   "id": 48,
+   "timestamp": "2026-10-19T12:57:38.700477Z",
+   "agent": "practice",
+   "action": "session_started",
+   "summary": "Practice session started on Model evaluation (question from question bank).",
+   "refs": [
+    "practice#2"
+   ],
+   "payload": {},
+   "title": "practice: session_started",
+   "detail": "Practice session started on Model evaluation (question from question bank).",
+   "occurredAt": "2026-10-19T12:57:38.700477Z"
+  },
+  {
+   "id": 47,
+   "timestamp": "2026-10-19T12:57:38.677424Z",
+   "agent": "admin",
+   "action": "demo_seeded",
+   "summary": "Demo persona seeded (Meera).",
+   "refs": [
+    "plan#1"
+   ],
+   "payload": {},
+   "title": "admin: demo_seeded",
+   "detail": "Demo persona seeded (Meera).",
+   "occurredAt": "2026-10-19T12:57:38.677424Z"
+  },
+  {
+   "id": 46,
+   "timestamp": "2026-10-19T12:57:38.677052Z",
+   "agent": "seed",
+   "action": "plan_created",
+   "summary": "Plan v1 created: 12 tasks scheduled, 0 deferred, budget 60 min/day.",
+   "refs": [
+    "plan#1",
+    "decision#1",
+    "goal#1",
+    "skill#3",
+    "skill#4",
+    "goal#3",
+    "skill#5"
+   ],
+   "payload": {},
+   "title": "seed: plan_created",
+   "detail": "Plan v1 created: 12 tasks scheduled, 0 deferred, budget 60 min/day.",
+   "occurredAt": "2026-10-19T12:57:38.677052Z"
+  },
+  {
+   "id": 45,
+   "timestamp": "2026-10-19T12:57:38.671415Z",
+   "agent": "practice",
+   "action": "answer_evaluated",
+   "summary": "Earlier practice answer on Model evaluation scored 42/100.",
+   "refs": [
+    "practice#1"
+   ],
+   "payload": {},
+   "title": "practice: answer_evaluated",
+   "detail": "Earlier practice answer on Model evaluation scored 42/100.",
+   "occurredAt": "2026-10-19T12:57:38.671415Z"
+  },
+  {
+   "id": 44,
+   "timestamp": "2026-10-19T12:57:38.670595Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Backend Engineering Intern': 50% (Moderate); top gap: Data structures [deterministic].",
+   "refs": [
+    "fit#12",
+    "opp#12",
+    "ev#1",
+    "ev#2",
+    "ev#5"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Backend Engineering Intern': 50% (Moderate); top gap: Data structures [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.670595Z"
+  },
+  {
+   "id": 43,
+   "timestamp": "2026-10-19T12:57:38.669421Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Open-source ML Fellowship': 67% (Moderate); top gap: Model evaluation [deterministic].",
+   "refs": [
+    "fit#11",
+    "opp#11",
+    "ev#1",
+    "ev#2",
+    "ev#6"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Open-source ML Fellowship': 67% (Moderate); top gap: Model evaluation [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.669421Z"
+  },
+  {
+   "id": 42,
+   "timestamp": "2026-10-19T12:57:38.668186Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Quantitative Research Intern': 30% (Weak); top gap: Statistics [deterministic].",
+   "refs": [
+    "fit#10",
+    "opp#10",
+    "ev#1",
+    "ev#2"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Quantitative Research Intern': 30% (Weak); top gap: Statistics [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.668186Z"
+  },
+  {
+   "id": 41,
+   "timestamp": "2026-10-19T12:57:38.666908Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Student AI Hackathon': 100% (Strong); top gap: none [deterministic].",
+   "refs": [
+    "fit#9",
+    "opp#9",
+    "ev#1",
+    "ev#2",
+    "ev#3",
+    "ev#4",
+    "ev#6"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Student AI Hackathon': 100% (Strong); top gap: none [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.666908Z"
+  },
+  {
+   "id": 40,
+   "timestamp": "2026-10-19T12:57:38.665780Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Applied AI Intern': 33% (Weak); top gap: Deep learning [deterministic].",
+   "refs": [
+    "fit#8",
+    "opp#8",
+    "ev#1",
+    "ev#2"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Applied AI Intern': 33% (Weak); top gap: Deep learning [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.665780Z"
+  },
+  {
+   "id": 39,
+   "timestamp": "2026-10-19T12:57:38.664492Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Analytics Engineering Intern': 50% (Moderate); top gap: Data visualisation [deterministic].",
+   "refs": [
+    "fit#7",
+    "opp#7",
+    "ev#1",
+    "ev#2",
+    "ev#5"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Analytics Engineering Intern': 50% (Moderate); top gap: Data visualisation [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.664492Z"
+  },
+  {
+   "id": 38,
+   "timestamp": "2026-10-19T12:57:38.663205Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'ML Platform Intern': 78% (Strong); top gap: Docker [deterministic].",
+   "refs": [
+    "fit#6",
+    "opp#6",
+    "ev#1",
+    "ev#2",
+    "ev#3",
+    "ev#4",
+    "ev#6"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'ML Platform Intern': 78% (Strong); top gap: Docker [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.663205Z"
+  },
+  {
+   "id": 37,
+   "timestamp": "2026-10-19T12:57:38.661910Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'NLP Engineering Intern': 33% (Weak); top gap: Model evaluation [deterministic].",
+   "refs": [
+    "fit#5",
+    "opp#5",
+    "ev#1",
+    "ev#2"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'NLP Engineering Intern': 33% (Weak); top gap: Model evaluation [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.661910Z"
+  },
+  {
+   "id": 36,
+   "timestamp": "2026-10-19T12:57:38.660765Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Computer Vision Intern': 33% (Weak); top gap: Deep learning [deterministic].",
+   "refs": [
+    "fit#4",
+    "opp#4",
+    "ev#1",
+    "ev#2"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Computer Vision Intern': 33% (Weak); top gap: Deep learning [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.660765Z"
+  },
+  {
+   "id": 35,
+   "timestamp": "2026-10-19T12:57:38.659407Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Data Science Intern': 45% (Weak); top gap: Statistics [deterministic].",
+   "refs": [
+    "fit#3",
+    "opp#3",
+    "ev#1",
+    "ev#2",
+    "ev#5"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Data Science Intern': 45% (Weak); top gap: Statistics [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.659407Z"
+  },
+  {
+   "id": 34,
+   "timestamp": "2026-10-19T12:57:38.657755Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'Machine Learning Research Intern': 30% (Weak); top gap: Deep learning [deterministic].",
+   "refs": [
+    "fit#2",
+    "opp#2",
+    "ev#1",
+    "ev#2"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'Machine Learning Research Intern': 30% (Weak); top gap: Deep learning [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.657755Z"
+  },
+  {
+   "id": 33,
+   "timestamp": "2026-10-19T12:57:38.656483Z",
+   "agent": "fit",
+   "action": "fit_assessed",
+   "summary": "Fit for 'AI/ML Engineering Intern': 67% (Moderate); top gap: Model evaluation [deterministic].",
+   "refs": [
+    "fit#1",
+    "opp#1",
+    "ev#1",
+    "ev#2",
+    "ev#3",
+    "ev#4",
+    "ev#5",
+    "ev#6"
+   ],
+   "payload": {},
+   "title": "fit: fit_assessed",
+   "detail": "Fit for 'AI/ML Engineering Intern': 67% (Moderate); top gap: Model evaluation [deterministic].",
+   "occurredAt": "2026-10-19T12:57:38.656483Z"
+  },
+  {
+   "id": 32,
+   "timestamp": "2026-10-19T12:57:38.652721Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Backend Engineering Intern' with 4 requirement(s).",
+   "refs": [
+    "opp#12"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Backend Engineering Intern' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.652721Z"
+  },
+  {
+   "id": 31,
+   "timestamp": "2026-10-19T12:57:38.652049Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Open-source ML Fellowship' with 4 requirement(s).",
+   "refs": [
+    "opp#11"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Open-source ML Fellowship' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.652049Z"
+  },
+  {
+   "id": 30,
+   "timestamp": "2026-10-19T12:57:38.651335Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Quantitative Research Intern' with 4 requirement(s).",
+   "refs": [
+    "opp#10"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Quantitative Research Intern' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.651335Z"
+  },
+  {
+   "id": 29,
+   "timestamp": "2026-10-19T12:57:38.650682Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Student AI Hackathon' with 3 requirement(s).",
+   "refs": [
+    "opp#9"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Student AI Hackathon' with 3 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.650682Z"
+  },
+  {
+   "id": 28,
+   "timestamp": "2026-10-19T12:57:38.649998Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Applied AI Intern' with 4 requirement(s).",
+   "refs": [
+    "opp#8"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Applied AI Intern' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.649998Z"
+  },
+  {
+   "id": 27,
+   "timestamp": "2026-10-19T12:57:38.649339Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Analytics Engineering Intern' with 3 requirement(s).",
+   "refs": [
+    "opp#7"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Analytics Engineering Intern' with 3 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.649339Z"
+  },
+  {
+   "id": 26,
+   "timestamp": "2026-10-19T12:57:38.648675Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'ML Platform Intern' with 4 requirement(s).",
+   "refs": [
+    "opp#6"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'ML Platform Intern' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.648675Z"
+  },
+  {
+   "id": 25,
+   "timestamp": "2026-10-19T12:57:38.647801Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'NLP Engineering Intern' with 4 requirement(s).",
+   "refs": [
+    "opp#5"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'NLP Engineering Intern' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.647801Z"
+  },
+  {
+   "id": 24,
+   "timestamp": "2026-10-19T12:57:38.647185Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Computer Vision Intern' with 4 requirement(s).",
+   "refs": [
+    "opp#4"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Computer Vision Intern' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.647185Z"
+  },
+  {
+   "id": 23,
+   "timestamp": "2026-10-19T12:57:38.646619Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Data Science Intern' with 4 requirement(s).",
+   "refs": [
+    "opp#3"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Data Science Intern' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.646619Z"
+  },
+  {
+   "id": 22,
+   "timestamp": "2026-10-19T12:57:38.646008Z",
+   "agent": "seed",
+   "action": "opportunity_stored",
+   "summary": "Stored opportunity 'Machine Learning Research Intern' with 4 requirement(s).",
+   "refs": [
+    "opp#2"
+   ],
+   "payload": {},
+   "title": "seed: opportunity_stored",
+   "detail": "Stored opportunity 'Machine Learning Research Intern' with 4 requirement(s).",
+   "occurredAt": "2026-10-19T12:57:38.646008Z"
+  }
+ ]
+}

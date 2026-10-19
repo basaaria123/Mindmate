@@ -1,12 +1,15 @@
 import activityEmblemReference from '../assets/activity-emblem-reference.png'
+import { getTraceEvents } from '../services/api'
+import { useLoad } from '../hooks/useLoad'
 
-const activitySteps = [
-  { title: 'Analyzing your study plan...', time: '2 min ago', done: false },
-  { title: 'Generating personalized plan...', time: '2 min ago', done: false },
-  { title: 'Fetching relevant resources...', time: '3 min ago', done: false },
-  { title: 'Creating your task list...', time: '0 min ago', done: false },
-  { title: 'Almost done!', time: 'Done', done: true },
-]
+function relativeTime(iso: string) {
+  const minutes = Math.round((Date.now() - new Date(iso).getTime()) / 60000)
+  if (Number.isNaN(minutes)) return 'Recently'
+  if (minutes < 1) return 'Just now'
+  if (minutes < 60) return `${minutes} min ago`
+  const hours = Math.round(minutes / 60)
+  return hours < 24 ? `${hours} h ago` : new Date(iso).toLocaleDateString()
+}
 
 function ActivityEmblem() {
   return (
@@ -21,6 +24,13 @@ function ActivityEmblem() {
 }
 
 function Console() {
+  const events = useLoad(getTraceEvents)
+  const activitySteps = (events.data ?? []).slice(0, 5).map((event, index) => ({
+    key: event.id,
+    title: event.detail.length > 110 ? `${event.detail.slice(0, 107)}…` : event.detail || event.title,
+    time: `${event.title} · ${relativeTime(event.occurredAt)}`,
+    done: index === 0,
+  }))
   return (
     <div className="relative isolate mx-auto w-full max-w-[1100px]">
       <div
@@ -38,15 +48,18 @@ function Console() {
           <h2 className="text-[20px] font-bold leading-7">Live Activity</h2>
           <span className="inline-flex h-[30px] items-center gap-2 rounded-full bg-white/[0.07] px-4 text-[11px] font-medium text-[#e2e2f3]">
             <span className="size-[7px] rounded-full bg-[#38d7a7] shadow-[0_0_9px_rgba(56,215,167,.8)]" />
-            Online
+            {events.error ? 'Offline' : 'Live'}
           </span>
         </div>
 
         <div className="relative z-10 mt-[22px] grid h-[365px] grid-cols-1 md:grid-cols-[1.15fr_0.85fr]">
           <ol className="relative">
             <span aria-hidden="true" className="absolute left-[11px] top-[11px] h-[294px] w-px bg-gradient-to-b from-[#9b68ff] via-[#7951e4] to-[#31d7a4]" />
-            {activitySteps.map(({ title, time, done }) => (
-              <li key={title} className="relative flex min-h-[73px] gap-[18px]">
+            {events.loading && <li className="pl-10 text-[13px] text-[#a8aecb]">Loading recent activity…</li>}
+            {events.error && <li role="alert" className="pl-10 text-[13px] text-rose-300">Could not load activity: {events.error}</li>}
+            {!events.loading && !events.error && activitySteps.length === 0 && <li className="pl-10 text-[13px] text-[#a8aecb]">No agent activity yet. Run a practice session or update your plan.</li>}
+            {activitySteps.map(({ key, title, time, done }) => (
+              <li key={key} className="relative flex min-h-[73px] gap-[18px]">
                 <span
                   className={`relative z-10 mt-[6px] grid size-[22px] shrink-0 place-items-center rounded-full ${done ? 'bg-[#153c4c]' : 'bg-[#342558]'}`}
                 >
