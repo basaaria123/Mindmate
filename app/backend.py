@@ -108,6 +108,9 @@ def register_backend(app: FastAPI) -> FastAPI:
     app.add_middleware(DemoCacheMiddleware)
     app.add_middleware(RateLimitMiddleware)
     _extend_cors(app)
+    # CORS must be the outermost middleware: responses built by the demo cache or the
+    # rate limiter would otherwise lack CORS headers and the browser would discard them.
+    app.user_middleware.sort(key=lambda middleware: middleware.cls is not CORSMiddleware)
 
     existing_lifespan = app.router.lifespan_context
 

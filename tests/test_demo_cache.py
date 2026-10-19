@@ -87,3 +87,23 @@ def test_record_then_replay_exact_request(client, monkeypatch, tmp_path):
     monkeypatch.setenv("MINDMATE_DEMO_CACHE", "replay")
     assert client.post("/profile", json={"user_message": "first"}).json()["education"] == "echo:first"
     assert client.post("/profile", json={"user_message": "unseen"}).json()["education"] == "echo:second"  # latest = default
+
+
+def test_cached_and_rate_limited_responses_keep_cors_headers(client, monkeypatch):
+    """Browsers discard responses without CORS headers; middleware-built responses must carry them."""
+
+    from app.rate_limit import limiter
+
+    origin = {"Origin": "http://localhost:5173"}
+    monkeypatch.setenv("MINDMATE_DEMO_CACHE", "replay")
+    replayed = client.post("/opportunity", json={"opportunity_text": "x"}, headers=origin)
+    assert replayed.headers["X-MindMate-Cache"] == "replay"
+    assert replayed.headers.get("access-control-allow-origin") == "http://localhost:5173"
+
+    monkeypatch.setenv("RATE_LIMIT_PER_MINUTE", "1")
+    limiter.reset()
+    client.get("/profile", headers=origin)
+    limited = client.get("/profile", headers=origin)
+    assert limited.status_code == 429
+    assert limited.headers.get("access-control-allow-origin") == "http://localhost:5173"
+    monkeypatch.setenv("RATE_LIMIT_PER_MINUTE", "0")
