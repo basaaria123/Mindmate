@@ -66,3 +66,12 @@ def test_demo_check_script_passes(tmp_path):
     result = subprocess.run([sys.executable, str(ROOT / "scripts" / "demo_check.py")], capture_output=True, text=True, env=env, timeout=120)
     assert result.returncode == 0, result.stdout + result.stderr
     assert "All demo checks passed." in result.stdout
+
+
+def test_evaluation_runner_offline(tmp_path):
+    env = {"PATH": "/usr/bin:/bin:/usr/local/bin", "DATABASE_URL": f"sqlite:///{tmp_path}/eval.db", "PYTHONPATH": str(ROOT)}
+    result = subprocess.run([sys.executable, str(ROOT / "scripts" / "run_eval.py"), "--json"], capture_output=True, text=True, env=env, timeout=120)
+    assert result.returncode == 0, result.stderr
+    summary = json.loads(result.stdout)
+    assert summary["mode"] == "deterministic" and len(summary["practice_scores"]) == 10 and len(summary["extracted"]) == 10
+    assert 0 <= summary["extraction_precision"] <= 1 and 0 <= summary["extraction_recall"] <= 1

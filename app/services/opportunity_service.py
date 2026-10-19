@@ -329,7 +329,7 @@ def deterministic_extract(db: Session, user: models.User, text: str) -> dict:
     lowered = text.lower()
     requirements: list[dict] = []
     for name in skill_vocabulary(db, user):
-        line = next((l for l in lines if skill_matches(name, l) or name.lower() in l.lower()), None)
+        line = next((l for l in lines if skill_matches(name, l)), None)
         if line is None:
             continue
         line_l = line.lower()

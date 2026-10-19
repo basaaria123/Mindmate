@@ -88,7 +88,7 @@ bands 75+ Strong, 50–74 Moderate, below 50 Weak. Any non-zero coverage must ci
 | POST | `/plans` | `{tasks:[{title, minutes, priority, day_number?, why?, refs[], role_impact?, goal_id?, deadline?}], daily_budget_minutes?, goal_id?, rationale?, refs?, generate_from_opportunity_id?, use_model?}` | plan (new version); with `generate_from_opportunity_id` the Planner agent is called with database memory when live, its references are validated against the database, and invalid output falls back to the deterministic planner |
 | GET | `/plans/{id}` | – | plan |
 | PATCH | `/plans/tasks/{id}` | `{status: todo|done|deferred|dropped}` | task |
-| POST | `/plans/replan` | `{available_minutes?, reason?}` | `{plan, previous_plan_id, daily_budget_minutes, diff:{before[], after[], added[], moved[], deferred[], kept[]}, rationale, refs[]}` |
+| POST | `/plans/replan` | `{available_minutes?, reason?}` | `{plan, previous_plan_id, daily_budget_minutes, diff:{before[], after[], added[], moved[], deferred[], kept[]}, rationale, rationale_detail, explained_by, refs[]}`; `rationale` is the Replanning agent's plain-language summary when live (`explained_by: replan_agent`), otherwise the code-written explanation; `rationale_detail` is always the code-written one |
 
 Plan shape: `{id, ref, version, status, goal, daily_budget_minutes, rationale, refs, minutes_by_day, tasks[]}`;
 task: `{id, ref, title, minutes, priority, day_number, deadline, status, why, refs[], role_impact, must_keep, priority_score, goal}`.
@@ -105,7 +105,7 @@ and defers (never drops) what does not fit in 14 days.
 |---|---|---|---|
 | GET | `/practice/topics` | – | `{topics[]}` |
 | GET | `/practice/sessions` | – | `{sessions[]}` |
-| POST | `/practice/start` | `{topic?, question?}` | session `{id, ref, topic, question, status: "open"}` |
+| POST | `/practice/start` | `{topic?, question?}` | session `{id, ref, topic, question, expected_concepts, status: "open", question_source}`; `question_source` is `practice_agent` (generated from the user's role, evidence, gaps and weaknesses when live), `question_bank` or `user` |
 | POST | `/practice/evaluate` | `{answer, session_id?, question?, topic?}` | `{session_id, topic, question, answer, score, rubric_scores:{correctness, depth, clarity}, matched_concepts, missing_concepts, feedback, weakness, weakness_detail, weakness_recorded, weakness_ref, weakness_reason, evaluator, submittedAt}` |
 
 Weakness thresholds (`app/scoring/weakness.py`): a topic becomes a weakness after

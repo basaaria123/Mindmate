@@ -143,3 +143,48 @@ def planner_memories(db: Session, user: models.User) -> tuple[list[str], list[di
     for goal in active_goals(db, user.id):
         memories.append({"memory_id": make_ref(goal), "memory_type": "goal", "content": goal.title})
     return decisions, memories
+
+
+
+def database_planner_context() -> tuple[list[str], list[dict]]:
+    """Decisions and memory records from the database for the AI POST /plan endpoint."""
+
+    from app.db import get_session_factory
+    from app.services.users import get_or_create_default_user
+
+    session = get_session_factory()()
+    try:
+        return planner_memories(session, get_or_create_default_user(session))
+    finally:
+        session.close()
+
+
+def mirror_practice_evaluation(*, question: str, topic: str, answer: str, evaluation) -> dict:
+    """Record an AI POST /practice evaluation in the database memory (thresholds apply)."""
+
+    from app.db import get_session_factory
+    from app.services.practice_service import record_external_evaluation
+    from app.services.users import get_or_create_default_user
+
+    session = get_session_factory()()
+    try:
+        user = get_or_create_default_user(session)
+        practice, weakness, reason = record_external_evaluation(
+            session,
+            user,
+            question=question,
+            topic=topic,
+            answer=answer,
+            rubric={"correctness": evaluation.correctness, "depth": evaluation.depth, "clarity": evaluation.clarity},
+            feedback=evaluation.feedback,
+            evaluator="practice_agent",
+        )
+        session.commit()
+        return {
+            "practice_ref": make_ref(practice),
+            "weakness_recorded": weakness is not None,
+            "weakness_ref": make_ref(weakness) if weakness else None,
+            "weakness_reason": reason,
+        }
+    finally:
+        session.close()

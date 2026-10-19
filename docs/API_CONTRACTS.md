@@ -60,8 +60,8 @@ They require `NEBIUS_API_KEY` on the backend and fail with `500`/`422` without i
 | `assessFit` | `POST /fit` | `{user_profile, opportunity}` | `FitAssessment`: `{opportunity_title, overall_fit, matching_skills[], partial_matches[], missing_skills[], strengths[], improvement_areas[], summary}` |
 | `getPersonalizedSuggestions` | `POST /suggestions` | `{user_profile}` | `{suggestions[12]: {title, organization, opportunity_type, category, explanation}}` |
 | – | `POST /gap` | `{user_profile, opportunity, fit_assessment}` | `GapVectorJSON`: `{opportunity_title, gaps[{skill_name, career_impact_score, gap_type, missing_evidence, rationale, recommended_focus, evidence_refs[]}]}` |
-| – | `POST /plan` | `{user_profile, opportunity, gap_vector, goal_id, existing_decisions[]}` | `PlanScheduleJSON`: `{goal_id, daily_budget_minutes, total_tasks, schedule[{task_id, day_number, title, duration_minutes, priority, why_it_matters, source_refs[]}]}` |
-| – | `POST /practice` | `{question, user_answer, topic}` | `PracticeEvaluation` + `{memory_saved, memory_id?}` |
+| – | `POST /plan` | `{user_profile, opportunity, gap_vector, goal_id, existing_decisions[]}` (database decisions and memory IDs are added automatically) | `PlanScheduleJSON`: `{goal_id, daily_budget_minutes, total_tasks, schedule[{task_id, day_number, title, duration_minutes, priority, why_it_matters, source_refs[]}]}` |
+| – | `POST /practice` | `{question, user_answer, topic}` | `PracticeEvaluation` + `{memory_saved, memory_id?, practice_ref, weakness_recorded, weakness_ref}`; the evaluation is also stored as a database practice session and the weakness thresholds apply |
 | – | `GET /memories` | – | `{total, memories[]}` (legacy JSON store) |
 
 Note the same path `/profile` serves `POST` (AI extraction) and `GET`/`PUT` (stored profile).
@@ -76,6 +76,8 @@ The backend calls the agents as Python functions; no HTTP hop:
 | `app/services/plan_service.py` via `POST /plans` | `app.agents.planner_agent.generate_plan(user_profile, opportunity, gap_vector, goal_id, existing_decisions, existing_memories)` | Inputs built from the database (`app/services/agent_bridge.py`); memory IDs are database refs; output re-validated against the database, invalid output falls back to the deterministic planner |
 | `app/services/opportunity_service.py` via `POST /opportunities/{id}/fit` | `app.agents.fit_agent.assess_fit(user_profile, opportunity)` | Coverage claims without evidence in memory are downgraded to "not shown" |
 | `app/services/opportunity_service.py` via `POST /opportunities/extract` | `app.agents.opportunity_agent.extract_opportunity(opportunity_text)` | Keyword extraction fallback when the model is off or fails |
+| `app/services/practice_service.py` via `POST /practice/start` | `app.agents.practice_agent.generate_practice_questions(...)` | Question bank fallback |
+| `app/services/plan_service.py` via `POST /plans/replan` | `app.agents.replan_agent.explain_replan(changes, allowed_refs)` | Code-written explanation kept in `rationale_detail` and used when the agent fails |
 | `POST /opportunities/{id}/fit` body `ai_assessment` | `FitAssessment` dict from `POST /fit` | Converted to requirement judgements; coverage without evidence in memory is downgraded to "not shown" |
 | `POST /opportunities` | `OpportunitySpec` dict from `POST /opportunity` | Accepted directly and stored |
 | `POST /memory` type `weakness`/`decision` | – | Agents may propose memory; the backend validates refs and thresholds before storing |

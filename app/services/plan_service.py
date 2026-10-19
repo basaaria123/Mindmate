@@ -585,7 +585,25 @@ def replan(
     for c in candidates:
         refs.extend(c.refs)
 
-    rationale = " ".join(rationale_lines)
+    detail = " ".join(rationale_lines)
+    rationale, explained_by = detail, "deterministic"
+    allowed_refs = list(dict.fromkeys(refs))
+    if allowed_refs:
+        from app.agents.replan_agent import explain_replan
+        from app.services.agent_bridge import call_agent
+
+        changes = {
+            "budget": {"before": old_budget, "after": budget},
+            "reason": reason or trigger,
+            "added": [{"title": e["title"], "day": e["to_day"], "refs": e["refs"]} for e in added_entries],
+            "moved": [{"title": e["title"], "from_day": e.get("from_day"), "to_day": e["to_day"], "refs": e["refs"]} for e in moved[:6]],
+            "deferred": [{"title": e["title"]} for e in deferred_entries],
+            "kept_regardless_of_budget": must_keep_titles,
+            "code_rationale": detail,
+        }
+        explanation = call_agent(db, user, "replan", explain_replan, changes=changes, allowed_refs=allowed_refs)
+        if explanation is not None:
+            rationale, explained_by = explanation.summary, "replan_agent"
     plan = _persist_plan(
         db,
         user,
@@ -622,6 +640,8 @@ def replan(
         "daily_budget_minutes": budget,
         "diff": diff,
         "rationale": rationale,
+        "rationale_detail": detail,
+        "explained_by": explained_by,
         "refs": list(dict.fromkeys(refs)),
     }
 

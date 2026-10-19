@@ -147,15 +147,21 @@ def create_plan(request: PlanRequest):
 
     memories = get_memories()
 
+    # Decisions and memory IDs from the database memory layer, so the planner
+    # can cite them and its reference check accepts them.
+    from app.services.agent_bridge import database_planner_context
+
+    database_decisions, database_memories = database_planner_context()
+
     plan = generate_plan(
         user_profile=user_profile,
         opportunity=opportunity,
         gap_vector=gap_vector,
         goal_id=request.goal_id,
-        existing_decisions=request.existing_decisions,
+        existing_decisions=request.existing_decisions + database_decisions,
         existing_memories=[
             memory.model_dump() for memory in memories
-        ],
+        ] + database_memories,
     )
 
     return plan.model_dump()
@@ -178,6 +184,22 @@ def create_practice_evaluation(request: PracticeRequest):
 
     if memory is not None:
         response["memory_id"] = memory.memory_id
+
+    # Mirror the evaluation into the database memory; weakness thresholds decide
+    # what is remembered there. A database problem never breaks this endpoint.
+    try:
+        from app.services.agent_bridge import mirror_practice_evaluation
+
+        response.update(
+            mirror_practice_evaluation(
+                question=request.question,
+                topic=request.topic,
+                answer=request.user_answer,
+                evaluation=evaluation,
+            )
+        )
+    except Exception:  # noqa: BLE001
+        response["database_mirror"] = "unavailable"
 
     return response
 

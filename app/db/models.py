@@ -229,6 +229,7 @@ class PracticeSession(Base, TimestampMixin):
     weakness_id: Mapped[int | None] = mapped_column(ForeignKey("weaknesses.id"), nullable=True)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="open")
     evaluator: Mapped[str] = mapped_column(String(50), nullable=False, default="deterministic")
+    question_source: Mapped[str] = mapped_column(String(30), nullable=False, default="question_bank", server_default="question_bank")
     evaluated_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 

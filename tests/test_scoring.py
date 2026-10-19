@@ -129,3 +129,31 @@ def test_fit_result_dict_roundtrip():
     data = result.as_dict()
     assert data["score"] == 100 and data["per_requirement"][0]["evidence_refs"] == ["ev#1"]
     assert isinstance(result, FitResult)
+
+
+
+@pytest.mark.parametrize("a,b,expected", [
+    ("Python", "Basic Python", True),
+    ("SQL", "Practice two SQL join questions", True),
+    ("Model evaluation", "Mock interview: model evaluation questions", True),
+    ("Model evaluation", "Model evaluation: metrics beyond accuracy", True),
+    ("Machine learning fundamentals", "Machine learning", True),
+    ("Data structures", "Data structure", True),
+    ("Deep learning", "Machine learning fundamentals", False),
+    ("Data visualisation", "core data structures", False),
+    ("Java", "JavaScript", False),
+    ("C++", "C", False),
+    ("Statistics", "Basic statistics", True),
+    ("", "Python", False),
+])
+def test_skill_matching(a, b, expected):
+    from app.scoring.fit import skill_matches
+
+    assert skill_matches(a, b) is expected and skill_matches(b, a) is expected
+
+
+def test_deep_learning_requirement_is_not_credited_to_ml_evidence():
+    requirements = [{"name": "Deep learning", "weight": "High"}]
+    skills = [{"name": "Machine learning fundamentals", "level": "intermediate", "ref": "skill#2", "evidence_refs": ["ev#3"]},
+              {"name": "Deep learning", "level": "none", "ref": "skill#6", "evidence_refs": []}]
+    assert judge_from_skills(requirements, skills)[0].coverage == "not_shown"

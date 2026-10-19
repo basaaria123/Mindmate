@@ -125,17 +125,75 @@ def pick_question(db: Session, user: models.User, topic: str | None) -> dict:
     return min(pool, key=lambda q: (used.get(q["question"], 0), pool.index(q)))
 
 
+def preferred_topic(db: Session, user: models.User) -> str | None:
+    """Active weakness first, then the top gap of the latest fit assessment."""
+
+    weaknesses = active_weaknesses(db, user.id)
+    if weaknesses:
+        return weaknesses[0].topic
+    latest_fit = db.scalar(
+        select(models.FitAssessment).where(models.FitAssessment.user_id == user.id).order_by(models.FitAssessment.created_at.desc()).limit(1)
+    )
+    return latest_fit.top_gap if latest_fit and latest_fit.top_gap else None
+
+
+def generated_question(db: Session, user: models.User, topic: str | None) -> dict | None:
+    """Ask the Practice agent for a question built from this user's memory; None when unavailable."""
+
+    from app.agents.practice_agent import generate_practice_questions
+    from app.memory.retrieval import active_skills
+    from app.services.agent_bridge import call_agent
+
+    skills = [
+        f"{skill.name} ({skill.level}); evidence: " + ("; ".join(ev.description for ev in skill.evidence if ev.deleted_at is None) or "none")
+        for skill in active_skills(db, user.id)
+    ]
+    weaknesses = [{"ref": make_ref(w), "topic": w.topic, "severity": w.severity} for w in active_weaknesses(db, user.id)]
+    latest_fit = db.scalar(
+        select(models.FitAssessment).where(models.FitAssessment.user_id == user.id).order_by(models.FitAssessment.created_at.desc()).limit(1)
+    )
+    gaps = [
+        {"requirement": r["requirement"], "coverage": r["coverage"], "weight": r["weight"]}
+        for r in (latest_fit.per_requirement if latest_fit else [])
+        if r.get("gap", 0) > 0
+    ]
+    allowed = [w["ref"] for w in weaknesses] + ([make_ref(latest_fit)] if latest_fit else [])
+    result = call_agent(
+        db,
+        user,
+        "practice",
+        generate_practice_questions,
+        target_role=user.target_role or "Not specified",
+        skills=skills,
+        gaps=gaps,
+        weaknesses=weaknesses,
+        topic=topic,
+        count=1,
+        allowed_refs=allowed,
+    )
+    if result is None:
+        return None
+    question = result.questions[0]
+    return {"topic": question.topic, "question": question.question, "expected_concepts": list(question.expected_concepts), "concept_aliases": {}}
+
+
 def start_session(db: Session, user: models.User, *, topic: str | None = None, question: str | None = None) -> models.PracticeSession:
+    source = "user"
     if question:
         chosen = {"topic": topic or "Custom", "question": question.strip(), "expected_concepts": [], "concept_aliases": {}}
     else:
-        chosen = pick_question(db, user, topic)
+        chosen = generated_question(db, user, topic or preferred_topic(db, user))
+        source = "practice_agent"
+        if chosen is None:
+            chosen = pick_question(db, user, topic)
+            source = "question_bank"
     session = models.PracticeSession(
         user_id=user.id,
         topic=chosen["topic"],
         question=chosen["question"],
         expected_concepts=list(chosen.get("expected_concepts", [])),
         status="open",
+        question_source=source,
     )
     db.add(session)
     db.flush()
@@ -144,7 +202,7 @@ def start_session(db: Session, user: models.User, *, topic: str | None = None, q
         user_id=user.id,
         agent="practice",
         action="session_started",
-        summary=f"Practice session started on {session.topic}.",
+        summary=f"Practice session started on {session.topic} (question from {source.replace('_', ' ')}).",
         refs=[make_ref(session)],
     )
     return session
@@ -270,6 +328,54 @@ def serialize_session(session: models.PracticeSession) -> dict:
         "weakness_ref": f"weakness#{session.weakness_id}" if session.weakness_id else None,
         "status": session.status,
         "evaluator": session.evaluator,
+        "question_source": session.question_source,
         "created_at": session.created_at.isoformat() + "Z",
         "evaluated_at": session.evaluated_at.isoformat() + "Z" if session.evaluated_at else None,
     }
+
+
+def record_external_evaluation(
+    db: Session,
+    user: models.User,
+    *,
+    question: str,
+    topic: str,
+    answer: str,
+    rubric: dict,
+    feedback: str,
+    evaluator: str,
+) -> tuple[models.PracticeSession, models.Weakness | None, str]:
+    """Store an evaluation made elsewhere (the AI /practice endpoint) as a practice session.
+
+    The weakness thresholds then decide whether it becomes memory, exactly as for
+    POST /practice/evaluate, so a single answer never creates a weakness on its own.
+    """
+
+    session = models.PracticeSession(
+        user_id=user.id,
+        topic=topic,
+        question=question,
+        expected_concepts=[],
+        answer=answer,
+        rubric_scores=rubric,
+        missing_concepts=[],
+        score=overall_score(rubric),
+        feedback=feedback,
+        status="evaluated",
+        evaluator=evaluator,
+        question_source="user",
+        evaluated_at=utcnow(),
+    )
+    db.add(session)
+    db.flush()
+    log_event(
+        db,
+        user_id=user.id,
+        agent="practice",
+        action="answer_evaluated",
+        summary=f"Answer on {topic} scored {session.score}/100 ({evaluator}).",
+        refs=[make_ref(session)],
+        payload={"rubric": rubric},
+    )
+    weakness, reason = apply_thresholds(db, user, session)
+    return session, weakness, reason

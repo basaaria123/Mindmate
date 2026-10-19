@@ -182,15 +182,47 @@ def _tokens(text: str) -> set[str]:
     return {t for t in re.split(r"[^a-z0-9+#]+", text.lower()) if t and t not in _STOP}
 
 
+# Words that appear in many skill names and say nothing about which skill it is.
+_GENERIC = {
+    "learning", "data", "fundamentals", "fundamental", "skills", "skill", "experience", "engineering",
+    "development", "analysis", "programming", "advanced", "intro", "introduction", "practice", "basic",
+}
+
+
+def _significant(text: str) -> set[str]:
+    words = set()
+    for token in _tokens(text):
+        if token in _GENERIC:
+            continue
+        words.add(token[:-1] if len(token) > 3 and token.endswith("s") and not token.endswith("ss") else token)
+    return words
+
+
+def _contains_phrase(longer: str, shorter: str) -> bool:
+    return re.search(r"(?<![a-z0-9+#])" + re.escape(shorter) + r"(?![a-z0-9+#])", longer) is not None
+
+
 def skill_matches(requirement: str, skill_name: str) -> bool:
-    req = requirement.lower().strip()
-    name = skill_name.lower().strip()
+    """True when two skill phrases name the same skill.
+
+    Matches exact names and whole-phrase containment ("SQL" in "SQL joins", but
+    not "Java" in "JavaScript"). Otherwise every significant word of the shorter
+    phrase must appear in the longer one, ignoring generic words, so "Deep
+    learning" does not match "Machine learning fundamentals" and "Data
+    visualisation" does not match "Data structures".
+    """
+
+    req = " ".join(requirement.lower().split())
+    name = " ".join(skill_name.lower().split())
     if not req or not name:
         return False
-    if req == name or req in name or name in req:
+    if req == name or _contains_phrase(req, name) or _contains_phrase(name, req):
         return True
-    overlap = _tokens(req) & _tokens(name)
-    return bool(overlap) and len(overlap) >= max(1, min(len(_tokens(req)), len(_tokens(name))) // 2)
+    req_words, name_words = _significant(req), _significant(name)
+    if not req_words or not name_words:
+        return False
+    shorter, longer = sorted((req_words, name_words), key=len)
+    return shorter <= longer
 
 
 def judge_from_skills(

@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py alembic.ini conftest.py ./
 COPY app ./app
+COPY prompts ./prompts
 COPY alembic ./alembic
 COPY data ./data
 COPY scripts ./scripts
