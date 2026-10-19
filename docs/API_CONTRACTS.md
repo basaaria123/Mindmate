@@ -61,8 +61,11 @@ Backend endpoints not called by the UI (available for scripts and the OpenAPI pa
 
 ## B. AI agent endpoints (`main.py`, AI-owned)
 
-These call Nemotron through Nebius and validate the model output against `app/schemas/*`.
-They require `NEBIUS_API_KEY` on the backend and fail with `500`/`422` without it.
+These call Nemotron through Nebius and validate the model output against `app/schemas/*`. Without a key
+(or when the model fails) `/profile`, `/opportunity`, `/fit`, `/gap` and `/suggestions` answer with offline
+analysis in the same schema; the header `X-MindMate-Source: nemotron | offline` says which, and CORS exposes it
+to the browser. `/plan` and `/practice` need the key. Every function returns its result with
+`mindmate_source` added (`nemotron`, `offline` or `recorded`) for the screens to label.
 
 | Frontend function | Method and path | Request | Response schema |
 |---|---|---|---|
@@ -104,8 +107,9 @@ Model configuration lives in `app/services/llm_client.py` (`REASONING_MODEL`, `F
   Long calls (Nemotron Ultra) can take 15–60 s; screens show loading states.
 * Backend fallback: practice, fit, plan generation and opportunity extraction never fail because of the model
   (deterministic code); every call and fallback is logged (`model_call`, `model_fallback`, `model_output_rejected`).
-* Demo fallback for the AI endpoints in `main.py`: `MINDMATE_DEMO_CACHE=fallback` serves recorded responses when the
-  model fails, `replay` never calls the model (see `docs/contracts/backend-api.md`).
+* AI endpoints in `main.py`: offline analysis when the model is unavailable (above). With
+  `MINDMATE_DEMO_CACHE=fallback` a recorded answer to the exact same request wins over offline analysis;
+  `replay` never calls the model (see `docs/contracts/backend-api.md`).
 * Rate limit: `RATE_LIMIT_PER_MINUTE` per client IP; `/health` and docs are exempt.
 
 ## E. Environment variables

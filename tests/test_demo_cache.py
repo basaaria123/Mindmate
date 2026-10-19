@@ -33,23 +33,38 @@ def test_shipped_defaults_validate_against_ai_schemas():
     assert set(AI_ENDPOINTS.values()) == {p.stem for p in CACHE.glob("*.json")}
 
 
-def test_off_mode_calls_live_agent_and_fails_without_key(client, monkeypatch):
+def test_off_mode_answers_offline_without_key(client, monkeypatch):
     monkeypatch.delenv("NEBIUS_API_KEY", raising=False)
-    monkeypatch.setattr("app.services.llm_client.NEBIUS_API_KEY", None)
     monkeypatch.setenv("MINDMATE_DEMO_CACHE", "off")
-    with pytest.raises(RuntimeError, match="NEBIUS_API_KEY"):  # the test client re-raises server errors
-        client.post("/profile", json={"user_message": "I am a student"})
+    response = client.post("/profile", json={"user_message": "I am a student. I know Python and SQL."})
+    assert response.status_code == 200
+    assert response.headers["X-MindMate-Source"] == "offline"
+    assert "X-MindMate-Cache" not in response.headers
+    assert response.json()["skills"] == ["Python", "SQL"]
 
 
-def test_fallback_serves_recording_when_model_fails(client, monkeypatch):
-    monkeypatch.setattr("app.services.llm_client.NEBIUS_API_KEY", None)
+def test_fallback_serves_exact_recording_else_offline_analysis(client, monkeypatch, tmp_path):
+    from app.demo_cache import request_key
+
+    monkeypatch.setenv("MINDMATE_DEMO_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("MINDMATE_DEMO_CACHE", "fallback")
-    response = client.post("/opportunity", json={"opportunity_text": "AI intern, Python required"})
+    recorded = json.loads((CACHE / "opportunity.json").read_text())["default"]
+    demo_body = {"opportunity_text": "AI intern, Python required"}
+    (tmp_path / "opportunity.json").write_text(json.dumps({
+        "entries": {request_key(json.dumps(demo_body).encode()): recorded}, "default": recorded}))
+
+    response = client.post("/opportunity", json=demo_body)
     assert response.status_code == 200
     assert response.headers["X-MindMate-Cache"] == "fallback"
     assert response.json()["opportunity_title"] == "AI/ML Engineering Intern"
     events = client.get("/agent/events?agent=opportunity").json()["events"]
     assert any(e["action"] == "demo_cache_fallback" for e in events)
+
+    # Any other posting is analysed offline instead of answered with another posting's recording.
+    other = client.post("/opportunity", json={"opportunity_text": "Data Analyst Intern\nSQL and Excel required."})
+    assert other.headers["X-MindMate-Source"] == "offline" and "X-MindMate-Cache" not in other.headers
+    assert other.json()["opportunity_title"] == "Data Analyst Intern"
+    assert [r["skill_name"] for r in other.json()["required_skills"]] == ["SQL", "Excel"]
 
 
 def test_fallback_does_not_hide_request_validation_errors(client, monkeypatch):
@@ -75,6 +90,7 @@ def test_record_then_replay_exact_request(client, monkeypatch, tmp_path):
     from app.schemas.profile import UserProfile
 
     monkeypatch.setenv("MINDMATE_DEMO_CACHE_DIR", str(tmp_path))
+    monkeypatch.setattr("app.services.agent_bridge.llm_available", lambda: True)
     monkeypatch.setattr("main.extract_user_profile", lambda message: UserProfile(
         education=f"echo:{message}", goals=[], skills=[], interests=[], daily_available_minutes=30, learning_preferences=[]))
     monkeypatch.setenv("MINDMATE_DEMO_CACHE", "record")

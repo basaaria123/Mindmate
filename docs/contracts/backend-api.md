@@ -136,3 +136,9 @@ Permission levels (`app/permissions.py`): read-only (profile, opportunities, mem
 `/fit`, `/gap`, `/plan`, `/suggestions`, `/practice`. Cached answers carry the response header `X-MindMate-Cache`
 (`replay`, `fallback` or `recorded`) and are logged to the trace as `demo_cache_*` events. Request-validation
 errors are never hidden. Recordings: `data/demo_cache/<endpoint>.json`.
+
+Without a key, or when the model fails, `/profile`, `/opportunity`, `/fit`, `/gap` and `/suggestions` answer
+with offline analysis in the agents' schema (`app/services/offline_ai.py`) and the header
+`X-MindMate-Source: offline` (`nemotron` for model answers). In `fallback` mode an exact recording of the same
+request replaces the offline answer; a recording of a different request never does. `record` never records
+offline answers.

@@ -1,5 +1,6 @@
 
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from app.agents.profile_agent import extract_user_profile
@@ -11,6 +12,15 @@ from app.agents.planner_agent import generate_plan
 from app.agents.practice_agent import evaluate_practice
 from app.agents.memory_agent import create_and_store_memory
 from app.services.memory_store import get_memories
+from app.services import offline_ai
+from app.services.agent_bridge import answer_with_fallback
+
+
+def _answer(agent, live, offline):
+    """Nemotron when available, otherwise offline analysis; the header says which answered."""
+
+    result, source = answer_with_fallback(agent, live, offline)
+    return JSONResponse(result.model_dump(), headers={"X-MindMate-Source": source})
 
 class ProfileRequest(BaseModel):
     user_message: str = Field(
@@ -84,15 +94,19 @@ def health_check():
 
 @app.post("/profile")
 def create_profile(request: ProfileRequest):
-    profile = extract_user_profile(request.user_message)
-
-    return profile.model_dump()
+    return _answer(
+        "profile",
+        lambda: extract_user_profile(request.user_message),
+        lambda: offline_ai.profile_from_text(request.user_message),
+    )
 
 @app.post("/opportunity")
 def create_opportunity(request: OpportunityRequest):
-    opportunity = extract_opportunity(request.opportunity_text)
-
-    return opportunity.model_dump()
+    return _answer(
+        "opportunity",
+        lambda: extract_opportunity(request.opportunity_text),
+        lambda: offline_ai.opportunity_from_text(request.opportunity_text),
+    )
 
 @app.post("/fit")
 def create_fit_assessment(request: FitRequest):
@@ -102,18 +116,22 @@ def create_fit_assessment(request: FitRequest):
     user_profile = UserProfile.model_validate(request.user_profile)
     opportunity = OpportunitySpec.model_validate(request.opportunity)
 
-    assessment = assess_fit(user_profile, opportunity)
-
-    return assessment.model_dump()
+    return _answer(
+        "fit",
+        lambda: assess_fit(user_profile, opportunity),
+        lambda: offline_ai.fit_for(user_profile, opportunity),
+    )
 
 @app.post("/suggestions")
 def create_suggestions(request: SuggestionsRequest):
     from app.schemas.profile import UserProfile
 
     user_profile = UserProfile.model_validate(request.user_profile)
-    suggestions = generate_suggestions(user_profile)
-
-    return suggestions.model_dump()
+    return _answer(
+        "suggestions",
+        lambda: generate_suggestions(user_profile),
+        lambda: offline_ai.suggestions_for(user_profile),
+    )
 
 @app.post("/gap")
 def create_skill_gap_assessment(request: GapRequest):
@@ -127,13 +145,11 @@ def create_skill_gap_assessment(request: GapRequest):
         request.fit_assessment
     )
 
-    gap_vector = identify_skill_gaps(
-        user_profile,
-        opportunity,
-        fit_assessment,
+    return _answer(
+        "gap",
+        lambda: identify_skill_gaps(user_profile, opportunity, fit_assessment),
+        lambda: offline_ai.gaps_for(user_profile, opportunity, fit_assessment),
     )
-
-    return gap_vector.model_dump()
 
 @app.post("/plan")
 def create_plan(request: PlanRequest):

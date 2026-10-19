@@ -310,36 +310,22 @@ def gaps_for(db: Session, user: models.User, opportunity: models.Opportunity) ->
 # Extraction from posting text: Opportunity agent when live, keyword fallback otherwise
 # ---------------------------------------------------------------------------
 
-_MANDATORY_HINTS = ("required", "must", "mandatory", "essential", "need")
-_PREFERRED_HINTS = ("preferred", "nice to have", "bonus", "plus", "desirable")
-
-
 def skill_vocabulary(db: Session, user: models.User) -> list[str]:
-    names: list[str] = []
-    for data in curated_opportunities():
-        names.extend(req["name"] for req in data["requirements"])
-    names.extend(skill.name for skill in active_skills(db, user.id))
-    names.extend(["Python", "SQL", "Git", "Docker", "Statistics", "Deep learning", "Machine learning fundamentals", "Model evaluation", "Data structures", "Linux", "C++", "Java", "JavaScript", "React", "Cloud", "Communication"])
-    return list(dict.fromkeys(n for n in names if n))
+    from app.services.offline_ai import vocabulary
+
+    return vocabulary([skill.name for skill in active_skills(db, user.id)])
 
 
 def deterministic_extract(db: Session, user: models.User, text: str) -> dict:
-    lines = [line.strip(" -*•\t") for line in text.splitlines() if line.strip()]
-    title = lines[0][:200] if lines else "Untitled opportunity"
-    lowered = text.lower()
-    requirements: list[dict] = []
-    for name in skill_vocabulary(db, user):
-        line = next((l for l in lines if skill_matches(name, l)), None)
-        if line is None:
-            continue
-        line_l = line.lower()
-        mandatory = any(hint in line_l for hint in _MANDATORY_HINTS)
-        preferred = any(hint in line_l for hint in _PREFERRED_HINTS)
-        weight = "High" if mandatory else "Low" if preferred else "Medium"
-        if not any(skill_matches(name, r["name"]) for r in requirements):
-            requirements.append({"name": name, "weight": weight, "mandatory": mandatory, "description": line[:300]})
-    kind = next((k for k in ("internship", "hackathon", "fellowship", "job") if k in lowered), "internship")
-    return {"title": title, "type": kind, "requirements": requirements, "summary": " ".join(lines[1:3])[:400] or title}
+    """Keyword extraction shared with the offline AI endpoints (app/services/offline_ai.py)."""
+
+    from app.services.offline_ai import extract_requirements, guess_title, guess_type, sentences
+
+    parts = sentences(text)
+    title = guess_title(text)
+    requirements = extract_requirements(text, [skill.name for skill in active_skills(db, user.id)])
+    return {"title": title[:200], "type": guess_type(text), "requirements": requirements,
+            "summary": " ".join(parts[:2])[:400] or title}
 
 
 def extract_and_store(db: Session, user: models.User, text: str) -> tuple[models.Opportunity, str]:

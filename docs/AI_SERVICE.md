@@ -63,9 +63,15 @@ Every agent call spends Token Factory credits; Ultra calls are the expensive one
 ## Failure handling
 
 * Invalid or off-schema JSON: one retry with the validation error, then `ValueError` (→ HTTP 422).
-* Missing key: `RuntimeError("NEBIUS_API_KEY is missing")` (→ HTTP 500 on the AI endpoints; the backend's
-  practice path falls back to the deterministic rubric instead).
-* Timeouts/provider errors propagate from the OpenAI client; the backend practice path catches them.
+* Missing key, model off (`MINDMATE_LLM_MODE=off`), timeout or provider error: the AI endpoints `/profile`,
+  `/opportunity`, `/fit`, `/gap` and `/suggestions` answer with offline analysis instead
+  (`app/services/offline_ai.py`: keyword extraction, the fit weights, curated suggestions), in the same schema.
+  The response header `X-MindMate-Source` is `nemotron` or `offline`, the screens label offline answers, and a
+  model failure is logged as `model_fallback`. `/plan` and `/practice` still need the key; the backend's own
+  `POST /plans` and `POST /practice/evaluate` have deterministic paths.
+* In frontend mock mode (no `VITE_API_BASE_URL`) the same rules run in the browser
+  (`mindmate-frontend/src/services/offlineAnalysis.ts`); `tests/test_offline_ai.py` checks that its skill
+  vocabulary and hint words match the Python module.
 
 ## Running and testing
 

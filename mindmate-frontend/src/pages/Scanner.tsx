@@ -4,12 +4,13 @@ import {
   extractOpportunity,
   getPersonalizedSuggestions,
   type AIFitAssessment,
-  type AIProfile,
   type AIOpportunity,
   type AIOpportunitySuggestion,
+  type AISource,
+  type WithSource,
 } from '../services/api'
 import { Building2, GraduationCap, Hospital, Sprout } from 'lucide-react'
-import { assessStoredFit, getOpportunities, type FitResult, type Opportunity } from '../services/backend'
+import { assessStoredFit, getAIProfile, getOpportunities, type FitResult, type Opportunity } from '../services/backend'
 import { useLoad } from '../hooks/useLoad'
 import { RefTags } from '../components/RefText'
 
@@ -51,6 +52,21 @@ function categoryFor(type: string) {
   return 'Other'
 }
 
+const SOURCE_TEXT: Record<AISource, string> = {
+  nemotron: 'Analysed by NVIDIA Nemotron.',
+  offline: 'Offline analysis: keyword matching and fit rules, no AI model was used. Connect the backend with a Nebius key for the Nemotron analysis.',
+  recorded: 'Recorded demo answer (the model was not called).',
+}
+
+function SourceNote({ source }: { source?: AISource }) {
+  if (!source) return null
+  return (
+    <p className={`mt-2 rounded-lg px-3 py-2 text-xs leading-5 ${source === 'nemotron' ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800'}`}>
+      {SOURCE_TEXT[source]}
+    </p>
+  )
+}
+
 function bandClass(band: string) {
   return band === 'Strong' ? 'bg-emerald-50 text-emerald-700' : band === 'Moderate' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'
 }
@@ -84,15 +100,16 @@ function Scanner() {
   const [activeCategory, setActiveCategory] = useState('Jobs')
   const [opportunityText, setOpportunityText] = useState('')
   const [personalizedSuggestions, setPersonalizedSuggestions] = useState<AIOpportunitySuggestion[]>([])
+  const [suggestionsSource, setSuggestionsSource] = useState<AISource | undefined>()
   const [, setSuggestionsLoading] = useState(true)
   const [suggestionsError, setSuggestionsError] = useState('')
   const [suggestionsLoaded, setSuggestionsLoaded] = useState(false)
-  const [aiOpportunity, setAiOpportunity] = useState<AIOpportunity | null>(null)
+  const [aiOpportunity, setAiOpportunity] = useState<WithSource<AIOpportunity> | null>(null)
   const [isExtracting, setIsExtracting] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
 
   const [fitAssessment, setFitAssessment] =
-    useState<AIFitAssessment | null>(null)
+    useState<WithSource<AIFitAssessment> | null>(null)
   const [isAssessingFit, setIsAssessingFit] = useState(false)
   const [fitError, setFitError] = useState<string | null>(null)
   const stored = useLoad(getOpportunities)
@@ -147,16 +164,10 @@ function Scanner() {
   setSuggestionsLoading(true)
   setSuggestionsError('')
   try {
-    const savedProfile = localStorage.getItem('mindmate-ai-profile')
-
-    if (!savedProfile) {
-      throw new Error('Please complete your profile first to get personalized suggestions.')
-    }
-
-    const userProfile = JSON.parse(savedProfile) as AIProfile
-    const result = await getPersonalizedSuggestions(userProfile)
+    const result = await getPersonalizedSuggestions(await getAIProfile())
 
     setPersonalizedSuggestions(result.suggestions)
+    setSuggestionsSource(result.mindmate_source)
   } catch (error) {
     setSuggestionsError(
       error instanceof Error
@@ -185,16 +196,7 @@ useEffect(() => {
     setFitAssessment(null)
 
     try {
-      const savedProfile = window.localStorage.getItem('mindmate-ai-profile')
-
-      if (!savedProfile) {
-        throw new Error(
-          'No AI profile found. Please complete onboarding first.',
-        )
-      }
-
-      const userProfile = JSON.parse(savedProfile) as AIProfile
-      const result = await assessFit(userProfile, aiOpportunity)
+      const result = await assessFit(await getAIProfile(), aiOpportunity)
       setFitAssessment(result)
     } catch (error) {
       setFitError(
@@ -207,33 +209,26 @@ useEffect(() => {
     }
   }
 
- const visibleOpportunities: Card[] =
-    personalizedSuggestions.length > 0
-      ? personalizedSuggestions
-          .filter((suggestion) => suggestion.category === activeCategory)
-          .map((suggestion) => {
-            const Icon =
-              activeCategory === 'Jobs'
-                ? Building2
-                : activeCategory === 'Projects'
-                  ? Sprout
-                  : activeCategory === 'Resources'
-                    ? GraduationCap
-                    : Hospital
-
-            return {
-              title: suggestion.title,
-              organization: suggestion.organization ?? suggestion.explanation,
-              type: suggestion.opportunity_type,
-              Icon,
-              iconColor: 'bg-[#8170e8]',
-              tagColor: 'bg-[#eeeaff] text-[#6552c7]',
-              category: suggestion.category,
-            }
-          })
-      : (stored.data ?? []).map(storedCard).filter(
-          (opportunity) => opportunity.category === activeCategory,
-        )
+  // Saved opportunities (with evidence-based fit) first, then suggestions not already saved.
+  const storedCards = (stored.data ?? []).map(storedCard)
+  const storedTitles = new Set(storedCards.map((card) => card.title.toLowerCase()))
+  const suggestionCards: Card[] = personalizedSuggestions
+    .filter((suggestion) => !storedTitles.has(suggestion.title.toLowerCase()))
+    .map((suggestion) => {
+      const category = categories.includes(suggestion.category) ? suggestion.category : 'Other'
+      return {
+        title: suggestion.title,
+        organization: suggestion.organization ? `${suggestion.organization} · ${suggestion.explanation}` : suggestion.explanation,
+        type: suggestion.opportunity_type.charAt(0).toUpperCase() + suggestion.opportunity_type.slice(1),
+        Icon: category === 'Jobs' ? Building2 : category === 'Projects' ? Sprout : category === 'Resources' ? GraduationCap : Hospital,
+        iconColor: 'bg-[#8170e8]',
+        tagColor: 'bg-[#eeeaff] text-[#6552c7]',
+        category,
+      }
+    })
+  const visibleOpportunities = [...storedCards, ...suggestionCards].filter(
+    (opportunity) => opportunity.category === activeCategory,
+  )
 
   return (
     <div className="relative isolate mx-auto w-full max-w-[1120px]">
@@ -310,6 +305,7 @@ useEffect(() => {
               <h3 className="font-bold text-[#262251]">
                 {aiOpportunity.opportunity_title}
               </h3>
+              <SourceNote source={aiOpportunity.mindmate_source} />
 
               <p className="mt-1 text-sm text-[#737ba6]">
                 {aiOpportunity.organization || 'Organization not specified'}
@@ -481,7 +477,7 @@ useEffect(() => {
                         {fitAssessment.overall_fit || 'Not specified'}
                       </h4>
                       <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold">
-                        AI assessment
+                        {fitAssessment.mindmate_source === 'offline' ? 'Offline estimate' : fitAssessment.mindmate_source === 'recorded' ? 'Recorded answer' : 'AI assessment'}
                       </span>
                     </div>
                     <p className="mt-3 text-sm leading-6">
@@ -549,10 +545,11 @@ useEffect(() => {
                     )}
                   </div>
 
+                  <SourceNote source={fitAssessment.mindmate_source} />
                   <p className="text-xs leading-5 text-[#737ba6]">
                     This assessment is based on your saved MindMate profile and
-                    the opportunity description. Results are AI-generated
-                    guidance, not a guarantee of selection.
+                    the opportunity description. It is guidance, not a
+                    guarantee of selection.
                   </p>
                 </div>
               )
@@ -568,6 +565,11 @@ useEffect(() => {
             Personalised suggestions: {suggestionsError} Showing your saved opportunities instead.
             </p>
           )}
+        {suggestionsSource && suggestionsSource !== 'nemotron' && suggestionCards.some((card) => card.category === activeCategory) && (
+          <p className="border-b border-[#e6e0ff] px-5 py-3 text-[12px] text-[#737ba6]">
+            Suggestions below your saved opportunities come from {suggestionsSource === 'offline' ? 'offline matching against your skills, not an AI model' : 'a recorded demo answer'}.
+          </p>
+        )}
           {stored.error && <p role="alert" className="p-5 text-sm text-rose-600">Could not load opportunities: {stored.error}</p>}
           {storedFitError && <p role="alert" className="px-5 pt-3 text-sm text-rose-600">{storedFitError}</p>}
           {!suggestionsLoaded || stored.loading ? <p role="status" className="p-5 text-sm text-[#737ba6]">Loading opportunities…</p> : visibleOpportunities.length > 0 ? (

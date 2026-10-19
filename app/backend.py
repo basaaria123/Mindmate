@@ -36,12 +36,18 @@ ROUTERS = (
 )
 
 
+EXPOSED_HEADERS = ["X-MindMate-Source", "X-MindMate-Cache"]
+
+
 def _extend_cors(app: FastAPI) -> None:
     extra = get_settings().cors_origins
-    if not extra:
-        return
     for middleware in app.user_middleware:
         if middleware.cls is CORSMiddleware:
+            # Let the browser read which engine answered (Nemotron, offline analysis, recording).
+            exposed = list(middleware.kwargs.get("expose_headers", []))
+            middleware.kwargs["expose_headers"] = exposed + [h for h in EXPOSED_HEADERS if h not in exposed]
+            if not extra:
+                continue
             current = list(middleware.kwargs.get("allow_origins", []))
             middleware.kwargs["allow_origins"] = current + [origin for origin in extra if origin not in current]
 

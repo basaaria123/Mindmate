@@ -4,7 +4,10 @@
 import type { FitResult, Gap, GapReport, Goal, MemoryItem, Opportunity, PracticeSession, Plan, PlanTask, ReplanResult } from './backend'
 import { loadDemoState } from './demoState'
 
+export type PersonaProfile = { goal: string | null; education: string | null; dailyMinutes: number | null }
+
 type Snapshot = {
+  profile: PersonaProfile
   goals: Goal[]
   plan: Plan
   opportunities: Opportunity[]
@@ -44,6 +47,10 @@ function wait(ms = 250) {
 
 function practiceDone(): boolean {
   return Boolean(loadDemoState().latestPractice)
+}
+
+export async function getPersonaProfile(): Promise<PersonaProfile> {
+  return (await snapshot()).profile
 }
 
 export async function getGoals(): Promise<Goal[]> {

@@ -2,7 +2,7 @@
 // With VITE_API_BASE_URL set every call goes to FastAPI; without it, the same
 // functions answer from a snapshot of real backend responses for the demo
 // persona (personaSnapshot.json), so the UI can be built and demoed offline.
-import { request, useMocks } from './api'
+import { request, useMocks, type AIProfile } from './api'
 import * as mock from './personaMock'
 
 export type Goal = {
@@ -200,6 +200,33 @@ export async function getBackendStatus(): Promise<BackendStatus> {
   if (useMocks) return { llm_available: false, llm_mode: 'mock', source: 'mock' }
   const status = await request<{ llm_available: boolean; llm_mode: string }>('/admin/status')
   return { llm_available: status.llm_available, llm_mode: status.llm_mode, source: 'backend' }
+}
+
+// The AI agents' profile shape. Onboarding saves one ('mindmate-ai-profile'); without it the
+// profile is built from memory: the stored profile, skills with a level, and preferences.
+export async function getAIProfile(): Promise<AIProfile> {
+  try {
+    const saved = window.localStorage.getItem('mindmate-ai-profile')
+    if (saved) return JSON.parse(saved) as AIProfile
+  } catch { /* fall back to memory */ }
+  const [profile, items] = await Promise.all([
+    useMocks ? mock.getPersonaProfile() : request<{ goal: string | null; education: string | null; dailyMinutes: number | null }>('/profile'),
+    getMemoryItems(),
+  ])
+  const text = (item: MemoryItem, key: string) => (typeof item.payload[key] === 'string' ? (item.payload[key] as string) : '')
+  const skills = items
+    .filter((item) => item.type === 'skill' && text(item, 'level') !== 'none')
+    .map((item) => text(item, 'name') || item.content.replace(/\s*\(.*\)$/, ''))
+  const preferences = items.filter((item) => item.type === 'preference').map((item) => item.content)
+  const isInterest = (value: string) => /^interest\s*:/i.test(value)
+  return {
+    education: profile.education || 'Not stated',
+    goals: profile.goal ? [profile.goal] : [],
+    skills,
+    interests: preferences.filter(isInterest).map((value) => value.replace(/^interest\s*:\s*/i, '')),
+    daily_available_minutes: profile.dailyMinutes ?? null,
+    learning_preferences: preferences.filter((value) => !isInterest(value)),
+  }
 }
 
 export function hasActiveWeakness(items: MemoryItem[]): boolean {

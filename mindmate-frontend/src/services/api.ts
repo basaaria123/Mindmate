@@ -187,7 +187,10 @@ export async function getDemoState(): Promise<DemoState> {
 
 
 // Same configurable base URL as the rest of the API; the local default keeps mock mode working.
-const AI_API_BASE_URL = apiBaseUrl || 'http://127.0.0.1:8000'
+// Which engine produced an AI answer: Nemotron, offline analysis (no key, or mock mode), or a
+// recorded demo answer. The screens show it so offline results are never passed off as model output.
+export type AISource = 'nemotron' | 'offline' | 'recorded'
+export type WithSource<T> = T & { mindmate_source?: AISource }
 
 
 export type AIProfile = {
@@ -241,11 +244,11 @@ export type AIFitAssessment = {
 async function callMindMateAI<T>(
   path: string,
   body: unknown,
-): Promise<T> {
+): Promise<WithSource<T>> {
   let response: Response
 
   try {
-    response = await fetch(`${AI_API_BASE_URL}${path}`, {
+    response = await fetch(`${apiBaseUrl}${path}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -255,7 +258,7 @@ async function callMindMateAI<T>(
     })
   } catch {
     throw new Error(
-      'Could not reach the MindMate AI server. Check that the backend is running and try again.',
+      'Could not reach the MindMate API. Check that the backend is running and try again.',
     )
   }
 
@@ -275,17 +278,36 @@ async function callMindMateAI<T>(
     throw new Error(detail)
   }
 
-  if (responseBody === null) {
+  if (responseBody === null || typeof responseBody !== 'object') {
     throw new Error(
       'The MindMate AI server returned an empty or invalid response. Please try again.',
     )
   }
 
-  return responseBody as T
+  const source: AISource = response.headers.get('X-MindMate-Cache')
+    ? 'recorded'
+    : response.headers.get('X-MindMate-Source') === 'offline'
+      ? 'offline'
+      : 'nemotron'
+  return { ...(responseBody as T), mindmate_source: source }
 }
 
+// Mock mode has no server: analyse in the browser (services/offlineAnalysis.ts).
+async function offline<T>(compute: (module: typeof import('./offlineAnalysis'), curated: CuratedList) => T): Promise<WithSource<T>> {
+  const [module, curated] = await Promise.all([import('./offlineAnalysis'), curatedOpportunities()])
+  await new Promise((resolve) => window.setTimeout(resolve, 300))
+  return { ...compute(module, curated), mindmate_source: 'offline' }
+}
 
-export function extractProfile(userMessage: string): Promise<AIProfile> {
+type CuratedList = { title: string; org: string | null; type: string; requirements: { name: string }[] }[]
+
+async function curatedOpportunities(): Promise<CuratedList> {
+  const snapshot = (await import('./personaSnapshot.json')).default as unknown as { opportunities: CuratedList }
+  return snapshot.opportunities
+}
+
+export function extractProfile(userMessage: string): Promise<WithSource<AIProfile>> {
+  if (useMocks) return offline((m) => m.analyseProfile(userMessage))
   return callMindMateAI<AIProfile>('/profile', {
     user_message: userMessage,
   })
@@ -293,7 +315,10 @@ export function extractProfile(userMessage: string): Promise<AIProfile> {
 
 export function extractOpportunity(
   opportunityText: string,
-): Promise<AIOpportunity> {
+): Promise<WithSource<AIOpportunity>> {
+  if (useMocks) {
+    return offline((m, curated) => m.analyseOpportunity(opportunityText, curated.flatMap((o) => o.requirements.map((r) => r.name))))
+  }
   return callMindMateAI<AIOpportunity>('/opportunity', {
     opportunity_text: opportunityText,
   })
@@ -302,7 +327,8 @@ export function extractOpportunity(
 export function assessFit(
   userProfile: AIProfile,
   opportunity: AIOpportunity,
-): Promise<AIFitAssessment> {
+): Promise<WithSource<AIFitAssessment>> {
+  if (useMocks) return offline((m) => m.analyseFit(userProfile, opportunity))
   return callMindMateAI<AIFitAssessment>('/fit', {
     user_profile: userProfile,
     opportunity,
@@ -324,7 +350,8 @@ export type AISuggestionsResponse = {
 
 export function getPersonalizedSuggestions(
   userProfile: AIProfile,
-): Promise<AISuggestionsResponse> {
+): Promise<WithSource<AISuggestionsResponse>> {
+  if (useMocks) return offline((m, curated) => m.suggest(userProfile, curated))
   return callMindMateAI<AISuggestionsResponse>(
     '/suggestions',
     { user_profile: userProfile },

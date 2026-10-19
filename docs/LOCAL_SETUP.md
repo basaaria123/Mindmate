@@ -72,8 +72,10 @@ cp .env.example .env
 Set `VITE_API_BASE_URL=http://localhost:8000` in `mindmate-frontend/.env` so every screen talks to the
 backend. Leave it empty for mock mode: every memory, plan, practice and opportunity screen then reads a
 persona snapshot (`src/services/personaSnapshot.json`, real backend responses for the Meera persona) and keeps
-your edits in `localStorage` (key `mindmate-persona-mock`; clear it to start over). The AI screens then call
-`http://127.0.0.1:8000` directly. The header chip shows which mode you are in.
+your edits in `localStorage` (key `mindmate-persona-mock`; clear it to start over). The AI features
+(onboarding profile, "Analyze with AI", fit, suggestions) run offline analysis in the browser and say so on
+screen; for Nemotron, run the backend with a key and set `VITE_API_BASE_URL`. The header chip shows which mode
+you are in.
 
 ```bash
 npm run dev                          # http://localhost:5173
@@ -147,7 +149,7 @@ The second call's `rationale` cites `weakness#1`; `GET /memory` returns `updated
 
 | Symptom | Fix |
 |---|---|
-| `NEBIUS_API_KEY is missing` | Add the key to `.env` (backend root), restart uvicorn. Only the AI endpoints need it. |
+| Results say "Offline analysis" | No key, or `MINDMATE_LLM_MODE=off`. Add `NEBIUS_API_KEY` to `.env` (backend root), set `MINDMATE_LLM_MODE=live`, restart uvicorn, and set `VITE_API_BASE_URL` in the frontend. |
 | Frontend shows "Could not reach the MindMate API" | Backend not running on 8000, or `VITE_API_BASE_URL` wrong. Restart `npm run dev` after editing `.env`. |
 | CORS error in the browser | Add the frontend origin to `CORS_ORIGINS` in `.env`. |
 | `429 Rate limit exceeded` | `RATE_LIMIT_PER_MINUTE=0` in `.env` for local work. |

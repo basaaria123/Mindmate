@@ -62,6 +62,38 @@ def call_agent(db: Session, user: models.User | None, agent: str, fn: Callable[.
     return result
 
 
+def answer_with_fallback(agent: str, live: Callable[[], T], offline: Callable[[], T]) -> tuple[T, str]:
+    """For the stateless AI endpoints in main.py: the agent when available, offline analysis otherwise.
+
+    Returns ``(result, source)`` with source ``"nemotron"`` or ``"offline"``. A model failure
+    is logged like any other fallback; a database problem never blocks the answer.
+    """
+
+    try:
+        from app.db import get_session_factory
+
+        session = get_session_factory()()
+    except Exception:  # noqa: BLE001
+        session = None
+    try:
+        if session is None:
+            result = None
+            if llm_available():
+                try:
+                    result = live()
+                except Exception:  # noqa: BLE001
+                    result = None
+        else:
+            result = call_agent(session, None, agent, live)
+            session.commit()
+    finally:
+        if session is not None:
+            session.close()
+    if result is not None:
+        return result, "nemotron"
+    return offline(), "offline"
+
+
 def user_profile_input(db: Session, user: models.User, *, daily_minutes: int | None = None):
     """The AI UserProfile schema, filled from structured memory."""
 

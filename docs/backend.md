@@ -92,8 +92,9 @@ budgets are enforced by the scheduler.
 
 ## Demo fallback, rehearsal and persona
 
-* `MINDMATE_DEMO_CACHE=fallback` serves recorded answers for the AI endpoints when Nebius fails; `replay`
-  never calls the model. The shipped recordings are hand-written defaults for the persona, validated against the
+* Without a key the AI endpoints answer with offline analysis (`app/services/offline_ai.py`, header
+  `X-MindMate-Source: offline`). `MINDMATE_DEMO_CACHE=fallback` serves a recorded answer instead when one exists
+  for the exact request (or when an endpoint errors); `replay` never calls the model. The shipped recordings are hand-written defaults for the persona, validated against the
   AI schemas; run once with `record` and a real key to replace them with real Nemotron output.
 * `python scripts/demo_check.py` (or `make demo-check BASE_URL=...`) resets the persona, runs the scripted demo
   path, checks success criteria 1, 2, 3 and 7, and prints step timings.

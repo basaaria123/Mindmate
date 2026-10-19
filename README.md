@@ -26,7 +26,7 @@ cites the weakness, the practice sessions and the user's own decisions.
 | NVIDIA Nemotron via Nebius Token Factory | Integrated: nine agents (profile, opportunity, fit, gap, planner, practice evaluation, practice questions, replan explanation, suggestions). Ultra for reasoning, Nano for fast extraction. Needs `NEBIUS_API_KEY`. |
 | Structured, user-owned memory | Integrated: PostgreSQL (SQLite locally); every item viewable, editable and deletable; deleted items never reach a prompt. |
 | Deterministic decisions | Integrated: fit score, gap ranking, replan priority, budget scheduler, weakness thresholds and permissions are code, not model output. |
-| Model-failure handling | Integrated: every agent retries invalid output once then rejects it; every backend path has a deterministic fallback; recorded answers can replace the AI endpoints during a demo. |
+| Model-failure handling | Integrated: every agent retries invalid output once then rejects it; every backend path has a deterministic fallback; without a key the AI endpoints (and mock mode, in the browser) give labelled offline analysis; recorded answers can replace the AI endpoints during a demo. |
 | Permission tiers | Integrated: read-only, tasks-only writes, application drafts only; nothing is submitted for the user. |
 | Nebius hosting (Serverless or AI Cloud) | Deployment files ready (`Dockerfile`, `docker-compose.prod.yml`); not deployed yet. |
 | Vercel frontend hosting | Configuration ready (`mindmate-frontend/vercel.json`); not deployed yet. |
@@ -43,7 +43,7 @@ make dev       # backend http://localhost:8000, frontend http://localhost:5173
 ```
 
 Add `NEBIUS_API_KEY` to `.env` for live Nemotron calls; without it the backend runs its deterministic
-paths and the AI-only endpoints return an error. Step-by-step instructions, including Windows:
+paths and the AI endpoints answer with clearly labelled offline analysis (keyword extraction and fit rules). Step-by-step instructions, including Windows:
 `docs/LOCAL_SETUP.md`.
 
 ## Repository layout

@@ -3,12 +3,15 @@
 Set ``MINDMATE_DEMO_CACHE`` to choose how POST /profile, /opportunity, /fit,
 /gap, /plan, /suggestions and /practice behave:
 
-* ``off`` (default)  - normal live behaviour.
+* ``off`` (default)  - normal behaviour: Nemotron when available, otherwise offline
+                       analysis (``app/services/offline_ai.py``).
 * ``record``         - call the agents live and save every successful response.
 * ``replay``         - never call the model; serve the recorded response for the
                        same request body, else the endpoint's default response.
-* ``fallback``       - call live; if the model fails (provider error, missing key,
-                       invalid output after retry) serve the recorded response.
+* ``fallback``       - call live; when the model is unavailable the endpoint answers
+                       with offline analysis of the request, unless a recording
+                       of this exact request exists, which is served instead.
+                       A failing endpoint is answered with the recorded default.
 
 Recordings live in ``data/demo_cache/<endpoint>.json`` (``MINDMATE_DEMO_CACHE_DIR``
 overrides). The shipped files contain hand-written default responses for the demo
@@ -70,10 +73,10 @@ def _load(name: str) -> dict:
         return json.load(handle)
 
 
-def lookup(name: str, key: str) -> dict | list | None:
+def lookup(name: str, key: str, *, exact: bool = False) -> dict | list | None:
     data = _load(name)
     entry = data.get("entries", {}).get(key)
-    return entry if entry is not None else data.get("default")
+    return entry if entry is not None or exact else data.get("default")
 
 
 def record(name: str, key: str, response: dict | list) -> None:
@@ -141,9 +144,17 @@ class DemoCacheMiddleware(BaseHTTPMiddleware):
         except ValueError:
             payload = None
 
-        if mode == "record" and status == 200 and payload is not None:
+        offline = headers.get("x-mindmate-source") == "offline"
+        if mode == "record" and status == 200 and payload is not None and not offline:
             record(name, key, payload)
             headers["X-MindMate-Cache"] = "recorded"
+        elif mode == "fallback" and status == 200 and offline:
+            # The model was unavailable and the endpoint analysed the input offline; a recorded
+            # Nemotron answer to this exact request is better, a recording of another request is not.
+            cached = lookup(name, key, exact=True)
+            if cached is not None:
+                _log(name, "fallback")
+                return JSONResponse(cached, headers={"X-MindMate-Cache": "fallback"})
         elif mode == "fallback" and _is_model_failure(status, payload):
             cached = lookup(name, key)
             if cached is not None:
