@@ -63,6 +63,24 @@ Docker host works the same way (Render, Railway, Fly.io). Steps for a Docker hos
 Liveness path: `/health`. Readiness path (checks the database, returns 503 when it is down): `/health/ready`.
 Configuration and row counts: `/admin/status`.
 
+## 2b. Everything on one Nebius VM (alternative to Vercel)
+
+`docker-compose.prod.yml` runs PostgreSQL, the backend and the frontend (built into an nginx image by
+`mindmate-frontend/Dockerfile`) on one VM, for example a Nebius AI Cloud VM:
+
+```bash
+git clone https://github.com/basaaria123/Mindmate.git && cd Mindmate
+cp .env.production.example .env.production        # set passwords, NEBIUS_API_KEY, PUBLIC_API_URL, CORS_ORIGINS
+docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+docker compose -f docker-compose.prod.yml exec backend python scripts/reset_demo.py --seed-only
+python scripts/smoke_test.py --backend http://<vm>:8000 --frontend http://<vm>
+```
+
+The backend container applies migrations on start. The frontend image serves the app on port 80 with
+client-side routes, long-lived caching for hashed assets and a `/healthz` endpoint
+(`mindmate-frontend/nginx.conf`). `PUBLIC_API_URL` is baked into the frontend at build time; rebuild the
+frontend after changing it.
+
 ## 3. Connect the two
 
 1. Deploy the backend, note its public URL, confirm `https://<backend>/health` returns `{"status":"healthy"}`.
@@ -70,6 +88,14 @@ Configuration and row counts: `/admin/status`.
 3. Set `CORS_ORIGINS` on the backend to the Vercel production domain (and preview domains if needed).
 
 ## 4. Verification checklist (run against production)
+
+Non-destructive smoke test (health, readiness, Nemotron configured, read-only endpoints, CORS, frontend routes):
+
+```bash
+python scripts/smoke_test.py --backend https://<backend> --frontend https://<frontend>
+```
+
+Manual checks:
 
 ```bash
 B=https://<backend>; F=https://<frontend>
@@ -90,6 +116,15 @@ The application is only "deployed" when the last three steps work end to end on 
 
 ## 5. Status
 
-As of this commit: no Vercel project or backend host has been configured from this environment (no
-Vercel/Nebius credentials available here). The configuration above is ready to apply; production
-verification is pending and must be done by the person with Vercel and hosting access.
+| Item | State |
+|---|---|
+| Backend container (`Dockerfile`) | Written; its start command (migrate, then serve) verified by running it directly. The image itself has not been built here (no Docker daemon in the development environment). |
+| Frontend container (`mindmate-frontend/Dockerfile`, `nginx.conf`) | nginx config verified with `nginx -t` and by serving the production build: routes, 404s for missing assets, cache headers, `/healthz`. Image not built here. |
+| `docker-compose.prod.yml` | Written and syntax-checked; not run (no Docker daemon). |
+| Vercel project | Not created: needs the repository owner's Vercel account. Settings above. |
+| Nebius VM or container | Not created: needs the team's Nebius account. |
+| `scripts/smoke_test.py` | Verified locally against the backend and the nginx-served frontend: 11 of 12 checks pass; the one failure is "Nemotron configured", correct because no key exists locally. |
+| Backup screen recording | Captured from the integrated app running locally (no narration); kept outside the repository. |
+
+The application is deployed only when the smoke test and `scripts/demo_check.py` pass against the hosted
+URLs and the browser walkthrough above works.

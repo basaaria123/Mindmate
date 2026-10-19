@@ -40,5 +40,5 @@ def test_missing_placeholder_fails_loudly():
 
 
 def test_no_unused_prompt_files():
-    names = {re.sub(r"\.system$", "", p.stem) for p in Path(PROMPT_DIR).glob("*.md")}
+    names = {re.sub(r"\.system$", "", p.stem) for p in Path(PROMPT_DIR).glob("*.md") if p.name != "README.md"}
     assert names == set(PLACEHOLDERS)

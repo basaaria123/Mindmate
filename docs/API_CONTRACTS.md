@@ -35,18 +35,29 @@ Full reference with every field: `docs/contracts/backend-api.md`. Endpoints the 
 | `replanLearningPathApi` | `POST /plans/replan` | `{available_minutes?, reason?}` | `{plan, diff:{before, after, added, moved, deferred}, rationale, refs}` |
 | `getTraceEvents` | `GET /agent/events` | – | `{events:[{id, title, detail, occurredAt, agent, action, refs}]}` |
 
-Recommended next calls for the frontend (backend ready, UI not wired yet):
+Typed client for the memory, plan and practice screens (`src/services/backend.ts`). Each function uses the
+persona snapshot mock (`src/services/personaMock.ts`) when `VITE_API_BASE_URL` is empty:
 
-| Purpose | Method and path | Request | Response |
-|---|---|---|---|
-| Store the Profile agent's output in memory after onboarding | `POST /profile/import` | the `AIProfile` returned by `POST /profile` | `{added:{goals, skills, preferences}, skipped[], profile}` |
-| Show the question the backend will grade | `POST /practice/start` | `{topic?}` | `{id, question, topic}`; then send `session_id` with `POST /practice/evaluate` |
+| Frontend function (`src/services/backend.ts`) | Method and path | Used by |
+|---|---|---|
+| `getGoals` | `GET /goals` | Memory (sorted by `priority_rank`) |
+| `getActivePlan` | `GET /plans` → `active` | Pipeline, Sim |
+| `replanPlan(availableMinutes?, reason?)` | `POST /plans/replan` | Pipeline (budget select, before/after diff) |
+| `setTaskStatus(taskId, status)` | `PATCH /plans/tasks/{id}` | Pipeline, Sim |
+| `getOpportunities` | `GET /opportunities` (each item has `fit` and `target`) | Scanner, Gap Map |
+| `assessStoredFit(opportunityId)` | `POST /opportunities/{id}/fit` | Scanner ("Check fit") |
+| `getGaps(opportunityId)` | `POST /skills/gaps` → `{fit, gaps[]}` | Gap Map |
+| `getMemoryItems` | `GET /memory` → `items` | Memory |
+| `editMemoryItem(id, content)` | `PATCH /memory/{id}` | Memory |
+| `deleteMemoryItem(id)` | `DELETE /memory/{id}` | Memory |
+| `startPractice(topic?)` | `POST /practice/start` → `{id, question, topic, question_source}` | Sim (the `session_id` goes to `submitPracticeAnswer`) |
+| `importProfile(profile)` | `POST /profile/import` | Onboarding, after `POST /profile` |
+| `getBackendStatus` | `GET /admin/status` | Model chip in the header |
 
-Other backend endpoints (not yet used by the UI): `/goals`, `/constraints`, `/decisions`, `/skills`,
-`/evidence`, `/weaknesses`, `/skills/gaps`, `/opportunities`, `/opportunities/search`,
-`/opportunities/{id}/fit`, `/plans`, `/plans/{id}`, `PATCH /plans/tasks/{id}`, `/practice/start`,
-`/practice/topics`, `/practice/sessions`, `/memory/context`, `/memory/{id}` (GET/PATCH/DELETE),
-`/memory/purge`, `DELETE /memory?confirm=true`, `/actions`, `/admin/status`, `/admin/reset-demo`.
+Backend endpoints not called by the UI (available for scripts and the OpenAPI page): `/constraints`,
+`/decisions`, `/skills`, `/evidence`, `/weaknesses`, `/opportunities/search`, `/opportunities/extract`,
+`/plans/{id}`, `/practice/topics`, `/practice/sessions`, `/memory/context`, `/memory/purge`,
+`DELETE /memory?confirm=true`, `/actions`, `/admin/reset-demo`.
 
 ## B. AI agent endpoints (`main.py`, AI-owned)
 

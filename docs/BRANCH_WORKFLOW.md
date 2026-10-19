@@ -17,13 +17,15 @@ backend layer), so all three branches start from identical content.
 
 | Path | Owner | Notes |
 |---|---|---|
-| `mindmate-frontend/**` | Frontend | UI, routing, styles, assets, `src/services/api.ts` (API client), mocks, Vite/ESLint/TS config, `package.json` + lockfile, `vercel.json` |
+| `mindmate-frontend/**` | Frontend | UI, routing, styles, assets, `src/services/api.ts` and `src/services/backend.ts` (API clients), `src/services/personaMock.ts` and `personaSnapshot.json` (offline mode), `src/components/`, `src/hooks/`, Vite/ESLint/TS config, `package.json` + lockfile, `vercel.json`, `Dockerfile`, `nginx.conf` |
 | `main.py` | Backend (shared with AI) | AI developer owns the agent endpoints (`/profile` POST, `/opportunity`, `/fit`, `/gap`, `/plan`, `/practice` POST, `/suggestions`, `/memories`); backend owns the two `register_backend` lines and CORS. Coordinate before editing. |
 | `app/api/**`, `app/db/**`, `app/memory/**`, `app/scoring/**`, `app/backend.py`, `app/config.py`, `app/permissions.py`, `app/rate_limit.py` | Backend | Routers, models, memory layer, deterministic logic |
 | `app/services/*` except the two AI files | Backend | plan, practice, opportunity, seed, events, users, weakness services |
 | `app/services/llm_client.py`, `app/services/memory_store.py` | AI | Nebius client, model tiering, legacy JSON memory store |
-| `app/agents/**`, `app/schemas/**`, `app/utils/**`, root `test_*.py` | AI | Agents, prompts (inline today; `prompts/` when extracted), output schemas, agent tests |
-| `alembic/**`, `alembic.ini`, `tests/**`, `scripts/**`, `data/*.json`, `Dockerfile`, `.dockerignore` | Backend | Migrations, backend tests, seed/reset, container |
+| `app/agents/**`, `app/schemas/**`, `app/utils/**`, `prompts/**`, `data/eval/**`, `scripts/run_eval.py`, root `test_*.py` | AI | Agents, versioned prompts, output schemas, evaluation set, agent tests |
+| `alembic/**`, `alembic.ini`, `tests/**`, `scripts/**` (except `run_eval.py`), `data/*.json`, `data/demo_cache/**`, `Dockerfile`, `.dockerignore` | Backend | Migrations, backend tests, seed/reset, demo check, recorded demo answers, container |
+| `docker-compose.prod.yml`, `.env.production.example`, `scripts/smoke_test.py`, `docs/DEPLOYMENT.md` | DevOps | Production stack, smoke test, deployment guide |
+| `LICENSE`, `README.md`, `docs/SUBMISSION.md`, `docs/demo-script.md`, `docs/DECISIONS.md`, `docs/TEST_PLAN.md`, `docs/feedback.md` | Product lead | License, submission pack, demo script, decisions, test plan, tool feedback |
 | `requirements.txt` | Shared (backend + AI) | Announce dependency changes in the PR description |
 | `.env.example`, `.gitignore`, `Makefile`, `scripts/dev.sh`, `.github/**`, `README.md`, `docs/**` | Shared | Edit through a PR that names the change in its title |
 | `docs/contracts/backend-api.md`, `docs/API_CONTRACTS.md` | Shared contract | Any change needs a reviewer from each affected component |

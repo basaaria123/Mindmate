@@ -1,5 +1,5 @@
 # Root developer commands for MindMate (works on macOS/Linux; see docs/LOCAL_SETUP.md for Windows).
-.PHONY: demo-check test-backend-postgres setup setup-backend setup-frontend dev backend frontend test test-backend test-ai test-ai-live test-frontend lint-frontend reset-demo
+.PHONY: eval smoke demo-check test-backend-postgres setup setup-backend setup-frontend dev backend frontend test test-backend test-ai test-ai-live test-frontend lint-frontend reset-demo
 
 setup: setup-backend setup-frontend
 
@@ -33,7 +33,7 @@ test-ai-live:   ## calls Nemotron on Nebius Token Factory; spends credits
 	python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q
 
 test-frontend:
-	cd mindmate-frontend && npm run build
+	cd mindmate-frontend && npm run lint && npm run build
 
 lint-frontend:
 	cd mindmate-frontend && npm run lint
@@ -46,3 +46,9 @@ demo-check:     ## rehearse the scripted demo and check success criteria (in-pro
 
 test-backend-postgres:  ## backend tests against PostgreSQL (docker compose up -d first)
 	MINDMATE_TEST_DATABASE_URL=postgresql+psycopg://mindmate:mindmate@localhost:5432/mindmate MINDMATE_LLM_MODE=off python -m pytest tests -q
+
+eval:           ## evaluation set; add LIVE=1 to call Nemotron
+	python scripts/run_eval.py $(if $(LIVE),--live,)
+
+smoke:          ## non-destructive production smoke test: make smoke BACKEND=https://... FRONTEND=https://...
+	python scripts/smoke_test.py --backend $(BACKEND) $(if $(FRONTEND),--frontend $(FRONTEND),)

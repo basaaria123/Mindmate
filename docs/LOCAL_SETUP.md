@@ -70,8 +70,10 @@ cp .env.example .env
 ```
 
 Set `VITE_API_BASE_URL=http://localhost:8000` in `mindmate-frontend/.env` so every screen talks to the
-backend. Leave it empty to use the built-in mocks for the memory/plan screens (the AI screens then call
-`http://127.0.0.1:8000` directly).
+backend. Leave it empty for mock mode: every memory, plan, practice and opportunity screen then reads a
+persona snapshot (`src/services/personaSnapshot.json`, real backend responses for the Meera persona) and keeps
+your edits in `localStorage` (key `mindmate-persona-mock`; clear it to start over). The AI screens then call
+`http://127.0.0.1:8000` directly. The header chip shows which mode you are in.
 
 ```bash
 npm run dev                          # http://localhost:5173
@@ -112,9 +114,23 @@ python -m pytest . -q --ignore=tests --ignore=mindmate-frontend --ignore=test_se
 # AI, live part (needs NEBIUS_API_KEY and network; costs Token Factory credits)
 python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q
 
-# frontend
+# evaluation set: practice weak/strong agreement and extraction precision/recall (add --live with a key)
+python scripts/run_eval.py
+
+# backend against PostgreSQL (docker compose up -d first)
+make test-backend-postgres
+
+# frontend (lint is a required CI step)
 cd mindmate-frontend && npm run lint && npm run build
 ```
+
+Production-style check of a running stack (read-only; see `docs/DEPLOYMENT.md`):
+
+```bash
+python scripts/smoke_test.py --backend http://localhost:8000 --frontend http://localhost:5173
+```
+
+Without `NEBIUS_API_KEY` the `llm_available` check fails and the rest should pass.
 
 Integration check (backend running, no key needed):
 
@@ -137,4 +153,4 @@ The second call's `rationale` cites `weakness#1`; `GET /memory` returns `updated
 | `429 Rate limit exceeded` | `RATE_LIMIT_PER_MINUTE=0` in `.env` for local work. |
 | Database looks wrong | `python scripts/reset_demo.py` (or `POST /admin/reset-demo`). |
 | `alembic` errors with SQLite | Delete `data/mindmate.db` and rerun `python scripts/reset_demo.py`; SQLite uses auto-create. |
-| `npm run lint` reports 2 errors | Pre-existing in `ThemeContext.tsx` and `Scanner.tsx`; tracked by the frontend developer. The build still passes. |
+| Mock mode shows old edits | Clear the `mindmate-persona-mock` key in the browser's local storage. |
