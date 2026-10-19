@@ -146,7 +146,7 @@ def serialize_plan(plan: models.Plan) -> dict:
     tasks = sorted(plan.tasks, key=lambda t: (t.day_number, t.order_index))
     minutes_by_day: dict[int, int] = {}
     for task in tasks:
-        if task.status in {"todo", "done"}:
+        if task.status == "todo":
             minutes_by_day[task.day_number] = minutes_by_day.get(task.day_number, 0) + task.minutes
     return {
         "id": plan.id,
@@ -278,6 +278,29 @@ def _persist_plan(
             )
         )
     if previous is not None:
+        for task in previous.tasks:
+            if task.status != "done":
+                continue
+            db.add(
+                models.Task(
+                    plan_id=plan.id,
+                    user_id=user.id,
+                    goal_id=task.goal_id,
+                    title=task.title,
+                    minutes=task.minutes,
+                    priority=task.priority,
+                    day_number=task.day_number,
+                    order_index=-1,
+                    deadline=task.deadline,
+                    status="done",
+                    why=task.why,
+                    refs=list(task.refs or []),
+                    role_impact=task.role_impact,
+                    must_keep=task.must_keep,
+                    priority_score=task.priority_score,
+                    origin_task_id=task.origin_task_id or task.id,
+                )
+            )
         previous.status = "superseded"
         previous.replaced_by_id = plan.id
     db.flush()
