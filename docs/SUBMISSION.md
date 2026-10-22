@@ -1,76 +1,135 @@
 # Devpost submission pack
 
-Everything the product lead needs to submit. Items marked "to do" need an account, a key or a person.
+Ready to paste. Replace every `[PLACEHOLDER]` and resolve every **[CONFIRM]** before submitting.
+Requirement-by-requirement status: `docs/SUBMISSION_CHECKLIST.md`.
 
-## Checklist (proposal section 15)
+---
 
-| Item | Requirement | Status |
-|---|---|---|
-| Working project on Nebius | Runs on Token Factory or AI Cloud with an NVIDIA open model | Code integrated with Nemotron on Token Factory; hosting files ready. **To do:** deploy (`docs/DEPLOYMENT.md`) and verify with a key. |
-| Category | Personal AI | Ready |
-| Project description | What, why, how | Draft below |
-| Demo URL | Hosted app | **To do:** after deployment |
-| Demo video | Public YouTube, 3 minutes or less, shows Token Factory and Nemotron | Script in `docs/demo-script.md`; shot list below. **To do:** record with narration and upload. |
-| Public repository | Open-source license visible at the top | MIT `LICENSE` added; badge at the top of the README. **To do:** make the repository public if it is private. |
-| README | Setup, where Nemotron and Token Factory are used, which track tools are really used | Done (`README.md`, "What is actually integrated") |
-| Tool feedback | Nebius Token Factory, AI Cloud, NVIDIA tools | Draft below from `docs/feedback.md`. **To do:** add live latency and quality notes once a key is used. |
-| Pre-existing work | Explain anything that existed before the submission period | Draft below. **To do:** confirm against the official submission period. |
-| Optional | City Winner (IRL event), Tavily prize | Not applicable: no IRL event recorded; Tavily is not integrated. |
+## Project name and tagline
 
-## Project description (draft)
+**MindMate**
+*It remembers why. It adapts to you. It stays yours.*
 
-**MindMate: it remembers why. It adapts to you. It stays yours.**
+## Category
 
-Today's assistants answer one question and forget. Students chasing an internship re-explain their goals,
-time limits and history in every chat, and nothing they learn in practice changes their plan.
+Personal AI
 
-MindMate is a private personal agent that keeps a structured memory the user can inspect and edit: goals in
-priority order, decisions with their reasons ("college exams come before GATE"), skills backed by evidence,
-and weaknesses found in practice. NVIDIA Nemotron on Nebius Token Factory reads postings, judges fit,
-generates interview questions, evaluates answers and explains plan changes. Deterministic code decides
-everything with consequences: fit scores, gap ranking, the 14-day schedule within the user's daily time,
-when a weakness is real, and what actions are allowed.
+## Short description
 
-The loop is visible: a weak practice answer on model evaluation becomes a recorded weakness once there is
-repeated evidence; the next replan moves model-evaluation practice to day 1, keeps it even when the time drops
-from 60 to 30 minutes, and cites the weakness, the practice answers and the user's own decisions. Every item in
-memory can be edited or deleted, deleted items never reach a prompt, and MindMate only drafts; the user
-submits.
+MindMate is a private personal AI agent for students chasing an internship. It keeps an editable memory of
+your goals, decisions, skills and weaknesses, and uses NVIDIA Nemotron on Nebius Token Factory to evaluate
+your practice and rebuild your study plan when your time or results change, citing the memory behind every
+change.
 
-**How it is built:** React + Vite + TypeScript frontend; FastAPI backend with PostgreSQL, Alembic migrations
-and a memory layer with reference IDs that must exist in the database; nine Nemotron agents (Ultra for
-reasoning, Nano for extraction) with schema-validated JSON, one retry, then rejection; deterministic
-fallbacks and recorded answers so the demo survives provider trouble.
+## Full description
 
-**What's next:** live opportunity search, a daily brief job, calendar and notes integrations, and more agents
-on the same memory (exam preparation, project planning).
+### What it does
 
-## Video shot list (≤ 3:00)
+MindMate keeps a structured memory that you can see, edit and delete: goals in priority order, decisions
+with their reasons ("college exams come before GATE"), skills backed by evidence, and weaknesses found in
+practice. From that memory it:
 
-Follow `docs/demo-script.md` scene by scene. Production notes from the proposal:
+- extracts the requirements of an internship or job posting you paste, and scores your fit against the
+  evidence you actually have (a skill without evidence counts as "not shown");
+- ranks your skill gaps and builds a 14-day plan that fits your daily time;
+- runs mock-interview practice and evaluates your answers;
+- records a weakness only after repeated evidence (two low answers, or one very low answer), never from a
+  single answer;
+- replans when your time or results change. Drop from 60 to 30 minutes a day and the plan is re-fitted;
+  record a weakness and practice on it moves to day 1. Every replan explains what moved and cites the
+  memory items that caused it.
 
-* Show Token Factory and Nemotron explicitly: the header chip reads "nemotron | nebius token factory" when the
-  key is set; add one short shot of `app/services/llm_client.py` or a `model_call` event in Activity History.
-* Record at 1080p; record the voice-over separately; add captions.
-* Keep it under 3:00; upload as a public YouTube video; test the link in a signed-out browser.
-* A silent backup recording of the full path exists (captured locally); use it only if a live take fails.
+Every memory item can be edited or deleted, deleted items never reach a prompt, and MindMate only drafts:
+it never submits anything for you. The AI Activity page shows every model call with the agent, the
+Nemotron model and how long it took.
 
-## Tool feedback (draft, from `docs/feedback.md`)
+### Why I built it
 
-* **Nebius Token Factory.** The OpenAI-compatible endpoint meant one client library for every agent; switching
-  models or endpoints is an environment variable. To add after a live run: latency for Ultra vs Nano, rate
-  limits hit, credit use for the demo path.
-* **NVIDIA Nemotron.** To add after a live run: JSON-schema adherence per agent (how often the retry was
-  needed), quality of requirement extraction and answer grading against the evaluation set (`make eval LIVE=1`).
-* **Designing around the model.** Because responses can be slow or off-schema, every model call has a
-  validated schema, one repair retry, and a deterministic fallback; this kept the product demoable even
-  without a key.
+Today's assistants answer one question and forget. A student preparing for an internship re-explains their
+goals, time limits and history in every chat, and nothing they learn in practice changes their plan. We
+wanted an assistant that remembers *why* (the reasons behind your decisions), adapts when your situation
+changes, and stays yours: inspectable, editable, and never acting on your behalf without you.
 
-## Pre-existing work (draft; confirm the submission period)
+### How it works
 
-The repository history starts on 10 October 2026 with the frontend starter, followed by the first agents on
-12 October; all code was written by the team for this project. The 15-day plan treats 15 October as day 1.
-If the official submission period began after 10 October, state: "A frontend starter (10 Oct) and early
-agent prototypes (12 Oct) existed before the period; during it we built the memory layer, database,
-deterministic engines, practice and replan loop, the remaining agents, the integrated screens and the
-deployment setup." Use `git log --format='%cs %an %s'` to cite exact commits.
+- **Nine NVIDIA Nemotron agents on Nebius Token Factory.** Nemotron 3 Nano
+  (`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`) handles extraction: profile, opportunity, suggestions.
+  Nemotron 3 Ultra (`nvidia/Nemotron-3-Ultra-550b-a55b`) handles judgement over your memory: fit, skill
+  gaps, planning, practice evaluation, practice questions and replan explanations. All agents share one
+  OpenAI-compatible Token Factory endpoint.
+- **Models propose, code decides.** Fit scores, gap ranking, replan priority, the budget scheduler,
+  weakness thresholds and permissions are deterministic code, so the same inputs give the same plan.
+  Agent output is validated before use: JSON must match a schema (one retry with the validation error,
+  then rejection), and cited memory IDs must exist in the database.
+- **Memory layer.** FastAPI with PostgreSQL (SQLite locally) and Alembic migrations; every memory item has
+  a reference ID (`goal#1`, `weakness#1`, `decision#2`) that explanations cite.
+- **Honest failure handling.** If Nemotron is unavailable, each path falls back to deterministic logic and
+  the screen says so ("offline analysis") instead of passing it off as model output.
+- **Frontend.** React, TypeScript and Vite on Vercel; the backend runs in Docker on a Nebius AI Cloud VM
+  behind Caddy for HTTPS. [CONFIRM after deploying]
+
+### Challenges
+
+- **Making model output safe to act on.** Free-text JSON can be malformed or invent references, so every
+  agent validates its output and the backend rejects citations of memory that does not exist.
+- **Keeping decisions reproducible.** We moved every number that changes the plan into code and use the
+  model for judgement and explanation, so a replan can always say exactly which inputs caused it.
+- **Not hiding failures.** We had to design fallbacks that keep the app usable without the model while
+  labelling those answers clearly, and added a smoke test that fails if a deployment answers offline.
+- **Matching skills honestly.** Our evaluation set caught our own matcher crediting "Deep learning" for
+  "Machine learning fundamentals" and "Java" for "JavaScript"; we fixed it before scoring anyone.
+
+### What's next
+
+Live opportunity search, a daily brief, calendar and notes integrations, and more agents on the same memory
+(exam preparation, project planning). None of these are in the current build.
+
+## Built with
+
+NVIDIA Nemotron 3 Ultra · NVIDIA Nemotron 3 Nano · Nebius Token Factory · Nebius AI Cloud [CONFIRM after
+deploying] · Python · FastAPI · Pydantic · SQLAlchemy · Alembic · PostgreSQL · SQLite · OpenAI Python SDK
+(as the Token Factory client) · React · TypeScript · Vite · Tailwind CSS · Docker · Docker Compose · Caddy ·
+Vercel · GitHub Actions
+
+## Links
+
+- Repository: https://github.com/basaaria123/Mindmate (must be **public**) [CONFIRM visibility]
+- Live demo: [LIVE_DEMO_URL] (frontend https://mindmate-lyart.vercel.app, once `VITE_API_BASE_URL`
+  points at the deployed backend)
+- Backend health: [BACKEND_URL]/health
+- Demo video: [YOUTUBE_URL] (public, 3:00 or less)
+
+## Feedback on Nebius and NVIDIA tools
+
+Full notes: `docs/feedback.md`. Summary to paste:
+
+> Nebius Token Factory's OpenAI-compatible API let us run nine Nemotron agents from one FastAPI backend:
+> one client, one base URL, models chosen by environment variable, no GPUs or model hosting, and offline
+> tests with a fake client. We used Nemotron 3 Nano for fast extraction and Nemotron 3 Ultra for judgement
+> over the user's memory, with deterministic code making the final decisions. We would like clearer
+> per-model guidance on structured JSON output, and per-request usage and latency we could log alongside
+> our own traces. [CONFIRM: one sentence on your observed Ultra vs Nano speed and quality, and your
+> experience deploying on Nebius AI Cloud.]
+
+## Updated during the Submission Period
+
+Only needed if the project existed before the Submission Period. The Submission Period started on
+**[CONFIRM: start date from the Official Rules]**. The repository's first commit is **2026-10-10** and the
+latest is **2026-10-22** (`git log --reverse --format='%h %ad %s' --date=short`).
+
+If the period started on or before 10 October 2026, everything below was built during it and this section
+can be omitted. If it started later, paste this, keeping only the dates before the start:
+
+> The repository began on 10 October 2026. Before [START DATE] it contained: a frontend starter
+> (10 Oct, `d2a797e`), a first profile-extraction agent (11 Oct, `d77a934`), early agents and their
+> API (12 Oct, `f09d657`, `24043c6`), and a first frontend connection to that API (14 Oct, `1675a79`).
+> Significantly updated during the Submission Period:
+> - personalised suggestions agent (15 Oct) and memory integration for the agents (16 Oct);
+> - the backend memory layer: database schema, memory APIs, deterministic fit, gap, priority and
+>   weakness engines, and the replan engine (17 Oct, `77f5350`);
+> - the remaining Nemotron agents and their tests (18–19 Oct): planner, practice evaluation, practice
+>   question generation and replan explanation, with versioned prompts (`47b4cbb`, `f66e052`);
+> - agent orchestration over database memory, PostgreSQL support, and integration of every screen with
+>   real data, including memory edit and delete and the before/after plan diff (19 Oct);
+> - production deployment for Nebius (Docker, HTTPS via Caddy, migrations on start), a live smoke test,
+>   and model and latency logging for every Nemotron call (22 Oct).
