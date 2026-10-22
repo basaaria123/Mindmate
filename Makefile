@@ -1,5 +1,5 @@
 # Root developer commands for MindMate (works on macOS/Linux; see docs/LOCAL_SETUP.md for Windows).
-.PHONY: eval smoke demo-check test-backend-postgres setup setup-backend setup-frontend dev backend frontend test test-backend test-ai test-ai-live test-frontend lint-frontend reset-demo
+.PHONY: eval smoke smoke-live demo-check test-backend-postgres setup setup-backend setup-frontend dev backend frontend test test-backend test-ai test-ai-live test-frontend lint-frontend reset-demo
 
 setup: setup-backend setup-frontend
 
@@ -50,6 +50,9 @@ test-backend-postgres:  ## backend tests against PostgreSQL (docker compose up -
 
 eval:           ## evaluation set; add LIVE=1 to call Nemotron
 	python scripts/run_eval.py $(if $(LIVE),--live,)
+
+smoke-live:     ## proves the deployment answers with Nemotron (fails on offline/mock/recorded): make smoke-live BACKEND=https://...
+	./scripts/smoke_test.sh $(BACKEND)
 
 smoke:          ## non-destructive production smoke test: make smoke BACKEND=https://... FRONTEND=https://...
 	python scripts/smoke_test.py --backend $(BACKEND) $(if $(FRONTEND),--frontend $(FRONTEND),)

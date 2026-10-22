@@ -19,5 +19,7 @@ COPY alembic ./alembic
 COPY data ./data
 COPY scripts ./scripts
 
-# Apply migrations (no-op when the schema is current), then serve.
-CMD ["sh", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port ${PORT}"]
+# Apply migrations (no-op when the schema is current), then serve. `exec` makes uvicorn PID 1 so it
+# receives SIGTERM on `docker stop` and shuts down cleanly; a crash exits the container and the
+# restart policy (docker-compose.prod.yml: unless-stopped) brings it back.
+CMD ["sh", "-c", "alembic upgrade head && exec uvicorn main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]

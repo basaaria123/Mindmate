@@ -1,16 +1,25 @@
-# Full MindMate stack on one VM (for example a Nebius AI Cloud VM).
+# MindMate production stack on one server (for example a Nebius AI Cloud VM).
+# Full steps: docs/DEPLOYMENT.md.
 #
-#   cp .env.production.example .env.production   # fill in the secrets
-#   docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
-#   docker compose -f docker-compose.prod.yml exec backend python scripts/reset_demo.py --seed-only
-#   python scripts/smoke_test.py --backend http://<vm>:8000 --frontend http://<vm>
+#   cp .env.production.example .env.production        # fill in the values (never commit it)
+#   docker compose -f docker-compose.prod.yml --env-file .env.production --profile https up -d --build
+#   ./scripts/smoke_test.sh https://<API_DOMAIN>
 #
-# The frontend can instead be hosted on Vercel (docs/DEPLOYMENT.md); then run only
-# the postgres and backend services.
+# Always started: postgres and backend. Profile "https" adds Caddy (automatic HTTPS for API_DOMAIN).
+# Profile "frontend" also serves the React app from this server (skip it when the frontend is on Vercel).
+# Migrations run when the backend starts; the demo persona is seeded only into an empty database.
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
+    logging: *logging
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-mindmate}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.production}
@@ -26,38 +35,62 @@ services:
   backend:
     build: .
     restart: unless-stopped
+    logging: *logging
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-mindmate}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-mindmate}
       NEBIUS_API_KEY: ${NEBIUS_API_KEY:-}
-      MINDMATE_AUTO_CREATE_SCHEMA: "false"
-      MINDMATE_AUTO_SEED: "false"
+      MINDMATE_AUTO_CREATE_SCHEMA: "false"   # alembic upgrade head runs at container start instead
+      MINDMATE_AUTO_SEED: ${MINDMATE_AUTO_SEED:-true}   # seeds the demo persona only if the database is empty
       MINDMATE_LLM_MODE: ${MINDMATE_LLM_MODE:-live}
-      MINDMATE_DEMO_CACHE: ${MINDMATE_DEMO_CACHE:-off}
+      MINDMATE_DEMO_CACHE: ${MINDMATE_DEMO_CACHE:-off}   # recorded answers stay off in production
       MINDMATE_ADMIN_TOKEN: ${MINDMATE_ADMIN_TOKEN:?set MINDMATE_ADMIN_TOKEN in .env.production}
-      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:?set CORS_ORIGINS (the Vercel URL) in .env.production}
+      CORS_ORIGIN_REGEX: ${CORS_ORIGIN_REGEX:-}
       RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-120}
       PORT: "8000"
     ports:
-      - "8000:8000"
+      # Localhost only when Caddy terminates HTTPS; set BACKEND_BIND=0.0.0.0 to expose port 8000 directly.
+      - "${BACKEND_BIND:-127.0.0.1}:8000:8000"
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready')\""]
       interval: 15s
       timeout: 5s
       retries: 5
 
+  caddy:
+    image: caddy:2-alpine
+    profiles: ["https"]
+    restart: unless-stopped
+    logging: *logging
+    depends_on:
+      - backend
+    environment:
+      API_DOMAIN: ${API_DOMAIN:?set API_DOMAIN (for example api.example.com) in .env.production}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
   frontend:
+    profiles: ["frontend"]
     build:
       context: ./mindmate-frontend
       args:
         VITE_API_BASE_URL: ${PUBLIC_API_URL:?set PUBLIC_API_URL in .env.production}
     restart: unless-stopped
+    logging: *logging
     depends_on:
       - backend
     ports:
-      - "80:80"
+      - "${FRONTEND_PORT:-8080}:80"
 
 volumes:
   mindmate-postgres:
+  caddy-data:
+  caddy-config:

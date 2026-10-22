@@ -40,9 +40,17 @@ EXPOSED_HEADERS = ["X-MindMate-Source", "X-MindMate-Cache"]
 
 
 def _extend_cors(app: FastAPI) -> None:
+    """Add the deployed frontend's origins from CORS_ORIGINS (exact, comma-separated) and
+    CORS_ORIGIN_REGEX (optional, e.g. for Vercel preview URLs). There is no wildcard default."""
+
+    import os
+
     extra = get_settings().cors_origins
+    origin_regex = os.getenv("CORS_ORIGIN_REGEX", "").strip()
     for middleware in app.user_middleware:
         if middleware.cls is CORSMiddleware:
+            if origin_regex:
+                middleware.kwargs["allow_origin_regex"] = origin_regex
             # Let the browser read which engine answered (Nemotron, offline analysis, recording).
             exposed = list(middleware.kwargs.get("expose_headers", []))
             middleware.kwargs["expose_headers"] = exposed + [h for h in EXPOSED_HEADERS if h not in exposed]

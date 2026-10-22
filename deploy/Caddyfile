@@ -1,0 +1,10 @@
+# HTTPS reverse proxy for the MindMate backend (docker-compose.prod.yml, profile "https").
+# Caddy obtains and renews a Let's Encrypt certificate for API_DOMAIN automatically;
+# the domain's DNS A record must point at this server and ports 80/443 must be open.
+{$API_DOMAIN} {
+	encode gzip
+	reverse_proxy backend:8000
+	log {
+		output stdout
+	}
+}

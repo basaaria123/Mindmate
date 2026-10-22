@@ -1,130 +1,174 @@
-# Deployment: Vercel frontend + separately hosted backend
+# Deployment: backend on Nebius, frontend on Vercel
 
-Vercel hosts the static frontend. The backend (FastAPI with a database, Alembic migrations and model
-calls that can take up to a minute) is a long-running Python service and is hosted separately; Vercel's
-serverless functions are not a fit for it (no persistent SQLite, short execution limits). The hackathon
-also requires the project to run on Nebius, so the backend targets a Nebius-hosted container.
+The frontend is a static Vite build on Vercel (`https://mindmate-lyart.vercel.app`). The backend
+(FastAPI, PostgreSQL, Alembic migrations, Nemotron calls that can take tens of seconds) is a
+long-running container. Deploy it on a Nebius AI Cloud VM with `docker-compose.prod.yml`, which runs
+PostgreSQL, the backend and Caddy for automatic HTTPS. The Vercel site is served over HTTPS, so the
+backend must be HTTPS too: browsers block calls from an HTTPS page to an `http://` API.
 
-## 1. Frontend on Vercel (production branch `main`)
+```
+Browser ── https ──> Vercel (static React app)
+   │
+   └──── https ──> Caddy :443 ──> backend :8000 ──> PostgreSQL        (one Nebius VM, docker compose)
+                                     │
+                                     └── https ──> Nebius Token Factory (NVIDIA Nemotron Ultra / Nano)
+```
 
-Vercel project settings:
+## YOU DO THIS (needs your accounts or credentials)
 
-| Setting | Value |
-|---|---|
-| Git repository | `basaaria123/Mindmate` |
-| Production branch | `main` |
-| Root Directory | `mindmate-frontend` |
-| Framework preset | Vite |
-| Build command | `npm run build` |
-| Output directory | `dist` |
-| Install command | `npm ci` |
-| Node version | 22 (project default) |
+- [ ] **Nebius Token Factory API key.** Create it in the Token Factory console and check that both
+      model IDs below are listed for your account. **[CONFIRM]** the exact IDs match what the
+      console shows; override them with the env variables if they differ.
+      - `nvidia/Nemotron-3-Ultra-550b-a55b` (`MINDMATE_REASONING_MODEL`)
+      - `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` (`MINDMATE_FAST_MODEL`)
+- [ ] **A Nebius AI Cloud VM** (Ubuntu 22.04 or 24.04, 2 vCPU / 4 GB RAM is enough; no GPU needed,
+      the models run on Token Factory). Give it a public IP and allow inbound TCP 22, 80 and 443.
+      **[CONFIRM]** the console labels (Compute → Virtual machines, security group or firewall rules).
+- [ ] **A domain or subdomain** for the API, e.g. `api.yourdomain.com`, with a DNS **A record** pointing
+      to the VM's public IP. No domain? Use `<VM-IP>.sslip.io` (for example `203.0.113.7.sslip.io`),
+      which resolves to that IP and works with Caddy's certificates.
+- [ ] **Secrets** for `.env.production`: a long random `POSTGRES_PASSWORD` and `MINDMATE_ADMIN_TOKEN`
+      (generate each with `openssl rand -hex 24`). Never commit this file.
+- [ ] **Vercel**: set `VITE_API_BASE_URL` and redeploy (section 3).
 
-`mindmate-frontend/vercel.json` adds the SPA rewrite so `react-router` routes such as `/memory` load
-`index.html`.
+## 1. Deploy the backend on a Nebius VM
 
-Environment variables (Project → Settings → Environment Variables):
-
-| Name | Production | Preview |
-|---|---|---|
-| `VITE_API_BASE_URL` | `https://<backend-host>` (no trailing slash) | staging backend URL, or empty to use frontend mocks |
-
-`VITE_*` variables are baked in at build time; redeploy after changing them. Preview deployments are
-created automatically for pull requests and for pushes to `mindmate-frontend`, `mindmate-backend` and
-`mindmate-ai` if those branches are enabled under Git → Preview branches.
-
-## 2. Backend (FastAPI + AI agents) as a container
-
-Build from the repository root with the provided `Dockerfile`; it runs `alembic upgrade head` and then
-`uvicorn` on `$PORT`.
-
-Recommended host: a Nebius AI Cloud VM or container service (meets the hackathon requirement). Any
-Docker host works the same way (Render, Railway, Fly.io). Steps for a Docker host:
-
-1. Create a PostgreSQL database (managed Postgres on Nebius, or Neon/Supabase/Render Postgres).
-2. Create the service from the repo, Dockerfile path `Dockerfile`, port `8000`.
-3. Set the environment variables below.
-4. After the first deploy run `python scripts/reset_demo.py` once (or call `POST /admin/reset-demo`
-   with the admin token) to seed the demo persona.
-
-| Variable | Production value |
-|---|---|
-| `DATABASE_URL` | `postgresql+psycopg://USER:PASSWORD@HOST:5432/DB` |
-| `NEBIUS_API_KEY` | Token Factory key (secret) |
-| `MINDMATE_AUTO_CREATE_SCHEMA` | `false` (Alembic owns the schema) |
-| `MINDMATE_AUTO_SEED` | `false` |
-| `MINDMATE_LLM_MODE` | `live` (`off` for a cached/deterministic demo fallback) |
-| `MINDMATE_DEMO_CACHE` | `fallback` for the live demo (recorded answers only when Nebius fails); `replay` if the network is unreliable |
-| `CORS_ORIGINS` | `https://<vercel-domain>,https://<custom-domain>` |
-| `RATE_LIMIT_PER_MINUTE` | `120` |
-| `MINDMATE_ADMIN_TOKEN` | long random string |
-| `PORT` | `8000` (or the host's injected port) |
-
-Liveness path: `/health`. Readiness path (checks the database, returns 503 when it is down): `/health/ready`.
-Configuration and row counts: `/admin/status`.
-
-## 2b. Everything on one Nebius VM (alternative to Vercel)
-
-`docker-compose.prod.yml` runs PostgreSQL, the backend and the frontend (built into an nginx image by
-`mindmate-frontend/Dockerfile`) on one VM, for example a Nebius AI Cloud VM:
+Run on the VM (SSH in as the default user):
 
 ```bash
+# 1. Docker Engine + compose plugin (official convenience script), then use docker without sudo
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker "$USER" && newgrp docker
+docker compose version                      # must print v2.x
+
+# 2. Code
 git clone https://github.com/basaaria123/Mindmate.git && cd Mindmate
-cp .env.production.example .env.production        # set passwords, NEBIUS_API_KEY, PUBLIC_API_URL, CORS_ORIGINS
-docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
-docker compose -f docker-compose.prod.yml exec backend python scripts/reset_demo.py --seed-only
-python scripts/smoke_test.py --backend http://<vm>:8000 --frontend http://<vm>
+
+# 3. Configuration (fill in the values; see the table below)
+cp .env.production.example .env.production
+nano .env.production
+chmod 600 .env.production
+
+# 4. Build and start: postgres + backend + Caddy (HTTPS)
+docker compose -f docker-compose.prod.yml --env-file .env.production --profile https up -d --build
+
+# 5. Watch the first start: migrations, then uvicorn; Caddy obtains the certificate
+docker compose -f docker-compose.prod.yml --env-file .env.production --profile https logs -f backend caddy
+#    expect: "Running upgrade -> 0001_initial", "Running upgrade 0001_initial -> 0002_question_source",
+#    "Uvicorn running on http://0.0.0.0:8000", and from Caddy "certificate obtained successfully"
+
+# 6. Check it from anywhere
+curl -s https://$API_DOMAIN/health        # nebius_key_configured: true, llm_available: true, demo_cache: "off"
+./scripts/smoke_test.sh https://$API_DOMAIN
 ```
 
-The backend container applies migrations on start. The frontend image serves the app on port 80 with
-client-side routes, long-lived caching for hashed assets and a `/healthz` endpoint
-(`mindmate-frontend/nginx.conf`). `PUBLIC_API_URL` is baked into the frontend at build time; rebuild the
-frontend after changing it.
+`.env.production` values:
 
-## 3. Connect the two
-
-1. Deploy the backend, note its public URL, confirm `https://<backend>/health` returns `{"status":"healthy"}`.
-2. Set `VITE_API_BASE_URL` in Vercel to that URL and redeploy the frontend.
-3. Set `CORS_ORIGINS` on the backend to the Vercel production domain (and preview domains if needed).
-
-## 4. Verification checklist (run against production)
-
-Non-destructive smoke test (health, readiness, Nemotron configured, read-only endpoints, CORS, frontend routes):
-
-```bash
-python scripts/smoke_test.py --backend https://<backend> --frontend https://<frontend>
-```
-
-Manual checks:
-
-```bash
-B=https://<backend>; F=https://<frontend>
-curl -s $B/health
-curl -s $B/admin/status | python -m json.tool | head -20
-curl -s -H "Origin: $F" -I $B/profile | grep -i access-control-allow-origin      # CORS
-curl -s -X POST $B/practice/evaluate -H 'Content-Type: application/json' -d '{"answer":"Accuracy only.","topic":"Model evaluation"}'
-curl -s -X POST $B/plans/replan -H 'Content-Type: application/json' -d '{"available_minutes":30}' | head -c 400
-curl -s -X POST $B/profile -H 'Content-Type: application/json' -d '{"user_message":"Second-year CS student, one hour a day, knows Python"}'   # Nemotron path
-```
-
-Or run the whole scripted path with its checks: `python scripts/demo_check.py --base-url $B --admin-token <token>`.
-
-Then in the browser: Onboarding (AI profile extraction), Scanner (opportunity + fit via Nemotron),
-Sim (practice), Memory (save weakness), Pipeline (Update my plan shows the cited rationale), Trace.
-
-The application is only "deployed" when the last three steps work end to end on the hosted URLs.
-
-## 5. Status
-
-| Item | State |
+| Variable | Value |
 |---|---|
-| Backend container (`Dockerfile`) | Written; its start command (migrate, then serve) verified by running it directly. The image itself has not been built here (no Docker daemon in the development environment). |
-| Frontend container (`mindmate-frontend/Dockerfile`, `nginx.conf`) | nginx config verified with `nginx -t` and by serving the production build: routes, 404s for missing assets, cache headers, `/healthz`. Image not built here. |
-| `docker-compose.prod.yml` | Written and syntax-checked; not run (no Docker daemon). |
-| Vercel project | Not created: needs the repository owner's Vercel account. Settings above. |
-| Nebius VM or container | Not created: needs the team's Nebius account. |
-| `scripts/smoke_test.py` | Verified locally against the backend and the nginx-served frontend: 11 of 12 checks pass; the one failure is "Nemotron configured", correct because no key exists locally. |
-| Backup screen recording | Captured from the integrated app running locally (no narration); kept outside the repository. |
+| `POSTGRES_PASSWORD` | long random string |
+| `NEBIUS_API_KEY` | your Token Factory key (secret) |
+| `MINDMATE_LLM_MODE` | `live` |
+| `MINDMATE_DEMO_CACHE` | `off` (recorded answers are for offline rehearsal only; the smoke test fails if this is not `off`) |
+| `MINDMATE_ADMIN_TOKEN` | long random string (protects `POST /admin/reset-demo`) |
+| `API_DOMAIN` | `api.yourdomain.com` or `<VM-IP>.sslip.io` |
+| `CORS_ORIGINS` | `https://mindmate-lyart.vercel.app` (exact origins, comma-separated; no wildcard) |
+| `CORS_ORIGIN_REGEX` | optional, to also allow Vercel preview URLs, e.g. `https://mindmate-[a-z0-9-]+\.vercel\.app` |
+| `RATE_LIMIT_PER_MINUTE` | `120` |
 
-The application is deployed only when the smoke test and `scripts/demo_check.py` pass against the hosted
-URLs and the browser walkthrough above works.
+What the stack does on its own:
+
+- **Migrations:** the backend container runs `alembic upgrade head` before starting uvicorn, every start.
+- **Demo persona:** Meera is seeded only when the database is empty (`MINDMATE_AUTO_SEED=true`), so
+  restarts never duplicate data.
+- **Restart policy:** every service uses `restart: unless-stopped`; uvicorn runs as PID 1, so a crash
+  restarts the container and `docker stop` shuts down cleanly.
+- **Logs:** rotated at 10 MB × 3 files per container.
+- **Port 8000:** published on `127.0.0.1` only; the public entry point is Caddy on 80/443. Set
+  `BACKEND_BIND=0.0.0.0` only if you deliberately want plain HTTP on 8000.
+
+### Day-2 commands
+
+```bash
+DC="docker compose -f docker-compose.prod.yml --env-file .env.production --profile https"
+$DC ps                                       # status and health
+$DC logs -f --tail 100 backend               # backend logs (model calls, errors)
+$DC logs -f caddy                            # HTTPS / certificate logs
+git pull && $DC up -d --build                # deploy a new version (migrations run on start)
+$DC restart backend                          # restart after changing .env.production
+$DC exec backend python scripts/reset_demo.py              # reset the demo persona (wipes app data)
+curl -X POST https://$API_DOMAIN/admin/reset-demo -H "X-Admin-Token: <MINDMATE_ADMIN_TOKEN>"   # same, remotely
+$DC exec postgres pg_dump -U mindmate mindmate > backup-$(date +%F).sql                # database backup
+```
+
+Model calls and fallbacks are also visible in the app (AI Activity) and at `GET /agent/events`, each
+with the agent, the Nemotron model ID and the seconds it took.
+
+## 2. Fallback host: Render (if a Nebius VM is not available)
+
+The hackathon requires Nemotron on Nebius Token Factory; the model calls still go to Token Factory
+from any host. Render runs the same `Dockerfile` (it injects `PORT`, which the image honours).
+
+1. Render dashboard → **New → PostgreSQL**: create a database; copy its **Internal Database URL**.
+2. **New → Web Service** → connect `basaaria123/Mindmate` → Language **Docker**, Dockerfile path
+   `./Dockerfile`, branch `main`, health check path `/health/ready`.
+3. Environment variables: `DATABASE_URL` = the Internal Database URL (a `postgres://` URL is fine; the
+   backend switches it to the psycopg driver), `NEBIUS_API_KEY`, `MINDMATE_LLM_MODE=live`,
+   `MINDMATE_DEMO_CACHE=off`, `MINDMATE_AUTO_CREATE_SCHEMA=false`, `MINDMATE_AUTO_SEED=true`,
+   `MINDMATE_ADMIN_TOKEN`, `CORS_ORIGINS=https://mindmate-lyart.vercel.app`, `RATE_LIMIT_PER_MINUTE=120`.
+4. Deploy. Render provides HTTPS on `https://<service>.onrender.com`; use that as the API URL.
+5. `./scripts/smoke_test.sh https://<service>.onrender.com`
+
+**[CONFIRM]** current Render free-tier limits: free web services sleep when idle, so the first request
+after a pause is slow. Open `/health` a minute before recording or judging.
+
+Railway and Fly.io work the same way: deploy the repository's `Dockerfile`, attach a PostgreSQL
+database, set the same variables (Railway: `DATABASE_URL=${{Postgres.DATABASE_URL}}`; Fly:
+`fly launch` then `fly postgres create` and `fly secrets set NEBIUS_API_KEY=...`), and use the
+HTTPS URL the platform gives you.
+
+## 3. Point the Vercel frontend at the backend
+
+Vercel → project `mindmate` → **Settings → Environment Variables**:
+
+| Name | Environment | Value |
+|---|---|---|
+| `VITE_API_BASE_URL` | Production (and Preview, if previews should use the live API) | `https://api.yourdomain.com` (your backend URL, no trailing slash) |
+
+`VITE_*` values are compiled into the bundle, so a **redeploy is required** after setting or changing
+it: **Deployments** → latest production deployment → **⋯ → Redeploy**. Check that the new build log
+shows the latest commit. Then open the site on a laptop-width window: the header chip must read
+**`nemotron | nebius token factory`** (green dot), not `offline mocks` or `deterministic mode | no model key`.
+
+Vercel project settings (already in use; listed for reference): root directory `mindmate-frontend`,
+framework Vite, build `npm run build`, output `dist`; `mindmate-frontend/vercel.json` rewrites app
+routes such as `/memory` to `index.html`. **[CONFIRM]** the root directory setting in the Vercel project.
+
+## 4. Verify the live deployment
+
+```bash
+B=https://api.yourdomain.com
+./scripts/smoke_test.sh $B
+#  PASS GET /health, GET /memory, POST /opportunity (Nemotron), POST /plans/replan (Nemotron explanation)
+#  fails loudly on any offline, mock or recorded answer
+python scripts/smoke_test.py --backend $B --frontend https://mindmate-lyart.vercel.app   # read-only, adds CORS + frontend routes
+curl -s -H "Origin: https://mindmate-lyart.vercel.app" -I $B/profile | grep -i access-control-allow-origin
+```
+
+Then in the browser on the Vercel URL: Tasks & Practice (answer weakly) → AI Activity shows Nemotron
+calls with model IDs and seconds → Plan & Progress (drop to 30 minutes, replan cites the weakness).
+
+## 5. What was verified in development (22 October 2026)
+
+| Item | Result |
+|---|---|
+| Backend image (`Dockerfile`) | Built and run with Docker 29. The sandbox needed its proxy certificate added in a scratch copy of the Dockerfile; the repository Dockerfile is unchanged by that. |
+| Migrations on PostgreSQL 16 at container start | `0001_initial` and `0002_question_source` applied; `alembic current` = head |
+| Demo persona seeding | Seeded into the empty database; not duplicated after a restart |
+| `/health`, `/health/ready` | Healthy; key presence reported without the key; `demo_cache: off` by default |
+| CORS | Configured origin and preview-regex origin allowed; other origins get no CORS header |
+| Caddy HTTPS | Served `/health` over HTTPS (local certificate for `localhost`; a real domain gets a Let's Encrypt certificate) |
+| Restart policy | Backend killed with SIGKILL came back on its own (restart count 1); `docker stop` exits cleanly in under 1 s |
+| Frontend image (`mindmate-frontend/Dockerfile`) | Built; serves `/`, app routes and `/healthz` |
+| `scripts/smoke_test.sh` | Fails loudly without a key and when an answer falls back to offline; passes against a backend whose agents were replaced by stubs. Not yet run against a real Nemotron deployment. |
+| Real Nemotron calls from a deployment | **Not verified**: Token Factory is not reachable from the development sandbox and no key is available there. |

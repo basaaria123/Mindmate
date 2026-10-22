@@ -7,7 +7,9 @@ from app.rate_limit import limiter
 
 
 def test_health_and_status(seeded_client):
-    assert seeded_client.get("/health").json() == {"status": "healthy"}
+    health = seeded_client.get("/health").json()
+    assert health["status"] == "healthy" and health["llm_mode"] == "off" and health["llm_available"] is False
+    assert set(health["models"]) == {"reasoning", "fast"} and "nvidia/" in health["models"]["reasoning"]
     status = seeded_client.get("/admin/status").json()
     assert status["database"] in {"sqlite", "postgresql"} and status["counts"]["users"] == 1
     assert status["llm_available"] is False
@@ -263,3 +265,10 @@ def test_extracted_opportunity_is_scored(seeded_client):
     body = seeded_client.post("/opportunities/extract", json={"text": "Data Intern\nRequired: SQL and Python"}).json()
     listed = next(o for o in seeded_client.get("/opportunities").json()["opportunities"] if o["id"] == body["id"])
     assert listed["fit"]["score"] >= 0
+
+
+def test_health_reports_key_presence_without_the_key(client, monkeypatch):
+    monkeypatch.setenv("NEBIUS_API_KEY", "secret-value-that-must-not-leak")
+    response = client.get("/health")
+    assert response.json()["nebius_key_configured"] is True
+    assert "secret-value-that-must-not-leak" not in response.text

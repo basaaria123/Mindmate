@@ -87,8 +87,21 @@ def home():
 
 @app.get("/health")
 def health_check():
+    # Says whether a Nebius key is configured and which models are used; never the key itself.
+    import os
+
+    from app.config import get_settings, llm_available
+    from app.demo_cache import cache_mode
+    from app.services.llm_client import FAST_MODEL, NEBIUS_BASE_URL, REASONING_MODEL
+
     return {
         "status": "healthy",
+        "nebius_key_configured": bool(os.getenv("NEBIUS_API_KEY")),
+        "llm_mode": get_settings().llm_mode,
+        "llm_available": llm_available(),
+        "demo_cache": cache_mode(),
+        "models": {"reasoning": REASONING_MODEL, "fast": FAST_MODEL},
+        "nebius_base_url": NEBIUS_BASE_URL,
     }
 
 

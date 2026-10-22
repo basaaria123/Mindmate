@@ -84,3 +84,29 @@ def test_empty_database_url_falls_back_to_sqlite(monkeypatch):
 
     monkeypatch.setenv("DATABASE_URL", "")
     assert get_settings().database_url.startswith("sqlite:///")
+
+
+def test_cors_origins_come_from_environment_without_wildcard(monkeypatch):
+    from fastapi import FastAPI
+    from fastapi.middleware.cors import CORSMiddleware
+
+    from app.backend import _extend_cors
+
+    monkeypatch.setenv("CORS_ORIGINS", "https://mindmate-lyart.vercel.app")
+    monkeypatch.setenv("CORS_ORIGIN_REGEX", r"https://mindmate-[a-z0-9-]+\.vercel\.app")
+    app = FastAPI()
+    app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"])
+    _extend_cors(app)
+    options = app.user_middleware[0].kwargs
+    assert options["allow_origins"] == ["http://localhost:5173", "https://mindmate-lyart.vercel.app"]
+    assert options["allow_origin_regex"] == r"https://mindmate-[a-z0-9-]+\.vercel\.app"
+    assert "*" not in options["allow_origins"]
+    assert "X-MindMate-Source" in options["expose_headers"]
+
+
+def test_hosted_postgres_urls_use_the_installed_driver(monkeypatch):
+    from app.config import get_settings
+
+    for given in ("postgres://u:p@db:5432/x", "postgresql://u:p@db:5432/x", "postgresql+psycopg://u:p@db:5432/x"):
+        monkeypatch.setenv("DATABASE_URL", given)
+        assert get_settings().database_url == "postgresql+psycopg://u:p@db:5432/x"

@@ -75,6 +75,16 @@ class Settings:
     cors_origins: tuple[str, ...] = ()
 
 
+def normalize_database_url(url: str) -> str:
+    """Hosts such as Render, Railway and Fly hand out postgres:// or postgresql:// URLs; use the
+    psycopg 3 driver that requirements.txt installs (SQLAlchemy would otherwise look for psycopg2)."""
+
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix):]
+    return url
+
+
 def get_settings() -> Settings:
     """Read settings from the environment on every call (cheap, test friendly)."""
 
@@ -87,7 +97,7 @@ def get_settings() -> Settings:
 
     return Settings(
         # An empty DATABASE_URL (as copied from .env.example) means "use the local SQLite file".
-        database_url=(os.getenv("DATABASE_URL") or "").strip() or default_db,
+        database_url=normalize_database_url((os.getenv("DATABASE_URL") or "").strip() or default_db),
         auto_create_schema=_env_bool("MINDMATE_AUTO_CREATE_SCHEMA", True),
         rate_limit_per_minute=_env_int("RATE_LIMIT_PER_MINUTE", 120),
         llm_mode=os.getenv("MINDMATE_LLM_MODE", "live").strip().lower() or "live",
