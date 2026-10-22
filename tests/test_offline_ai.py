@@ -106,3 +106,11 @@ def test_browser_offline_analysis_uses_the_same_vocabulary_and_hints():
 def test_organization_stays_on_its_line():
     spec = offline_ai.opportunity_from_text("ML Intern at Acme\nMust know Python.")
     assert spec.organization == "Acme" and spec.opportunity_title == "ML Intern at Acme"
+
+
+def test_too_short_description_is_not_scored_as_weak():
+    spec = offline_ai.opportunity_from_text("ai engineer")
+    profile = UserProfile(education="BSc", goals=[], skills=["Python"], interests=[], learning_preferences=[])
+    fit = offline_ai.fit_for(profile, spec)
+    assert spec.required_skills == [] and fit.overall_fit == "Not enough detail"
+    assert "could not be estimated" in fit.summary

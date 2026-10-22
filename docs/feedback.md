@@ -19,7 +19,7 @@ them into the final text. Only record what you actually observed.
 ## AI agents (AI)
 
 * **Observed so far (offline, 2026-10-19).** All nine agents run against a fake OpenAI client in
-  `test_agents_offline.py`; this exercises prompt rendering, the retry-once repair path and every validation rule,
+  `tests/ai/test_agents_offline.py`; this exercises prompt rendering, the retry-once repair path and every validation rule,
   but not model quality. Because Token Factory is OpenAI-compatible, the fake client needed no provider-specific code.
 * **Structured output.** Agents parse JSON from the reply text and validate it with Pydantic; invalid output gets one
   repair prompt that includes the validation error. Whether Nemotron needs that retry, and how often, is not yet

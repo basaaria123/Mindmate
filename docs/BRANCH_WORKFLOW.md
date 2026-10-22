@@ -22,7 +22,7 @@ backend layer), so all three branches start from identical content.
 | `app/api/**`, `app/db/**`, `app/memory/**`, `app/scoring/**`, `app/backend.py`, `app/config.py`, `app/permissions.py`, `app/rate_limit.py` | Backend | Routers, models, memory layer, deterministic logic |
 | `app/services/*` except the two AI files | Backend | plan, practice, opportunity, seed, events, users, weakness services |
 | `app/services/llm_client.py`, `app/services/memory_store.py` | AI | Nebius client, model tiering, legacy JSON memory store |
-| `app/agents/**`, `app/schemas/**`, `app/utils/**`, `prompts/**`, `data/eval/**`, `scripts/run_eval.py`, root `test_*.py` | AI | Agents, versioned prompts, output schemas, evaluation set, agent tests |
+| `app/agents/**`, `app/schemas/**`, `app/utils/**`, `prompts/**`, `data/eval/**`, `scripts/run_eval.py`, `tests/ai/**`, `tests/live/**` | AI | Agents, versioned prompts, output schemas, evaluation set, agent tests |
 | `alembic/**`, `alembic.ini`, `tests/**`, `scripts/**` (except `run_eval.py`), `data/*.json`, `data/demo_cache/**`, `Dockerfile`, `.dockerignore` | Backend | Migrations, backend tests, seed/reset, demo check, recorded demo answers, container |
 | `docker-compose.prod.yml`, `.env.production.example`, `scripts/smoke_test.py`, `docs/DEPLOYMENT.md` | DevOps | Production stack, smoke test, deployment guide |
 | `LICENSE`, `README.md`, `docs/SUBMISSION.md`, `docs/demo-script.md`, `docs/DECISIONS.md`, `docs/TEST_PLAN.md`, `docs/feedback.md` | Product lead | License, submission pack, demo script, decisions, test plan, tool feedback |

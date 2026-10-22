@@ -334,7 +334,8 @@ useEffect(() => {
                 </ul>
               ) : (
                 <p className="mt-2 text-sm text-[#737ba6]">
-                  No required skills were identified.
+                  No required skills were identified. Paste the full description, including the
+                  requirements or responsibilities, so skills can be found and your fit estimated.
                 </p>
               )}
 
@@ -410,11 +411,14 @@ useEffect(() => {
               const fit = String(fitAssessment.overall_fit || '').toLowerCase()
               const isHigh = fit.includes('high') || fit.includes('strong')
               const isModerate = fit.includes('moderate') || fit.includes('medium')
-              const fitColor = isHigh
-                ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                : isModerate
-                  ? 'border-amber-200 bg-amber-50 text-amber-800'
-                  : 'border-rose-200 bg-rose-50 text-rose-800'
+              const isUnknown = fit.includes('not enough') || aiOpportunity.required_skills.length === 0
+              const fitColor = isUnknown
+                ? 'border-slate-200 bg-slate-50 text-slate-700'
+                : isHigh
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                  : isModerate
+                    ? 'border-amber-200 bg-amber-50 text-amber-800'
+                    : 'border-rose-200 bg-rose-50 text-rose-800'
 
               const sections = [
                 {

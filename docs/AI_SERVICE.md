@@ -2,7 +2,7 @@
 
 Owner: AI developer, branch `mindmate-ai`. Files: `app/agents/`, `app/schemas/`, `prompts/`,
 `app/services/llm_client.py`, `app/services/memory_store.py`, `app/utils/json_utils.py`, `app/utils/prompts.py`,
-`data/eval/`, `scripts/run_eval.py`, root `test_*.py`.
+`data/eval/`, `scripts/run_eval.py`, `tests/ai/` (offline) and `tests/live/` (calls Nemotron).
 
 ## How it works
 
@@ -37,7 +37,7 @@ keyword extraction, coverage scoring, scheduler, question bank, code-written rep
 Every prompt is a versioned file in `prompts/`: `<agent>.system.md` (system message) and `<agent>.md`
 (user message template with `${name}` placeholders). `app/utils/prompts.py` loads them (cached) and renders
 them with `string.Template.substitute`, so a missing value fails loudly instead of sending a broken prompt.
-`test_prompts.py` checks that every agent's files exist, that every placeholder is filled, and that no prompt
+`tests/ai/test_prompts.py` checks that every agent's files exist, that every placeholder is filled, and that no prompt
 file is unused. Change a prompt in its own commit and run the eval set (below) before and after.
 `prompts/README.md` lists the files and their variables.
 
@@ -57,7 +57,7 @@ The model variables are read once at import, so restart the server after changin
 
 Every agent call spends Token Factory credits; Ultra calls are the expensive ones. For local work prefer:
 * `MINDMATE_LLM_MODE=off` while working on anything that is not the agents themselves;
-* the offline tests (`test_json_utils.py`, `test_*_schema.py`) for schema changes;
+* the offline tests (`tests/ai/test_json_utils.py`, `tests/ai/test_*_schema.py`) for schema changes;
 * one live run per agent before opening a PR.
 
 ## Failure handling
@@ -78,13 +78,13 @@ Every agent call spends Token Factory credits; Ultra calls are the expensive one
 ```bash
 pip install -r requirements.txt
 cp .env.example .env && echo "NEBIUS_API_KEY=..." >> .env
-python -m pytest . -q --ignore=tests --ignore=mindmate-frontend --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py   # offline
-python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q   # live
+python -m pytest tests/ai -q   # offline
+python -m pytest tests/live -q   # live
 uvicorn main:app --reload   # then POST /profile, /opportunity, /fit at http://localhost:8000/docs
 ```
 
 The offline set needs no key: schema tests, the JSON parser, model configuration, prompt files, and
-`test_agents_offline.py`, which runs every agent against a fake OpenAI client to cover the retry-once path,
+`tests/ai/test_agents_offline.py`, which runs every agent against a fake OpenAI client to cover the retry-once path,
 the repair prompt and every validation rule (refs, budgets, question count, replan citations).
 CI runs it on every push (`make test-ai`). The five live files call Nemotron and spend credits
 (`make test-ai-live`).

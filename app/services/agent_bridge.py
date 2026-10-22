@@ -31,23 +31,37 @@ from app.services.events import log_event
 
 T = TypeVar("T")
 
+# Which Nemotron tier each agent uses (mirrors get_model(...) inside app/agents/*), for the trace.
+AGENT_TIER = {
+    "profile": "fast", "opportunity": "fast", "suggestions": "fast",
+    "fit": "reasoning", "gap": "reasoning", "planner": "reasoning", "practice": "reasoning", "replan": "reasoning",
+}
+
+
+def agent_model(agent: str) -> str:
+    from app.services.llm_client import get_model
+
+    return get_model(AGENT_TIER.get(agent, "fast"))
+
 
 def call_agent(db: Session, user: models.User | None, agent: str, fn: Callable[..., T], **kwargs: Any) -> T | None:
     """Run one agent call with logging; return None when the model is off or fails."""
 
     if not llm_available():
         return None
+    model = agent_model(agent)
     started = time.perf_counter()
     try:
         result = fn(**kwargs)
     except Exception as error:  # noqa: BLE001 - every model failure degrades to deterministic code
+        elapsed = round(time.perf_counter() - started, 2)
         log_event(
             db,
             user_id=user.id if user else None,
             agent=agent,
             action="model_fallback",
-            summary=f"{agent} agent unavailable ({type(error).__name__}); deterministic logic used instead.",
-            payload={"error": str(error)[:300]},
+            summary=f"{agent} agent: {model} failed after {elapsed}s ({type(error).__name__}); deterministic logic used instead.",
+            payload={"error": str(error)[:300], "model": model, "seconds": elapsed},
         )
         return None
     elapsed = round(time.perf_counter() - started, 2)
@@ -56,8 +70,8 @@ def call_agent(db: Session, user: models.User | None, agent: str, fn: Callable[.
         user_id=user.id if user else None,
         agent=agent,
         action="model_call",
-        summary=f"{agent} agent answered via Nemotron in {elapsed}s ({get_settings().llm_mode}).",
-        payload={"seconds": elapsed},
+        summary=f"{agent} agent: {model} answered in {elapsed}s.",
+        payload={"seconds": elapsed, "model": model, "mode": get_settings().llm_mode},
     )
     return result
 

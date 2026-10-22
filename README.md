@@ -54,7 +54,7 @@ paths and the AI endpoints answer with clearly labelled offline analysis (keywor
 | `main.py`, `app/api`, `app/db`, `app/memory`, `app/scoring`, `app/services` | FastAPI backend and memory layer |
 | `app/agents`, `app/schemas`, `prompts/` | Nemotron agents, schema-validated outputs, versioned prompts |
 | `data/` | Demo persona, curated opportunities, question bank, evaluation set, recorded demo answers |
-| `tests/`, root `test_*.py` | Backend and AI tests |
+| `tests/` (backend), `tests/ai/` (offline AI), `tests/live/` (live Nemotron) | Tests |
 | `docs/` | Architecture, API contracts, setup, deployment, workflow, demo script, submission pack |
 
 ## Tests

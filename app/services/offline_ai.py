@@ -255,7 +255,7 @@ def fit_for(profile: UserProfile, opportunity: OpportunitySpec) -> FitAssessment
                                       required_level=required_level, match_status="missing",
                                       explanation=f"{req.skill_name} is not in your profile."))
     score = round(100 * covered / total) if total else 0
-    band = band_for(score)
+    band = band_for(score) if total else "Not enough detail"
     title = opportunity.opportunity_title
     summary = (f"Offline estimate: your profile lists {len(matching)} of {len(opportunity.required_skills)} "
                f"skills this opportunity asks for ({score}%, {band.lower()} by skill weight).")

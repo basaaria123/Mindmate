@@ -111,10 +111,10 @@ MINDMATE_LLM_MODE=off python -m pytest tests -q
 python scripts/demo_check.py
 
 # AI, offline part: parser, schema, memory-agent and model-config tests
-python -m pytest . -q --ignore=tests --ignore=mindmate-frontend --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
+python -m pytest tests/ai -q
 
 # AI, live part (needs NEBIUS_API_KEY and network; costs Token Factory credits)
-python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q
+python -m pytest tests/live -q
 
 # evaluation set: practice weak/strong agreement and extraction precision/recall (add --live with a key)
 python scripts/run_eval.py

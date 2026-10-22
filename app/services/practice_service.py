@@ -209,14 +209,18 @@ def _bank_entry(session: models.PracticeSession) -> dict:
     return {"topic": session.topic, "question": session.question, "expected_concepts": list(session.expected_concepts or []), "concept_aliases": {}}
 
 
-def _evaluate_with_model(session: models.PracticeSession, answer: str) -> tuple[dict, str, str | None] | None:
+def _evaluate_with_model(
+    db: Session, user: models.User, session: models.PracticeSession, answer: str
+) -> tuple[dict, str, str | None] | None:
     if not llm_available():
         return None
-    try:
-        from app.agents.practice_agent import evaluate_practice
+    from app.agents.practice_agent import evaluate_practice
+    from app.services.agent_bridge import call_agent
 
-        evaluation = evaluate_practice(question=session.question, user_answer=answer, topic=session.topic)
-    except Exception:  # noqa: BLE001 - any model failure falls back to the deterministic path
+    # Through call_agent so the call (model, seconds) or the fallback appears in the AI Activity trace.
+    evaluation = call_agent(db, user, "practice", evaluate_practice,
+                            question=session.question, user_answer=answer, topic=session.topic)
+    if evaluation is None:
         return None
     rubric = {"correctness": evaluation.correctness, "depth": evaluation.depth, "clarity": evaluation.clarity}
     return rubric, evaluation.feedback, evaluation.weakness_candidate
@@ -254,7 +258,7 @@ def evaluate(
 
     bank_entry = _bank_entry(session)
     matched, missing = matched_concepts(answer, bank_entry)
-    model_result = _evaluate_with_model(session, answer)
+    model_result = _evaluate_with_model(db, user, session, answer)
     weakness_detail: str | None = None
     if model_result is not None:
         rubric, feedback, weakness_detail = model_result

@@ -228,7 +228,7 @@ export function analyseFit(profile: AIProfile, opportunity: AIOpportunity): AIFi
     }
   }
   const score = total ? Math.round((100 * covered) / total) : 0
-  const band = score >= 75 ? 'Strong' : score >= 50 ? 'Moderate' : 'Weak'
+  const band = !total ? 'Not enough detail' : score >= 75 ? 'Strong' : score >= 50 ? 'Moderate' : 'Weak'
   return {
     opportunity_title: opportunity.opportunity_title,
     overall_fit: band,

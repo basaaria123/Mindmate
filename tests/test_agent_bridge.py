@@ -229,3 +229,33 @@ def test_ai_practice_endpoint_mirrors_into_database(seeded_client, monkeypatch, 
     # the seeded persona already has one weak model-evaluation answer, so this second one crosses the threshold
     assert body["weakness_recorded"] is True
     assert any(w["topic"] == "Model evaluation" for w in seeded_client.get("/weaknesses").json()["weaknesses"])
+
+
+def test_trace_names_the_model_each_agent_uses():
+    """AGENT_TIER must match get_model(...) in every agent module, so the AI Activity shows the real model."""
+
+    import re
+    from pathlib import Path
+
+    from app.services.agent_bridge import AGENT_TIER
+
+    agents = Path(__file__).resolve().parents[1] / "app" / "agents"
+    files = {"profile": "profile_agent", "opportunity": "opportunity_agent", "suggestions": "suggestions_agent",
+             "fit": "fit_agent", "gap": "gap_agent", "planner": "planner_agent", "practice": "practice_agent",
+             "replan": "replan_agent"}
+    for agent, module in files.items():
+        tiers = set(re.findall(r'get_model\("(\w+)"\)', (agents / f"{module}.py").read_text()))
+        assert tiers == {AGENT_TIER[agent]}, agent
+
+
+def test_model_call_event_records_model_and_seconds(seeded_client, live, monkeypatch):
+    from app.schemas.practice import PracticeEvaluation
+
+    monkeypatch.setattr("app.services.practice_service.llm_available", lambda: True)
+    monkeypatch.setattr("app.agents.practice_agent.evaluate_practice", lambda **kw: PracticeEvaluation(
+        correctness=40, depth=30, clarity=60, feedback="Add a validation set.",
+        weakness_candidate=kw["topic"], is_store_worthy=True, memory_tag=None))
+    seeded_client.post("/practice/evaluate", json={"answer": "I would only check accuracy on the test set.",
+                                                    "topic": "Model evaluation"})
+    call = next(e for e in _events(seeded_client, "model_call") if e["agent"] == "practice")
+    assert "nvidia/Nemotron-3-Ultra" in call["summary"] and call["summary"].endswith("s.")

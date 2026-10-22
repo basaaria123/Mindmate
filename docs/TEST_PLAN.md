@@ -9,10 +9,10 @@ Success criteria from the proposal (section 3.3) and how each is verified. Resul
 |---|---|---|---|
 | 1 | A recorded weakness changes the next plan's priorities | Weak answer, replan, assert the model-evaluation task moves to day 1 and the rationale cites the weakness | `tests/test_loop.py`, `scripts/demo_check.py`, browser walkthrough |
 | 2 | Cutting time from 60 to 30 minutes gives a valid reduced plan | No day above 30 minutes; must-keep tasks survive; completed tasks carry over | `tests/test_budget.py`, `tests/test_scheduler.py`, `scripts/demo_check.py` |
-| 3 | Every recommendation cites memory | References must exist in the database; agent output citing unknown references is rejected | `tests/test_agent_bridge.py`, `test_agents_offline.py`, `tests/test_api.py` |
+| 3 | Every recommendation cites memory | References must exist in the database; agent output citing unknown references is rejected | `tests/test_agent_bridge.py`, `tests/ai/test_agents_offline.py`, `tests/test_api.py` |
 | 4 | Every memory item is viewable, editable and deletable; deleted items never reach prompts | API and UI edit/delete; prompt bundles exclude deleted items | `tests/test_memory_control.py`, browser walkthrough |
 | 5 | No irreversible action without confirmation | Submissions and messages refused; drafts only; delete-all needs confirmation | `tests/test_permissions.py` |
-| 6 | Invalid model output is retried once, then rejected | Every agent with a fake client: valid, invalid-then-valid, invalid twice | `test_agents_offline.py` |
+| 6 | Invalid model output is retried once, then rejected | Every agent with a fake client: valid, invalid-then-valid, invalid twice | `tests/ai/test_agents_offline.py` |
 | 7 | Replan fast enough for a live demo (target 15 s) | Timed scripted path | `scripts/demo_check.py` (replan ≈ 0.03 s deterministic; the optional Replanning agent adds one Nemotron call) |
 
 ## Results (19 October 2026)

@@ -24,13 +24,13 @@ frontend:
 test: test-backend test-ai test-frontend
 
 test-backend:   ## memory layer, scoring, plans, API, migrations (no network needed)
-	MINDMATE_LLM_MODE=off python -m pytest tests -q
+	MINDMATE_LLM_MODE=off python -m pytest tests -q --ignore=tests/ai --ignore=tests/live
 
-test-ai:        ## all offline AI tests; the five live agent tests need NEBIUS_API_KEY (make test-ai-live)
-	python -m pytest . -q --ignore=tests --ignore=mindmate-frontend --ignore=test_setup.py --ignore=test_model_selection.py --ignore=test_profile_agent.py --ignore=test_opportunity_agent.py --ignore=test_fit_agent.py
+test-ai:        ## offline AI tests (tests/ai); the live agent tests in tests/live need NEBIUS_API_KEY (make test-ai-live)
+	python -m pytest tests/ai -q
 
 test-ai-live:   ## calls Nemotron on Nebius Token Factory; spends credits
-	python -m pytest test_setup.py test_model_selection.py test_profile_agent.py test_opportunity_agent.py test_fit_agent.py -q
+	python -m pytest tests/live -q
 
 test-frontend:
 	cd mindmate-frontend && npm run lint && npm run build
@@ -45,7 +45,7 @@ demo-check:     ## rehearse the scripted demo and check success criteria (in-pro
 	python scripts/demo_check.py $(if $(BASE_URL),--base-url $(BASE_URL),)
 
 test-backend-postgres:  ## backend tests against PostgreSQL (docker compose up -d first)
-	MINDMATE_TEST_DATABASE_URL=postgresql+psycopg://mindmate:mindmate@localhost:5432/mindmate MINDMATE_LLM_MODE=off python -m pytest tests -q
+	MINDMATE_TEST_DATABASE_URL=postgresql+psycopg://mindmate:mindmate@localhost:5432/mindmate MINDMATE_LLM_MODE=off python -m pytest tests -q --ignore=tests/ai --ignore=tests/live
 
 eval:           ## evaluation set; add LIVE=1 to call Nemotron
 	python scripts/run_eval.py $(if $(LIVE),--live,)
