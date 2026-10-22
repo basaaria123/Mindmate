@@ -86,7 +86,8 @@ def get_settings() -> Settings:
     )
 
     return Settings(
-        database_url=os.getenv("DATABASE_URL", default_db),
+        # An empty DATABASE_URL (as copied from .env.example) means "use the local SQLite file".
+        database_url=(os.getenv("DATABASE_URL") or "").strip() or default_db,
         auto_create_schema=_env_bool("MINDMATE_AUTO_CREATE_SCHEMA", True),
         rate_limit_per_minute=_env_int("RATE_LIMIT_PER_MINUTE", 120),
         llm_mode=os.getenv("MINDMATE_LLM_MODE", "live").strip().lower() or "live",

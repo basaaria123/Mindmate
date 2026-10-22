@@ -10,7 +10,8 @@ setup-backend:
 
 setup-frontend:
 	cd mindmate-frontend && npm install
-	@test -f mindmate-frontend/.env || cp mindmate-frontend/.env.example mindmate-frontend/.env
+	@# Point the local frontend at the local backend (empty VITE_API_BASE_URL would mean offline mock mode).
+	@test -f mindmate-frontend/.env || echo 'VITE_API_BASE_URL=http://localhost:8000' > mindmate-frontend/.env
 
 dev:            ## start backend (8000) and frontend (5173) together
 	./scripts/dev.sh

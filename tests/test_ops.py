@@ -75,3 +75,12 @@ def test_evaluation_runner_offline(tmp_path):
     summary = json.loads(result.stdout)
     assert summary["mode"] == "deterministic" and len(summary["practice_scores"]) == 10 and len(summary["extracted"]) == 10
     assert 0 <= summary["extraction_precision"] <= 1 and 0 <= summary["extraction_recall"] <= 1
+
+
+def test_empty_database_url_falls_back_to_sqlite(monkeypatch):
+    """`make setup` copies .env.example, whose DATABASE_URL is empty; that must mean the local SQLite file."""
+
+    from app.config import get_settings
+
+    monkeypatch.setenv("DATABASE_URL", "")
+    assert get_settings().database_url.startswith("sqlite:///")
