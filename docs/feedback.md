@@ -1,4 +1,4 @@
-# Feedback: Nebius Token Factory, Nebius AI Cloud, NVIDIA Nemotron
+# Feedback: Nebius Token Factory, NVIDIA Nemotron (and why not Nebius AI Cloud)
 
 Written from what the code, its comments, `docs/DECISIONS.md` and the git history show
 (2026-10-10 to 2026-10-22). Lines marked **[CONFIRM]** are things the team must check against its own
@@ -56,13 +56,11 @@ for each model, and per-request usage and latency information we could log along
 
 ## Nebius AI Cloud
 
-- **Planned use:** the backend runs on a Nebius AI Cloud VM with `docker-compose.prod.yml` (PostgreSQL,
-  backend, Caddy for HTTPS). The stack was built and run end to end in development; see
-  `docs/DEPLOYMENT.md`.
-- [CONFIRM after deploying: how long VM creation took, any networking or firewall setup that was
-  unclear, and whether you would use Serverless/containers instead next time.]
-- Suggestion: a one-page "deploy a Docker Compose app with HTTPS" guide for AI Cloud VMs would have saved
-  time; we wrote our own (Caddy + compose) [CONFIRM].
+- **Not used for hosting.** The backend runs on Render (Docker web service + Render PostgreSQL) and the
+  frontend on Vercel; only the model calls go to Nebius (Token Factory). A Nebius AI Cloud VM setup with
+  `docker-compose.prod.yml` and Caddy is documented in `docs/DEPLOYMENT.md` but was not used.
+- [CONFIRM: why the team chose Render over a Nebius AI Cloud VM (for example: a managed PostgreSQL and
+  HTTPS out of the box, no VM to administer, deadline). If someone tried AI Cloud, add what got in the way.]
 
 ## NVIDIA Nemotron
 

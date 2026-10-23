@@ -2,7 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-**Live demo:** [LIVE_DEMO_URL] (frontend: https://mindmate-lyart.vercel.app, connected to the Nebius-hosted backend once deployed)
+**Live demo:** https://mindmate-lyart.vercel.app (backend API: https://mindmate-backend-yw5d.onrender.com)
+
 **Demo video:** [YOUTUBE_URL]
 
 **It remembers why. It adapts to you. It stays yours.**
@@ -31,8 +32,8 @@ cites the weakness, the practice sessions and the user's own decisions.
 | Deterministic decisions | Integrated: fit score, gap ranking, replan priority, budget scheduler, weakness thresholds and permissions are code, not model output. |
 | Model-failure handling | Integrated: every agent retries invalid output once then rejects it; every backend path has a deterministic fallback; without a key the AI endpoints (and mock mode, in the browser) give labelled offline analysis; recorded answers can replace the AI endpoints during a demo. |
 | Permission tiers | Integrated: read-only, tasks-only writes, application drafts only; nothing is submitted for the user. |
-| Backend hosting on Nebius AI Cloud | Ready, not yet deployed: `docker-compose.prod.yml` (PostgreSQL, backend, Caddy HTTPS) built and run end to end in development; steps in `docs/DEPLOYMENT.md`. Backend URL: [BACKEND_URL]. |
-| Vercel frontend hosting | Deployed at https://mindmate-lyart.vercel.app. Until `VITE_API_BASE_URL` points at the deployed backend it runs in offline mock mode (labelled on screen). |
+| Backend hosting | Deployed on Render as a Docker web service with a Render PostgreSQL database: https://mindmate-backend-yw5d.onrender.com. Nemotron runs on Nebius Token Factory. [CONFIRM] `./scripts/smoke_test.sh https://mindmate-backend-yw5d.onrender.com` passes. |
+| Vercel frontend hosting | Deployed at https://mindmate-lyart.vercel.app. [CONFIRM] `VITE_API_BASE_URL` is set to the Render backend; without it the site runs in offline mock mode (labelled on screen). |
 | Live opportunity search (Tavily) | Not integrated. The opportunity set is curated plus whatever the user pastes. |
 | Daily brief job, NemoClaw / OpenShell, Hermes Agent | Not integrated. |
 | Calendar, Notion, Slack, GitHub integrations | Not integrated (future scope). |
@@ -78,9 +79,8 @@ explanations, and its output is validated before it is used (memory IDs must exi
 - Every call is logged with the agent, the Nemotron model ID and the seconds it took
   (AI Activity page and `GET /agent/events`).
 
-**Other Nebius services:** the backend is packaged to run on a Nebius AI Cloud VM
-(`docs/DEPLOYMENT.md`). [CONFIRM after deploying: Nebius AI Cloud VM hosting the backend.] No other
-Nebius services are used.
+**Hosting:** the models run on Nebius Token Factory; the backend itself is hosted on Render (Docker web
+service + Render PostgreSQL) and the frontend on Vercel. No other Nebius services are used.
 
 ## Quick start
 
@@ -124,7 +124,7 @@ Current results are in `docs/TEST_PLAN.md`.
 | `docs/ARCHITECTURE.md` | Components, request flows, data model, decision logic |
 | `docs/API_CONTRACTS.md`, `docs/contracts/backend-api.md` | Frontend, backend and AI interfaces |
 | `docs/LOCAL_SETUP.md` | Running and testing everything locally |
-| `docs/DEPLOYMENT.md` | Nebius VM with HTTPS, Render fallback, Vercel settings, live smoke test |
+| `docs/DEPLOYMENT.md` | Render (current), Nebius VM option with HTTPS, Vercel settings, live smoke test |
 | `docs/AI_SERVICE.md`, `prompts/README.md` | Agents, prompts, model configuration, evaluation |
 | `docs/BRANCH_WORKFLOW.md` | Branches, file ownership, pull requests |
 | `docs/DECISIONS.md` | Decisions and their reasons |

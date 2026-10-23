@@ -1,4 +1,24 @@
-# Deployment: backend on Nebius, frontend on Vercel
+# Deployment
+
+## Current production (Render + Vercel)
+
+| Part | Where |
+|---|---|
+| Frontend | Vercel: https://mindmate-lyart.vercel.app |
+| Backend | Render Docker web service: https://mindmate-backend-yw5d.onrender.com (built from the repository `Dockerfile`) |
+| Database | Render PostgreSQL, connected through `DATABASE_URL` (the Internal Database URL) |
+| Models | NVIDIA Nemotron on Nebius Token Factory (`NEBIUS_API_KEY` on the Render service) |
+
+Render service environment (Settings → Environment): `DATABASE_URL`, `NEBIUS_API_KEY`,
+`MINDMATE_LLM_MODE=live`, `MINDMATE_DEMO_CACHE=off`, `MINDMATE_AUTO_CREATE_SCHEMA=false`,
+`MINDMATE_AUTO_SEED=true`, `MINDMATE_ADMIN_TOKEN`, `CORS_ORIGINS=https://mindmate-lyart.vercel.app`,
+`RATE_LIMIT_PER_MINUTE=120`. Vercel: `VITE_API_BASE_URL=https://mindmate-backend-yw5d.onrender.com`, then redeploy. Verify with
+`./scripts/smoke_test.sh https://mindmate-backend-yw5d.onrender.com`. Render's step-by-step setup is section 2 below; the Nebius VM setup in
+section 1 is an alternative that is not in use.
+
+---
+
+## Alternative: backend on a Nebius VM, frontend on Vercel
 
 The frontend is a static Vite build on Vercel (`https://mindmate-lyart.vercel.app`). The backend
 (FastAPI, PostgreSQL, Alembic migrations, Nemotron calls that can take tens of seconds) is a

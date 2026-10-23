@@ -1,6 +1,6 @@
 # Demo video: shot list and voiceover (target 1:45, hard limit 3:00)
 
-Recorded on the **live deployment** (Vercel frontend + Nebius backend with a real Token Factory key).
+Recorded on the **live deployment**: Vercel frontend + Render backend (https://mindmate-backend-yw5d.onrender.com) with a real Token Factory key.
 Labels below are the exact on-screen text in the app.
 
 ## Before you record (10 minutes)
@@ -80,7 +80,7 @@ How it uses NVIDIA and Nebius:
 - Nemotron 3 Nano for fast extraction (profile, postings, suggestions)
 - Nemotron 3 Ultra for reasoning over memory (fit, gaps, planning, practice grading, replan explanations)
 - Deterministic code makes the decisions; every model call is logged with the model and latency
-- Backend on Nebius AI Cloud [CONFIRM after deploying]
+- Backend on Render (Docker + PostgreSQL); models on Nebius Token Factory
 
 In this video:
 0:00 The problem
@@ -90,6 +90,6 @@ In this video:
 1:20 The requests on Token Factory
 1:35 Model configuration and permission tiers
 
-Live demo: [LIVE_DEMO_URL]
+Live demo: https://mindmate-lyart.vercel.app
 Code (MIT): https://github.com/basaaria123/Mindmate
 ```

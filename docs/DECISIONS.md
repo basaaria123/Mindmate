@@ -14,3 +14,4 @@ MindMate's own principle applied to the project: every decision is recorded with
 | 8 | Vercel hosts the frontend; the backend runs as a container on Nebius. | Vercel functions cannot hold the database or long model calls; the hackathon requires Nebius. | 2026-10-17 |
 | 9 | Prompts live in versioned files under `prompts/`. | Prompt changes are reviewed like code; tests check every placeholder. | 2026-10-19 |
 | 10 | Completed tasks carry into new plan versions as done. | Progress and history must survive a replan. | 2026-10-19 |
+| 11 | The backend is hosted on Render (Docker web service + Render PostgreSQL); the models stay on Nebius Token Factory. Supersedes the hosting part of #8. | Managed PostgreSQL and HTTPS with no server to administer. [CONFIRM the team's reason.] | 2026-10-23 |

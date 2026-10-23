@@ -65,8 +65,8 @@ changes, and stays yours: inspectable, editable, and never acting on your behalf
   a reference ID (`goal#1`, `weakness#1`, `decision#2`) that explanations cite.
 - **Honest failure handling.** If Nemotron is unavailable, each path falls back to deterministic logic and
   the screen says so ("offline analysis") instead of passing it off as model output.
-- **Frontend.** React, TypeScript and Vite on Vercel; the backend runs in Docker on a Nebius AI Cloud VM
-  behind Caddy for HTTPS. [CONFIRM after deploying]
+- **Hosting.** React, TypeScript and Vite frontend on Vercel; the backend runs as a Docker web service on
+  Render with a Render PostgreSQL database; the models run on Nebius Token Factory, so we host no GPUs.
 
 ### Challenges
 
@@ -86,17 +86,15 @@ Live opportunity search, a daily brief, calendar and notes integrations, and mor
 
 ## Built with
 
-NVIDIA Nemotron 3 Ultra · NVIDIA Nemotron 3 Nano · Nebius Token Factory · Nebius AI Cloud [CONFIRM after
-deploying] · Python · FastAPI · Pydantic · SQLAlchemy · Alembic · PostgreSQL · SQLite · OpenAI Python SDK
+NVIDIA Nemotron 3 Ultra · NVIDIA Nemotron 3 Nano · Nebius Token Factory · Python · FastAPI · Pydantic · SQLAlchemy · Alembic · PostgreSQL · SQLite · OpenAI Python SDK
 (as the Token Factory client) · React · TypeScript · Vite · Tailwind CSS · Docker · Docker Compose · Caddy ·
-Vercel · GitHub Actions
+Vercel · Render · GitHub Actions
 
 ## Links
 
 - Repository: https://github.com/basaaria123/Mindmate (must be **public**) [CONFIRM visibility]
-- Live demo: [LIVE_DEMO_URL] (frontend https://mindmate-lyart.vercel.app, once `VITE_API_BASE_URL`
-  points at the deployed backend)
-- Backend health: [BACKEND_URL]/health
+- Live demo: https://mindmate-lyart.vercel.app
+- Backend API: https://mindmate-backend-yw5d.onrender.com (health: https://mindmate-backend-yw5d.onrender.com/health)
 - Demo video: [YOUTUBE_URL] (public, 3:00 or less)
 
 ## Feedback on Nebius and NVIDIA tools
@@ -108,8 +106,7 @@ Full notes: `docs/feedback.md`. Summary to paste:
 > tests with a fake client. We used Nemotron 3 Nano for fast extraction and Nemotron 3 Ultra for judgement
 > over the user's memory, with deterministic code making the final decisions. We would like clearer
 > per-model guidance on structured JSON output, and per-request usage and latency we could log alongside
-> our own traces. [CONFIRM: one sentence on your observed Ultra vs Nano speed and quality, and your
-> experience deploying on Nebius AI Cloud.]
+> our own traces. [CONFIRM: one sentence on your observed Ultra vs Nano speed and quality.]
 
 ## Updated during the Submission Period
 
@@ -131,5 +128,5 @@ can be omitted. If it started later, paste this, keeping only the dates before t
 >   question generation and replan explanation, with versioned prompts (`47b4cbb`, `f66e052`);
 > - agent orchestration over database memory, PostgreSQL support, and integration of every screen with
 >   real data, including memory edit and delete and the before/after plan diff (19 Oct);
-> - production deployment for Nebius (Docker, HTTPS via Caddy, migrations on start), a live smoke test,
->   and model and latency logging for every Nemotron call (22 Oct).
+> - production deployment (Docker, migrations on start; backend on Render with PostgreSQL), a live smoke
+>   test, and model and latency logging for every Nemotron call (22 Oct onwards).

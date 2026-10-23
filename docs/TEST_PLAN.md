@@ -38,7 +38,7 @@ Success criteria from the proposal (section 3.3) and how each is verified. Resul
 | Live wiring with a key set | Backend called Token Factory with the configured Nano model ID; the sandbox blocks the host, so the call failed and was logged as `model_fallback` and labelled offline (22 Oct) |
 | Live Nemotron agent tests (`make test-ai-live`) | Not run: no Nebius key in the development environment |
 | Evaluation set with live agents (`make eval LIVE=1`) | Not run: no Nebius key |
-| Deployed app | Not tested: backend not deployed yet (see `docs/DEPLOYMENT.md`) |
+| Deployed app (backend https://mindmate-backend-yw5d.onrender.com) | Not tested from the development sandbox (its network policy blocks onrender.com). [CONFIRM] run `./scripts/smoke_test.sh https://mindmate-backend-yw5d.onrender.com` |
 
 ## Still to run before submission (needs a key or the deployment)
 
