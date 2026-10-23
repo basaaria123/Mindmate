@@ -39,6 +39,7 @@ practice. From that memory it:
   record a weakness and practice on it moves to day 1. Every replan explains what moved and cites the
   memory items that caused it.
 
+You can also ask the AI Assistant anything about your studies; it answers from your memory and plan.
 Every memory item can be edited or deleted, deleted items never reach a prompt, and MindMate only drafts:
 it never submits anything for you. The AI Activity page shows every model call with the agent, the
 Nemotron model and how long it took.
@@ -52,10 +53,11 @@ changes, and stays yours: inspectable, editable, and never acting on your behalf
 
 ### How it works
 
-- **Nine NVIDIA Nemotron agents on Nebius Token Factory.** Nemotron 3 Nano
+- **Ten NVIDIA Nemotron agents on Nebius Token Factory.** Nemotron 3 Nano
   (`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`) handles extraction: profile, opportunity, suggestions.
   Nemotron 3 Ultra (`nvidia/Nemotron-3-Ultra-550b-a55b`) handles judgement over your memory: fit, skill
-  gaps, planning, practice evaluation, practice questions and replan explanations. All agents share one
+  gaps, planning, practice evaluation, practice questions and replan explanations. The AI Assistant chat
+  answers questions grounded in your memory on Nano, or on Ultra with "Think harder". All agents share one
   OpenAI-compatible Token Factory endpoint.
 - **Models propose, code decides.** Fit scores, gap ranking, replan priority, the budget scheduler,
   weakness thresholds and permissions are deterministic code, so the same inputs give the same plan.
@@ -101,7 +103,7 @@ Vercel · Render · GitHub Actions
 
 Full notes: `docs/feedback.md`. Summary to paste:
 
-> Nebius Token Factory's OpenAI-compatible API let us run nine Nemotron agents from one FastAPI backend:
+> Nebius Token Factory's OpenAI-compatible API let us run ten Nemotron agents from one FastAPI backend:
 > one client, one base URL, models chosen by environment variable, no GPUs or model hosting, and offline
 > tests with a fake client. We used Nemotron 3 Nano for fast extraction and Nemotron 3 Ultra for judgement
 > over the user's memory, with deterministic code making the final decisions. We would like clearer

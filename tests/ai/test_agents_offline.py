@@ -154,3 +154,26 @@ def test_replan_explanation_cites_only_allowed_refs(monkeypatch):
     uncited = {"summary": "Your plan changed because of your recent practice results.", "cited_refs": []}
     install(monkeypatch, "app.agents.replan_agent", uncited, good)
     assert replan.explain_replan({}, ["weakness#1"]).summary.startswith("Model evaluation")
+
+
+def test_assistant_agent_uses_memory_strips_thinking_and_picks_the_tier(monkeypatch):
+    from app.agents import assistant_agent
+    from app.schemas.assistant import ChatMessage
+    from app.services.llm_client import FAST_MODEL, REASONING_MODEL
+
+    client = install(monkeypatch, "app.agents.assistant_agent", "<think>plan the answer</think>Hello Meera! I can help.")
+    history = [ChatMessage(role="user", content="Hello")]
+    reply = assistant_agent.chat_reply(history, "GOALS:\n  [goal#1] Land an AI/ML internship")
+    assert reply.reply == "Hello Meera! I can help." and reply.model == FAST_MODEL
+    request = client.requests[0]
+    assert request["model"] == FAST_MODEL
+    assert "[goal#1] Land an AI/ML internship" in request["messages"][1]["content"]
+    assert request["messages"][-1] == {"role": "user", "content": "Hello"}
+
+    client = install(monkeypatch, "app.agents.assistant_agent", "", "Here is a deeper answer.")
+    reply = assistant_agent.chat_reply(history, "memory", think_harder=True)
+    assert reply.model == REASONING_MODEL and len(client.requests) == 2
+
+    install(monkeypatch, "app.agents.assistant_agent", "", "  ")
+    with pytest.raises(ValueError, match="empty response"):
+        assistant_agent.chat_reply(history, "memory")

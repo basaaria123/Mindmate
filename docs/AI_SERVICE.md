@@ -26,6 +26,7 @@ Owner: AI developer, branch `mindmate-ai`. Files: `app/agents/`, `app/schemas/`,
 | Practice questions | `generate_practice_questions(target_role, skills, gaps, weaknesses, topic, count, allowed_refs)` | `PracticeQuestionSet` (1–5 questions, refs must be allowed) | `POST /practice/start` |
 | Replan explanation | `explain_replan(changes, allowed_refs)` | `ReplanExplanation` (must cite at least one allowed ref; `cited_refs` must equal the refs in the text) | `POST /plans/replan` |
 | Suggestions | `generate_suggestions(profile)` | `SuggestionsResponse` (12 items) | `POST /suggestions` |
+| AI Assistant | `chat_reply(messages, memory, think_harder)` | `AssistantReply` (plain text; `<think>` blocks removed; empty reply retried once) | `POST /assistant/chat` (Nano; Ultra with "Think harder") |
 | Memory (no model) | `create_and_store_memory(evaluation, source)` | `MemoryItem` (JSON file store) | `POST /practice` |
 
 When the model is off or an agent fails validation twice, the backend uses its deterministic path (rubric,

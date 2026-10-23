@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react'
 import activityEmblemReference from '../assets/activity-emblem-reference.png'
-import { getTraceEvents } from '../services/api'
+import { getTraceEvents, useMocks } from '../services/api'
 import { useLoad } from '../hooks/useLoad'
+
+const POLL_MS = 5000
 
 function relativeTime(iso: string) {
   const minutes = Math.round((Date.now() - new Date(iso).getTime()) / 60000)
@@ -25,6 +28,27 @@ function ActivityEmblem() {
 
 function Console() {
   const events = useLoad(getTraceEvents)
+  const [pollFailed, setPollFailed] = useState(false)
+  const { setData } = events
+
+  // Keep the timeline current: refetch the persisted events every few seconds while the tab is
+  // visible, and when the window regains focus. A failed poll keeps the last good list.
+  useEffect(() => {
+    let active = true
+    const poll = () => {
+      if (document.visibilityState !== 'visible') return
+      getTraceEvents()
+        .then((data) => { if (active) { setData(data); setPollFailed(false) } })
+        .catch(() => { if (active) setPollFailed(true) })
+    }
+    const timer = window.setInterval(poll, POLL_MS)
+    window.addEventListener('focus', poll)
+    return () => {
+      active = false
+      window.clearInterval(timer)
+      window.removeEventListener('focus', poll)
+    }
+  }, [setData])
   const activitySteps = (events.data ?? []).slice(0, 5).map((event, index) => ({
     key: event.id,
     title: event.detail.length > 110 ? `${event.detail.slice(0, 107)}…` : event.detail || event.title,
@@ -48,7 +72,7 @@ function Console() {
           <h2 className="text-[20px] font-bold leading-7">Live Activity</h2>
           <span className="inline-flex h-[30px] items-center gap-2 rounded-full bg-white/[0.07] px-4 text-[11px] font-medium text-[#e2e2f3]">
             <span className="size-[7px] rounded-full bg-[#38d7a7] shadow-[0_0_9px_rgba(56,215,167,.8)]" />
-            {events.error ? 'Offline' : 'Live'}
+            {useMocks ? 'Offline mocks' : events.error || pollFailed ? 'Offline' : 'Live'}
           </span>
         </div>
 

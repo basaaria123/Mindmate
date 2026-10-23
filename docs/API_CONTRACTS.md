@@ -53,6 +53,7 @@ persona snapshot mock (`src/services/personaMock.ts`) when `VITE_API_BASE_URL` i
 | `startPractice(topic?)` | `POST /practice/start` → `{id, question, topic, question_source}` | Sim (the `session_id` goes to `submitPracticeAnswer`) |
 | `importProfile(profile)` | `POST /profile/import` | Onboarding, after `POST /profile` |
 | `getBackendStatus` | `GET /admin/status` | Model chip in the header |
+| `sendAssistantMessage(messages, thinkHarder)` | `POST /assistant/chat` `{messages:[{role, content}], think_harder}` → `{reply, model, source}`; 503 when no key/model mode off, 502 when the model fails | AI Assistant |
 
 Backend endpoints not called by the UI (available for scripts and the OpenAPI page): `/constraints`,
 `/decisions`, `/skills`, `/evidence`, `/weaknesses`, `/opportunities/search`, `/opportunities/extract`,

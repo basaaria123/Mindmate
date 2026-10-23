@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import select
 
-from app.api import actions, admin, events, goals, memory, opportunities, plans, practice, profile, skills
+from app.api import actions, admin, assistant, events, goals, memory, opportunities, plans, practice, profile, skills
 from app.config import get_settings
 from app.db import get_session_factory, init_db, models
 from app.memory.refs import InvalidReference
@@ -24,6 +24,7 @@ from app.rate_limit import RateLimitMiddleware
 
 ROUTERS = (
     profile.router,
+    assistant.router,
     memory.router,
     goals.router,
     skills.router,

@@ -18,6 +18,7 @@ PLACEHOLDERS = {
     "suggestions": {"profile"},
     "practice_questions": {"count", "target_role", "topic", "skills", "gaps", "weaknesses", "allowed_refs"},
     "replan": {"changes", "allowed_refs"},
+    "assistant": {"memory"},
 }
 
 

@@ -229,6 +229,21 @@ export async function getAIProfile(): Promise<AIProfile> {
   }
 }
 
+export type ChatTurn = { role: 'user' | 'assistant'; content: string }
+export type AssistantAnswer = { reply: string; model: string; source: 'nemotron' }
+
+// AI Assistant: POST /assistant/chat (Nemotron on Nebius Token Factory, grounded in memory).
+// There is no offline imitation: without a backend the caller gets a clear error instead.
+export async function sendAssistantMessage(messages: ChatTurn[], thinkHarder: boolean): Promise<AssistantAnswer> {
+  if (useMocks) {
+    throw new Error('The AI Assistant needs the MindMate backend: set VITE_API_BASE_URL to the backend URL and redeploy. Offline mock mode cannot generate AI replies.')
+  }
+  return request<AssistantAnswer>('/assistant/chat', {
+    method: 'POST',
+    body: JSON.stringify({ messages, think_harder: thinkHarder }),
+  })
+}
+
 export function hasActiveWeakness(items: MemoryItem[]): boolean {
   return items.some((item) => item.type === 'weakness' && !item.deletedAt)
 }

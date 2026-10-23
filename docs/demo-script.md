@@ -26,7 +26,7 @@ Labels below are the exact on-screen text in the app.
 | Time | Screen | Action | Voiceover | On-screen caption |
 |---|---|---|---|---|
 | 0:00–0:10 | MindMate **Home** (Meera's goal and next tasks) | Slow scroll; cursor on the header chip | "Students preparing for internships re-explain their goals to every chatbot, and nothing they practise changes their plan. MindMate remembers why, adapts to you, and stays yours." | MindMate: it remembers why. It adapts to you. It stays yours. |
-| 0:10–0:25 | Nebius **Token Factory** console | Show the two Nemotron models the app uses; API key hidden or blurred | "MindMate runs nine agents on NVIDIA Nemotron through Nebius Token Factory: Nemotron Nano for fast extraction, Nemotron Ultra for reasoning over your memory." | Nebius Token Factory · Nemotron 3 Ultra + Nano |
+| 0:10–0:25 | Nebius **Token Factory** console | Show the two Nemotron models the app uses; API key hidden or blurred | "MindMate runs ten agents on NVIDIA Nemotron through Nebius Token Factory: Nemotron Nano for fast extraction, Nemotron Ultra for reasoning over your memory." | Nebius Token Factory · Nemotron 3 Ultra + Nano |
 | 0:25–0:55 | **Tasks & Practice** → practice dialog → **AI Activity** | Open the practice task *Mock interview: model evaluation questions*, paste the weak answer, click **Submit answer**, wait for the score. Click **Save to My Memory**. Open **AI Activity**. **Pause 2 s** on the model-call lines. | "Meera answers a model-evaluation question badly. Nemotron Ultra grades it, and because this is her second weak answer on the topic, MindMate records a weakness. The AI Activity page shows every model call with the model and how long it took." | Nemotron Nano: extraction · Nemotron Ultra: reasoning (point at the matching lines) |
 | 0:55–1:20 | **Plan & Progress** | Set **Time today** from *60 min / day* to *30 min / day*, click **Update my plan**. Show **What changed and why** and the **Before** / **After** lists. **Pause 2 s** on the explanation. | "Her week gets busy, so she drops to thirty minutes a day. The scheduler refits the plan in code. Model-evaluation practice moves to day one, and Nemotron explains why, citing the weakness and her own decisions, like exams before GATE." | Replanned: 60 → 30 min/day · cites weakness#1 and decision#… (use the IDs on screen) |
 | 1:20–1:35 | Token Factory **usage/dashboard** | Refresh; show the new requests from the last minute. **Pause 2 s.** | "And here are those requests arriving on Nebius Token Factory." | Live requests on Nebius Token Factory |
@@ -76,7 +76,7 @@ study plan when your time or results change, citing the memory behind every chan
 Built for the NVIDIA x Nebius Global AI Hackathon 2026 (Personal AI track).
 
 How it uses NVIDIA and Nebius:
-- Nine agents on NVIDIA Nemotron through Nebius Token Factory (one OpenAI-compatible endpoint)
+- Ten agents on NVIDIA Nemotron through Nebius Token Factory (one OpenAI-compatible endpoint)
 - Nemotron 3 Nano for fast extraction (profile, postings, suggestions)
 - Nemotron 3 Ultra for reasoning over memory (fit, gaps, planning, practice grading, replan explanations)
 - Deterministic code makes the decisions; every model call is logged with the model and latency

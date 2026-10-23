@@ -24,6 +24,7 @@ TASK_MEMORY_KINDS: dict[str, tuple[str, ...]] = {
     "practice": ("skills", "weaknesses", "goals"),
     "memory": ("skills", "evidence", "decisions", "weaknesses", "goals", "constraints", "preferences", "notes"),
     "replan": ("goals", "constraints", "decisions", "weaknesses", "preferences"),
+    "assistant": ("profile", "goals", "constraints", "skills", "evidence", "decisions", "weaknesses", "preferences", "notes"),
 }
 
 

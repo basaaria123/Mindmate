@@ -7,7 +7,7 @@ quality numbers are claimed here because none were recorded in the repository.
 
 ## Summary (for the submission form)
 
-Nebius Token Factory's OpenAI-compatible API made it straightforward to run nine Nemotron agents from one
+Nebius Token Factory's OpenAI-compatible API made it straightforward to run ten Nemotron agents from one
 FastAPI backend: one client, one base URL, models chosen by environment variable, and offline testing with
 a fake client. We split work between Nemotron Nano (extraction) and Nemotron Ultra (judgement over the
 user's memory). The things we would most like improved are clearer guidance on structured (JSON) output
@@ -19,7 +19,7 @@ for each model, and per-request usage and latency information we could log along
 **What worked**
 
 - **OpenAI-compatible API.** `app/services/llm_client.py` creates a standard `openai.OpenAI` client with
-  `base_url=https://api.tokenfactory.nebius.com/v1`. All nine agents share it; no provider SDK was needed.
+  `base_url=https://api.tokenfactory.nebius.com/v1`. All ten agents share it; no provider SDK was needed.
 - **One endpoint, two model tiers.** Switching a tier between models is an environment variable
   (`MINDMATE_REASONING_MODEL`, `MINDMATE_FAST_MODEL`); the history shows the IDs and base URL moving from
   hard-coded constants to environment variables without touching any agent.

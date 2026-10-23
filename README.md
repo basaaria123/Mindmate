@@ -27,7 +27,7 @@ cites the weakness, the practice sessions and the user's own decisions.
 
 | Capability | Status |
 |---|---|
-| NVIDIA Nemotron via Nebius Token Factory | Integrated: nine agents (profile, opportunity, fit, gap, planner, practice evaluation, practice questions, replan explanation, suggestions). Ultra for reasoning, Nano for fast extraction. Needs `NEBIUS_API_KEY`. |
+| NVIDIA Nemotron via Nebius Token Factory | Integrated: ten agents (profile, opportunity, fit, gap, planner, practice evaluation, practice questions, replan explanation, suggestions, AI Assistant chat). Ultra for reasoning, Nano for fast extraction. Needs `NEBIUS_API_KEY`. |
 | Structured, user-owned memory | Integrated: PostgreSQL (SQLite locally); every item viewable, editable and deletable; deleted items never reach a prompt. |
 | Deterministic decisions | Integrated: fit score, gap ranking, replan priority, budget scheduler, weakness thresholds and permissions are code, not model output. |
 | Model-failure handling | Integrated: every agent retries invalid output once then rejects it; every backend path has a deterministic fallback; without a key the AI endpoints (and mock mode, in the browser) give labelled offline analysis; recorded answers can replace the AI endpoints during a demo. |
@@ -47,7 +47,7 @@ cites the weakness, the practice sessions and the user's own decisions.
 | Reasoning | `nvidia/Nemotron-3-Ultra-550b-a55b` | `MINDMATE_REASONING_MODEL` |
 | Fast | `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` | `MINDMATE_FAST_MODEL` |
 
-**Nine agents** (`app/agents/`, prompts in `prompts/`):
+**Ten agents** (`app/agents/`, prompts in `prompts/`):
 
 | Agent | Model | What it does |
 |---|---|---|
@@ -60,6 +60,7 @@ cites the weakness, the practice sessions and the user's own decisions.
 | Practice evaluation | Ultra | Scores a mock-interview answer (correctness, depth, clarity) |
 | Practice questions | Ultra | Writes questions aimed at the user's gaps and weaknesses |
 | Replan explanation | Ultra | Explains in plain language what the code changed and why, citing only allowed memory IDs |
+| AI Assistant (chat) | Nano; Ultra with "Think harder" | Answers the learner's questions grounded in their memory, plan and target fit; it cannot change memory or the plan |
 
 Why the split: Nano handles extraction, where the output mostly restates the input in a schema and
 speed matters during onboarding and pasting; Ultra handles judgement over the user's memory, where a
@@ -69,7 +70,7 @@ explanations, and its output is validated before it is used (memory IDs must exi
 
 **Where Nebius Token Factory helped:**
 
-- One OpenAI-compatible endpoint (`https://api.tokenfactory.nebius.com/v1`) and one client for all nine
+- One OpenAI-compatible endpoint (`https://api.tokenfactory.nebius.com/v1`) and one client for all ten
   agents: the standard `openai` SDK, no model hosting, no GPUs, no weights to download.
 - Switching a tier between Nemotron models is an environment variable, with no code change.
 - Because the API is OpenAI-compatible, every agent is tested offline against a fake client
